@@ -7,7 +7,7 @@ import { createIndexedDBStorage } from "zustand-indexeddb";
 type VariantsStore = {
 	variants: Record<string, VariantInfo>;
 
-	createVariant: (variantInfo: VariantInfo) => void;
+	createVariant: (variantInfo: VariantInfo) => string;
 	removeVariant: (variantId: string) => void;
 	updateVariant: (variantId: string, newVariantInfo: VariantInfo) => void;
 
@@ -30,6 +30,8 @@ const useVariantsStore = create<VariantsStore>()(
 						[generatedVariantId]: variantInfo,
 					},
 				}));
+
+				return generatedVariantId;
 			},
 
 			removeVariant: (variantId) => {
