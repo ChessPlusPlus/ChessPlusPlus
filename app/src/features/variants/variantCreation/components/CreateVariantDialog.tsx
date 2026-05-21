@@ -15,6 +15,7 @@ import type { VariantInfo } from "@/features/variants/common/types/variants";
 import { defaultVariantRules } from "@/features/variants/variantCreation/constants/newVariantDefaults";
 import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
+import { useNavigate } from "react-router-dom";
 
 function CreateVariantDialog() {
 	const {
@@ -27,11 +28,10 @@ function CreateVariantDialog() {
 	} = useCreateVariantDialogStore();
 
 	const { createVariant, hasHydrated } = useVariantsStore();
-	const {
-		defaultImagesCreated,
-		markAsDefaultImagesCreated,
-		updateImages,
-	} = usePieceImagesStore();
+	const { defaultImagesCreated, markAsDefaultImagesCreated, updateImages } =
+		usePieceImagesStore();
+
+	const navigate = useNavigate();
 
 	if (!hasHydrated) return null;
 
@@ -42,6 +42,10 @@ function CreateVariantDialog() {
 	function handleCreateVariantFormSubmit(e: SyntheticEvent<HTMLFormElement>) {
 		e.preventDefault();
 
+		const submitter = (e.nativeEvent as SubmitEvent)
+			.submitter as HTMLButtonElement | null;
+		const submitAction = submitter?.value ?? "create-and-open";
+
 		const clonedRules = structuredClone(defaultVariantRules);
 
 		const defaultVariant: VariantInfo = {
@@ -49,15 +53,19 @@ function CreateVariantDialog() {
 			variantRules: clonedRules,
 		};
 
-		createVariant(defaultVariant);
+		const variantId = createVariant(defaultVariant);
 
 		clearVariantName();
 		closeDialog();
 
-		if (defaultImagesCreated) return;
+		if (!defaultImagesCreated) {
+			updateImages(defaultPieceImages);
+			markAsDefaultImagesCreated();
+		}
 
-		updateImages(defaultPieceImages);
-		markAsDefaultImagesCreated();
+		if (submitAction === "create-and-open") {
+			navigate(`/variants/${variantId}`);
+		}
 	}
 
 	return (
@@ -86,7 +94,21 @@ function CreateVariantDialog() {
 					</div>
 
 					<DialogFooter>
-						<Button className="w-full">Create variant</Button>
+						<Button
+							type="submit"
+							value="create-and-open"
+							className="px-4"
+						>
+							Create and open
+						</Button>
+						<Button
+							type="submit"
+							value="create"
+							className="px-4"
+							variant="outline"
+						>
+							Create
+						</Button>
 					</DialogFooter>
 				</form>
 			</DialogContent>
