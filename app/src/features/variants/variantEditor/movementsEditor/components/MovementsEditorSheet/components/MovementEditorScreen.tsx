@@ -268,7 +268,7 @@ export function MovementEditorScreen() {
 					<FieldSet>
 						<FieldLegend>Move definition</FieldLegend>
 						<Field className="grid grid-cols-2 items-center">
-							<FieldLabel>Offsets</FieldLabel>
+							<FieldLabel>Vector</FieldLabel>
 
 							<div className="grid grid-cols-2 gap-2 items-center">
 								<Input
