@@ -43,7 +43,8 @@ function CreateVariantDialog() {
 		e.preventDefault();
 
 		const submitter = (e.nativeEvent as SubmitEvent)
-			.submitter as HTMLButtonElement;
+			.submitter as HTMLButtonElement | null;
+		const submitAction = submitter?.value ?? "create-and-open";
 
 		const clonedRules = structuredClone(defaultVariantRules);
 
@@ -62,7 +63,7 @@ function CreateVariantDialog() {
 			markAsDefaultImagesCreated();
 		}
 
-		if (submitter.value === "create-and-open") {
+		if (submitAction === "create-and-open") {
 			navigate(`/variants/${variantId}`);
 		}
 	}
