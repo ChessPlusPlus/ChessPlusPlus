@@ -11,11 +11,12 @@ import useCreateVariantDialogStore from "@/features/variants/variantCreation/sto
 import type { ChangeEvent, SyntheticEvent } from "react";
 import { Label } from "@/components/ui/label";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
-import type { VariantInfo } from "@/features/variants/common/types/variants";
+import type { VariantInfo, VariantRules } from "@/features/variants/common/types/variants";
 import { defaultVariantRules } from "@/features/variants/variantCreation/constants/newVariantDefaults";
 import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import { useNavigate } from "react-router-dom";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 function CreateVariantDialog() {
 	const {
@@ -25,6 +26,8 @@ function CreateVariantDialog() {
 		variantName,
 		updateVariantName,
 		clearVariantName,
+		templateType,
+		updateTemplateType,
 	} = useCreateVariantDialogStore();
 
 	const { createVariant, hasHydrated } = useVariantsStore();
@@ -46,11 +49,23 @@ function CreateVariantDialog() {
 			.submitter as HTMLButtonElement | null;
 		const submitAction = submitter?.value ?? "create-and-open";
 
-		const clonedRules = structuredClone(defaultVariantRules);
+		const blankTemplateRules: VariantRules = {
+			setupRules: {
+				pieceOwnership: {},
+				boardXSize: 8,
+				boardYSize: 8,
+				startingPosition: [],
+			},
+
+			pieceRuleset: {},
+			movementRules: {},
+		}
+
+		const chessPresetRules = structuredClone(defaultVariantRules);
 
 		const defaultVariant: VariantInfo = {
 			variantName: variantName,
-			variantRules: clonedRules,
+			variantRules: templateType === "start-from-scratch" ? blankTemplateRules : chessPresetRules,
 		};
 
 		const variantId = createVariant(defaultVariant);
@@ -93,6 +108,19 @@ function CreateVariantDialog() {
 						/>
 					</div>
 
+					<div className="flex flex-col gap-2">
+						<Label htmlFor="templateTypeSelect">Template type</Label>
+						<Select value={templateType} onValueChange={updateTemplateType}>
+							<SelectTrigger>
+								<SelectValue placeholder="Select template type" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="start-from-scratch">Start from scratch</SelectItem>
+								<SelectItem value="chess-preset">Chess preset</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+					
 					<DialogFooter>
 						<Button
 							type="submit"
