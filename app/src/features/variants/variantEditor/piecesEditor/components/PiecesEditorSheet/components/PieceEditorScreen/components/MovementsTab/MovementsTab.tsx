@@ -79,7 +79,7 @@ export function MovementsTab() {
 				),
 	);
 
-	const sortedActivePieceMovements = activePieceMovements.sort((a, b) => {
+	const sortedActivePieceMovements = structuredClone(activePieceMovements).sort((a, b) => {
 		const aIndex = Object.entries(movementRulesDraft).findIndex(
 			([movementName]) => movementName === a.moveName,
 		);
