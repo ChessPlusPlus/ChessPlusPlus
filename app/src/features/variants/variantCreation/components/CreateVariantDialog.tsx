@@ -11,7 +11,7 @@ import useCreateVariantDialogStore from "@/features/variants/variantCreation/sto
 import type { ChangeEvent, SyntheticEvent } from "react";
 import { Label } from "@/components/ui/label";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
-import type { VariantInfo } from "@/features/variants/common/types/variants";
+import type { VariantInfo, VariantRules } from "@/features/variants/common/types/variants";
 import { defaultVariantRules } from "@/features/variants/variantCreation/constants/newVariantDefaults";
 import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
@@ -49,11 +49,23 @@ function CreateVariantDialog() {
 			.submitter as HTMLButtonElement | null;
 		const submitAction = submitter?.value ?? "create-and-open";
 
-		const clonedRules = structuredClone(defaultVariantRules);
+		const blankTemplateRules: VariantRules = {
+			setupRules: {
+				pieceOwnership: {},
+				boardXSize: 8,
+				boardYSize: 8,
+				startingPosition: [],
+			},
+
+			pieceRuleset: {},
+			movementRules: {},
+		}
+
+		const chessPresetRules = structuredClone(defaultVariantRules);
 
 		const defaultVariant: VariantInfo = {
 			variantName: variantName,
-			variantRules: clonedRules,
+			variantRules: templateType === "start-from-scratch" ? blankTemplateRules : chessPresetRules,
 		};
 
 		const variantId = createVariant(defaultVariant);
