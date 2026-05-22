@@ -201,39 +201,50 @@ export function MovementsTab() {
 					</div>
 
 					<CollapsibleContent className="flex flex-col overflow-y-auto">
-						{activePieceMovements.map((movement) => (
-							<div
-								className="flex flex-row items-center justify-between"
-								key={movement.moveName}
-							>
-								<p>{movement.moveName}</p>
+						{activePieceMovements.map((movement) => {
+							const moveIndex = Object.entries(
+								movementRulesDraft,
+							).findIndex(
+								([movementName]) =>
+									movementName === movement.moveName,
+							);
 
-								<DropdownMenu>
-									<DropdownMenuTrigger asChild>
-										<Button
-											variant="ghost"
-											className="p-0 hover:bg-(--sidebar-primary-hover)"
-										>
-											<IconDotsVertical className="size-5" />
-										</Button>
-									</DropdownMenuTrigger>
+							if (moveIndex === -1) return null;
 
-									<DropdownMenuContent side="left">
-										<DropdownMenuItem
-											variant="destructive"
-											onClick={() =>
-												handleRegularMovementRemoveButtonClick(
-													movement.moveName,
-												)
-											}
-										>
-											<IconX className="size-4" />
-											Remove
-										</DropdownMenuItem>
-									</DropdownMenuContent>
-								</DropdownMenu>
-							</div>
-						))}
+							return (
+								<div
+									className="flex flex-row items-center justify-between"
+									key={movement.moveName}
+								>
+									<p>{moveIndex + 1}. {movement.moveName}</p>
+
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button
+												variant="ghost"
+												className="p-0 hover:bg-(--sidebar-primary-hover)"
+											>
+												<IconDotsVertical className="size-5" />
+											</Button>
+										</DropdownMenuTrigger>
+
+										<DropdownMenuContent side="left">
+											<DropdownMenuItem
+												variant="destructive"
+												onClick={() =>
+													handleRegularMovementRemoveButtonClick(
+														movement.moveName,
+													)
+												}
+											>
+												<IconX className="size-4" />
+												Remove
+											</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
+								</div>
+							);
+						})}
 					</CollapsibleContent>
 				</Collapsible>
 
