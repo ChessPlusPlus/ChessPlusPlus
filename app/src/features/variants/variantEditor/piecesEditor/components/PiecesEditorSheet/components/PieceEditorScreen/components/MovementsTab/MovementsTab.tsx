@@ -27,6 +27,7 @@ import type {
 	ChainedMoveNode,
 	RegularMove,
 } from "@/features/variants/common/types/pieceRules";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export function MovementsTab() {
 	const {
@@ -79,7 +80,9 @@ export function MovementsTab() {
 				),
 	);
 
-	const sortedActivePieceMovements = structuredClone(activePieceMovements).sort((a, b) => {
+	const sortedActivePieceMovements = structuredClone(
+		activePieceMovements,
+	).sort((a, b) => {
 		const aIndex = Object.entries(movementRulesDraft).findIndex(
 			([movementName]) => movementName === a.moveName,
 		);
@@ -187,9 +190,9 @@ export function MovementsTab() {
 
 	return (
 		<>
-			<TabsContent value="movements" className="flex flex-col gap-4">
+			<TabsContent value="movements" className="flex flex-col gap-4 h-full min-h-0">
 				<Collapsible
-					className="flex flex-col gap-1"
+					className="flex flex-col gap-1 min-h-0"
 					open={isMovementsExpanded}
 					onOpenChange={(open) => {
 						if (open) {
@@ -216,53 +219,55 @@ export function MovementsTab() {
 						</CollapsibleTrigger>
 					</div>
 
-					<CollapsibleContent className="flex flex-col overflow-y-auto">
-						{sortedActivePieceMovements.map((movement) => {
-							const moveIndex = Object.entries(
-								movementRulesDraft,
-							).findIndex(
-								([movementName]) =>
-									movementName === movement.moveName,
-							);
+					<CollapsibleContent className="flex flex-col min-h-0">
+						<ScrollArea className="flex-1 h-full min-h-0">
+							{sortedActivePieceMovements.map((movement) => {
+								const moveIndex = Object.entries(
+									movementRulesDraft,
+								).findIndex(
+									([movementName]) =>
+										movementName === movement.moveName,
+								);
 
-							if (moveIndex === -1) return null;
+								if (moveIndex === -1) return null;
 
-							return (
-								<div
-									className="flex flex-row items-center justify-between"
-									key={movement.moveName}
-								>
-									<p>
-										{moveIndex + 1}. {movement.moveName}
-									</p>
+								return (
+									<div
+										className="flex flex-row items-center justify-between"
+										key={movement.moveName}
+									>
+										<p>
+											{moveIndex + 1}. {movement.moveName}
+										</p>
 
-									<DropdownMenu>
-										<DropdownMenuTrigger asChild>
-											<Button
-												variant="ghost"
-												className="p-0 hover:bg-(--sidebar-primary-hover)"
-											>
-												<IconDotsVertical className="size-5" />
-											</Button>
-										</DropdownMenuTrigger>
+										<DropdownMenu>
+											<DropdownMenuTrigger asChild>
+												<Button
+													variant="ghost"
+													className="p-0 hover:bg-(--sidebar-primary-hover)"
+												>
+													<IconDotsVertical className="size-5" />
+												</Button>
+											</DropdownMenuTrigger>
 
-										<DropdownMenuContent side="left">
-											<DropdownMenuItem
-												variant="destructive"
-												onClick={() =>
-													handleRegularMovementRemoveButtonClick(
-														movement.moveName,
-													)
-												}
-											>
-												<IconX className="size-4" />
-												Remove
-											</DropdownMenuItem>
-										</DropdownMenuContent>
-									</DropdownMenu>
-								</div>
-							);
-						})}
+											<DropdownMenuContent side="left">
+												<DropdownMenuItem
+													variant="destructive"
+													onClick={() =>
+														handleRegularMovementRemoveButtonClick(
+															movement.moveName,
+														)
+													}
+												>
+													<IconX className="size-4" />
+													Remove
+												</DropdownMenuItem>
+											</DropdownMenuContent>
+										</DropdownMenu>
+									</div>
+								);
+							})}
+						</ScrollArea>
 					</CollapsibleContent>
 				</Collapsible>
 
