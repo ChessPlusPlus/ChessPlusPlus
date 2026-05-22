@@ -139,6 +139,8 @@ function CreateVariantDialog() {
 							placeholder="Variant name"
 							onChange={handleVariantNameOnChange}
 							value={variantName}
+							data-invalid={variantNameErrors.length > 0}
+							aria-invalid={variantNameErrors.length > 0}
 						/>
 
 						{variantNameErrors.length > 0 && (
