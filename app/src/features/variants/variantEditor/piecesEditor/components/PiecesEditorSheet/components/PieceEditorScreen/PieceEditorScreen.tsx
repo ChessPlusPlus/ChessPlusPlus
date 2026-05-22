@@ -131,7 +131,7 @@ function PieceEditorScreen() {
 					onValueChange={(value) =>
 						updateCurrentTab(value as "appearance" | "movements")
 					}
-					className="px-4"
+					className="px-4 flex flex-col h-full min-h-0"
 				>
 					<TabsList variant="line">
 						<TabsTrigger value="appearance">Appearance</TabsTrigger>
