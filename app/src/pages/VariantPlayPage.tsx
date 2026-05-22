@@ -131,7 +131,10 @@ function VariantPlayPage() {
 
 		if (!validMove || !newGameState) {
 			updateGameBoardState(gameBoardState);
+			return;
 		};
+
+		updateGameBoardState(newGameState);
 	}
 
 	async function handleDragStart(
