@@ -79,6 +79,22 @@ export function MovementsTab() {
 				),
 	);
 
+	const sortedActivePieceMovements = activePieceMovements.sort((a, b) => {
+		const aIndex = Object.entries(movementRulesDraft).findIndex(
+			([movementName]) => movementName === a.moveName,
+		);
+
+		if (aIndex === -1) return 1;
+
+		const bIndex = Object.entries(movementRulesDraft).findIndex(
+			([movementName]) => movementName === b.moveName,
+		);
+
+		if (bIndex === -1) return -1;
+
+		return aIndex - bIndex;
+	});
+
 	function handleRegularMovementRemoveButtonClick(movementName: string) {
 		if (!pieceRulesetDraft) return;
 		if (!activePiece) return;
@@ -201,7 +217,7 @@ export function MovementsTab() {
 					</div>
 
 					<CollapsibleContent className="flex flex-col overflow-y-auto">
-						{activePieceMovements.map((movement) => {
+						{sortedActivePieceMovements.map((movement) => {
 							const moveIndex = Object.entries(
 								movementRulesDraft,
 							).findIndex(
@@ -216,7 +232,9 @@ export function MovementsTab() {
 									className="flex flex-row items-center justify-between"
 									key={movement.moveName}
 								>
-									<p>{moveIndex + 1}. {movement.moveName}</p>
+									<p>
+										{moveIndex + 1}. {movement.moveName}
+									</p>
 
 									<DropdownMenu>
 										<DropdownMenuTrigger asChild>
