@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
+import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import PlayChessboard from "@/features/variants/variantPlay/components/PlayChessboard/PlayChessboard";
 import { createGame } from "@/features/variants/variantPlay/services/game";
 import {
@@ -19,6 +20,7 @@ function VariantPlayPage() {
 	const navigate = useNavigate();
 
 	const {
+		legalMoves,
 		gameBoardState,
 		updateGameBoardState,
 		activeGameId,
@@ -80,7 +82,8 @@ function VariantPlayPage() {
 	}
 
 	async function handleDragEnd(...args: Parameters<NonNullable<OnDragEnd>>) {
-		clearLegalMoves();
+		const locallyComputedLegalMoves = legalMoves;
+		if (!locallyComputedLegalMoves) return;
 
 		if (!activeGameId) return;
 		if (!gameBoardState) return;
@@ -101,14 +104,35 @@ function VariantPlayPage() {
 		if (!startLocation) return;
 		if (!piece) return;
 
+		const isLocallyLegal = locallyComputedLegalMoves.some(
+			(legalMove) =>
+				legalMove[0] === Number(file) && legalMove[1] === Number(rank),
+		);
+
+		if (!isLocallyLegal) return;
+
+		const locallyUpdatedGameBoardState = [
+			...gameBoardState,
+			[[Number(file), Number(rank)], piece],
+		].filter(
+			([location]) =>
+				location[0] !== Number(startLocation[0]) ||
+				location[1] !== Number(startLocation[1]),
+		);
+
+		updateGameBoardState(locallyUpdatedGameBoardState as GameState2DArray);
+		clearLegalMoves();
+
 		const { validMove, newGameState } = await processMove(
 			activeGameId,
 			startLocation,
 			[Number(file), Number(rank)],
 		);
 
-		if (!validMove) return;
-		if (!newGameState) return;
+		if (!validMove || !newGameState) {
+			updateGameBoardState(gameBoardState);
+			return;
+		};
 
 		updateGameBoardState(newGameState);
 	}
@@ -127,7 +151,10 @@ function VariantPlayPage() {
 
 		const [file, rank] = startLocation;
 
-		const legalMoves = (await generateLegalMoves(activeGameId, [file, rank]))?.legalMoves;
+		const legalMoves = (
+			await generateLegalMoves(activeGameId, [file, rank])
+		)?.legalMoves;
+
 		if (!legalMoves) return;
 
 		updateLegalMoves(legalMoves);
