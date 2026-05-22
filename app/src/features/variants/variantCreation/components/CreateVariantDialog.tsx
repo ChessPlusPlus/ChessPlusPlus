@@ -16,6 +16,7 @@ import { defaultVariantRules } from "@/features/variants/variantCreation/constan
 import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import { useNavigate } from "react-router-dom";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 function CreateVariantDialog() {
 	const {
@@ -25,6 +26,8 @@ function CreateVariantDialog() {
 		variantName,
 		updateVariantName,
 		clearVariantName,
+		templateType,
+		updateTemplateType,
 	} = useCreateVariantDialogStore();
 
 	const { createVariant, hasHydrated } = useVariantsStore();
@@ -93,6 +96,19 @@ function CreateVariantDialog() {
 						/>
 					</div>
 
+					<div className="flex flex-col gap-2">
+						<Label htmlFor="templateTypeSelect">Template type</Label>
+						<Select value={templateType} onValueChange={updateTemplateType}>
+							<SelectTrigger>
+								<SelectValue placeholder="Select template type" />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="start-from-scratch">Start from scratch</SelectItem>
+								<SelectItem value="chess-preset">Chess preset</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+					
 					<DialogFooter>
 						<Button
 							type="submit"
