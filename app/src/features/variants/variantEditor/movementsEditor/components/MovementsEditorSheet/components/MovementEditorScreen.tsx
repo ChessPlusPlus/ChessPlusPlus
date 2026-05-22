@@ -45,8 +45,11 @@ export function MovementEditorScreen() {
 		commitToDraft,
 	} = useMovementsEditorStore();
 	const { updateCurrentMode } = useMovementsEditorSheetStore();
-	const { movementRulesDraft, syncMovementRulesDraftToDB, syncPieceRulesetDraftToDB } =
-		useVariantDraftStore();
+	const {
+		movementRulesDraft,
+		syncMovementRulesDraftToDB,
+		syncPieceRulesetDraftToDB,
+	} = useVariantDraftStore();
 
 	const { openDeleteMovementAlert, updateMovementToDelete } =
 		useDeleteMovementAlertStore();
@@ -266,29 +269,26 @@ export function MovementEditorScreen() {
 					</FieldSet>
 
 					<FieldSet>
-						<FieldLegend>Move definition</FieldLegend>
-						<Field className="grid grid-cols-2 items-center">
-							<FieldLabel>Vector</FieldLabel>
-
-							<div className="grid grid-cols-2 gap-2 items-center">
-								<Input
-									className="bg-background"
-									type="number"
-									placeholder="X"
-									value={offsetX}
-									onChange={handleOffsetXInputChange}
-									onBlur={handleOffsetXInputBlur}
-								/>
-								<Input
-									className="bg-background"
-									type="number"
-									placeholder="Y"
-									value={offsetY}
-									onChange={handleOffsetYInputChange}
-									onBlur={handleOffsetYInputBlur}
-								/>
-							</div>
-						</Field>
+						<div className="grid grid-cols-[2fr_1fr_1fr] gap-2 items-center">
+							<FieldLegend className="mb-0">Move definition</FieldLegend>
+							<span>X</span>
+							<span>Y</span>
+							<span>Vector</span>
+							<Input
+								type="number"
+								value={offsetX}
+								onChange={handleOffsetXInputChange}
+								onBlur={handleOffsetXInputBlur}
+								className="bg-background"
+							/>
+							<Input
+								type="number"
+								value={offsetY}
+								onChange={handleOffsetYInputChange}
+								onBlur={handleOffsetYInputBlur}
+								className="bg-background"
+							/>
+						</div>
 
 						<FieldSet className="gap-2">
 							<FieldLegend className="data-[variant=legend]:text-sm">
