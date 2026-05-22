@@ -85,8 +85,6 @@ function VariantPlayPage() {
 		const locallyComputedLegalMoves = legalMoves;
 		if (!locallyComputedLegalMoves) return;
 
-		clearLegalMoves();
-
 		if (!activeGameId) return;
 		if (!gameBoardState) return;
 
@@ -123,6 +121,7 @@ function VariantPlayPage() {
 		);
 
 		updateGameBoardState(locallyUpdatedGameBoardState as GameState2DArray);
+		clearLegalMoves();
 
 		const { validMove, newGameState } = await processMove(
 			activeGameId,
