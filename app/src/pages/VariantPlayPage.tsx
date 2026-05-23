@@ -77,6 +77,12 @@ function VariantPlayPage() {
 		updateActiveGameId,
 	]);
 
+	useEffect(() => {
+		return () => {
+			clearLegalMoves();
+		}
+	}, [clearLegalMoves]);
+
 	function handleBackToHomePage() {
 		navigate("/");
 	}
@@ -140,6 +146,8 @@ function VariantPlayPage() {
 	async function handleDragStart(
 		...args: Parameters<NonNullable<OnDragStart>>
 	) {
+		clearLegalMoves();
+		
 		if (!activeGameId) return;
 
 		const [event] = args;
