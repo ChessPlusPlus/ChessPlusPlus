@@ -104,9 +104,24 @@ function Square({
 				return;
 			};
 
+			const pieceAtStartLocation = gameBoardState.find(
+				([location]) =>
+					location[0] === currentPrevClickedSquare[0] &&
+					location[1] === currentPrevClickedSquare[1],
+			)?.[1];
+
+			if (!pieceAtStartLocation) {
+				clearPrevClickedSquare();
+				clearClickedSquare();
+				clearLegalMoves();
+				return;
+			};
+
+			console.log([[squareFile, squareRank], pieceAtStartLocation])
+
 			const newGameBoardState = [
 				...gameBoardState,
-				[[squareFile, squareRank], piece],
+				[[squareFile, squareRank], pieceAtStartLocation],
 			].filter(
 				([location]) => {
 					if (location[0] !== currentPrevClickedSquare[0]) {
