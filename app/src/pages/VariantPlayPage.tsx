@@ -77,6 +77,12 @@ function VariantPlayPage() {
 		updateActiveGameId,
 	]);
 
+	useEffect(() => {
+		return () => {
+			clearLegalMoves();
+		}
+	}, [clearLegalMoves]);
+
 	function handleBackToHomePage() {
 		navigate("/");
 	}
