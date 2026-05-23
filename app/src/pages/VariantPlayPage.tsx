@@ -146,7 +146,6 @@ function VariantPlayPage() {
 	async function handleDragStart(
 		...args: Parameters<NonNullable<OnDragStart>>
 	) {
-		console.log("drag start");
 		clearLegalMoves();
 		
 		if (!activeGameId) return;
