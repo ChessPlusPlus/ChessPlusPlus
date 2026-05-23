@@ -1,4 +1,5 @@
 import PieceImage from "@/features/variants/variantPlay/components/PlayChessboard/PieceImage";
+import { generateLegalMoves } from "@/features/variants/variantPlay/services/moveProcessing";
 import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
 import { useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";
@@ -37,6 +38,9 @@ function Square({
 		updateClickedSquare,
 		clearPrevClickedSquare,
 		clearClickedSquare,
+		activeGameId,
+		updateLegalMoves,
+		clearLegalMoves,
 	} = useGameplayStore();
 
 	const isDark = (rank + file) % 2 === 0;
@@ -44,15 +48,36 @@ function Square({
 	const isOnLeftEdge = isFlipped ? file === boardXSize - 1 : file === 0;
 	const isOnBottomEdge = isFlipped ? rank === boardYSize - 1 : rank === 0;
 
-	function handleSquareClick(squareFile: number, squareRank: number) {
+	async function handleSquareClick(squareFile: number, squareRank: number) {
+		if (!activeGameId) return;
+
 		if (!prevClickedSquare && !clickedSquare) {
 			if (!piece) return;
 
 			updatePrevClickedSquare([squareFile, squareRank]);
+
+			const legalMoves = (
+				await generateLegalMoves(
+					activeGameId,
+					[squareFile, squareRank],
+				)
+			).legalMoves;
+
+			if (!legalMoves) return;
+
+			updateLegalMoves(legalMoves);
+
 			return;
 		}
 
 		if (prevClickedSquare && !clickedSquare) {
+			if (prevClickedSquare[0] === squareFile && prevClickedSquare[1] === squareRank) {
+				clearPrevClickedSquare();
+				clearClickedSquare();
+				clearLegalMoves();
+				return;
+			}
+
 			updateClickedSquare([squareFile, squareRank]);
 			return;
 		}
@@ -60,6 +85,7 @@ function Square({
 		if (prevClickedSquare && clickedSquare) {
 			clearPrevClickedSquare();
 			clearClickedSquare();
+			clearLegalMoves();
 			return;
 		}
 	}
