@@ -101,7 +101,7 @@ function Square({
 				clearPrevClickedSquare();
 				clearClickedSquare();
 
-				handleSquareClick(squareFile, squareRank);
+				await handleSquareClick(squareFile, squareRank);
 				
 				return;
 			};
