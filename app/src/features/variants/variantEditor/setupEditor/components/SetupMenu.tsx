@@ -209,6 +209,7 @@ function SetupMenu() {
 									type="number"
 									placeholder="Width"
 									min={1}
+									max={32}
 									value={boardXSize}
 									onChange={handleBoardWidthInputChange}
 								/>
@@ -226,6 +227,7 @@ function SetupMenu() {
 									type="number"
 									placeholder="Height"
 									min={1}
+									max={32}
 									value={boardYSize}
 									onChange={handleBoardHeightInputChange}
 								/>
