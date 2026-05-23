@@ -58,8 +58,6 @@ function Square({
 		const currentClickedSquare = useGameplayStore.getState().clickedSquare;
 
 		if (!currentPrevClickedSquare && !currentClickedSquare) {
-			console.log("Displaying legal moves", [squareFile, squareRank]);
-
 			if (!piece) return;
 
 			updatePrevClickedSquare([squareFile, squareRank]);
@@ -129,8 +127,6 @@ function Square({
 				currentPrevClickedSquare,
 				[squareFile, squareRank],
 			);
-
-			console.log(validMove, newGameState);
 
 			if (!validMove || !newGameState) {
 				clearLegalMoves();
