@@ -1,4 +1,7 @@
+import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import PieceImage from "@/features/variants/variantPlay/components/PlayChessboard/PieceImage";
+import { generateLegalMoves, processMove } from "@/features/variants/variantPlay/services/moveProcessing";
+import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
 import { useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";
 
@@ -29,13 +32,138 @@ function Square({
 		id: `${file}-${rank}`,
 	});
 
+	const {
+		updatePrevClickedSquare,
+		updateClickedSquare,
+		clearPrevClickedSquare,
+		clearClickedSquare,
+		activeGameId,
+		legalMoves,
+		updateLegalMoves,
+		clearLegalMoves,
+		gameBoardState,
+		updateGameBoardState,
+	} = useGameplayStore();
+
 	const isDark = (rank + file) % 2 === 0;
 
 	const isOnLeftEdge = isFlipped ? file === boardXSize - 1 : file === 0;
 	const isOnBottomEdge = isFlipped ? rank === boardYSize - 1 : rank === 0;
 
+	async function handleSquareClick(squareFile: number, squareRank: number) {
+		if (!activeGameId) return;
+		if (!gameBoardState) return;
+
+		const currentPrevClickedSquare = useGameplayStore.getState().prevClickedSquare;
+		const currentClickedSquare = useGameplayStore.getState().clickedSquare;
+
+		if (!currentPrevClickedSquare && !currentClickedSquare) {
+			if (!piece) return;
+
+			updatePrevClickedSquare([squareFile, squareRank]);
+
+			const legalMoves = (
+				await generateLegalMoves(activeGameId, [squareFile, squareRank])
+			).legalMoves;
+
+			if (!legalMoves) return;
+
+			updateLegalMoves(legalMoves);
+
+			return;
+		}
+
+		if (currentPrevClickedSquare && !currentClickedSquare) {
+			if (
+				currentPrevClickedSquare[0] === squareFile &&
+				currentPrevClickedSquare[1] === squareRank
+			) {
+				clearPrevClickedSquare();
+				clearClickedSquare();
+				clearLegalMoves();
+				return;
+			}
+
+			updateClickedSquare([squareFile, squareRank]);
+
+			const locallyComputedLegalMoves = legalMoves;
+			if (!locallyComputedLegalMoves) return;
+
+			const isLocallyLegal = locallyComputedLegalMoves.some(
+				([legalFile, legalRank]) =>
+					legalFile === squareFile && legalRank === squareRank,
+			);
+
+			if (!isLocallyLegal) {
+				clearLegalMoves();
+				clearPrevClickedSquare();
+				clearClickedSquare();
+
+				await handleSquareClick(squareFile, squareRank);
+				
+				return;
+			};
+
+			const pieceAtStartLocation = gameBoardState.find(
+				([location]) =>
+					location[0] === currentPrevClickedSquare[0] &&
+					location[1] === currentPrevClickedSquare[1],
+			)?.[1];
+
+			if (!pieceAtStartLocation) {
+				clearPrevClickedSquare();
+				clearClickedSquare();
+				clearLegalMoves();
+				return;
+			};
+
+			console.log([[squareFile, squareRank], pieceAtStartLocation])
+
+			const newGameBoardState = [
+				...gameBoardState,
+				[[squareFile, squareRank], pieceAtStartLocation],
+			].filter(
+				([location]) => {
+					if (location[0] !== currentPrevClickedSquare[0]) {
+						return true;
+					}
+
+					if (location[1] !== currentPrevClickedSquare[1]) {
+						return true;
+					}
+					return false;
+				}
+			);
+
+			updateGameBoardState(newGameBoardState as GameState2DArray);
+
+			const { validMove, newGameState } = await processMove(
+				activeGameId,
+				currentPrevClickedSquare,
+				[squareFile, squareRank],
+			);
+
+			if (!validMove || !newGameState) {
+				clearLegalMoves();
+				updateGameBoardState(gameBoardState);
+				updatePrevClickedSquare([squareFile, squareRank]);
+				clearClickedSquare();
+				
+				await handleSquareClick(currentPrevClickedSquare[0], currentPrevClickedSquare[1]);
+
+				return;
+			}
+
+			updateGameBoardState(newGameState);
+			clearPrevClickedSquare();
+			clearClickedSquare();
+			clearLegalMoves();
+		}
+	}
+
 	return (
 		<div
+			onClick={() => handleSquareClick(file, rank)}
 			ref={ref}
 			key={`${file}-${rank}`}
 			className={`${isDark ? "bg-chessboard-square-dark" : "bg-chessboard-square-light"} aspect-square relative`}

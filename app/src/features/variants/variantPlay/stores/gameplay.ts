@@ -6,6 +6,14 @@ type GameplayStore = {
 	updateGameBoardState: (gameBoardState: GameState2DArray) => void;
 	resetGameBoardState: () => void;
 
+	prevClickedSquare: [number, number] | null;
+	updatePrevClickedSquare: (prevClickedSquare: [number, number]) => void;
+	clearPrevClickedSquare: () => void;
+
+	clickedSquare: [number, number] | null;
+	updateClickedSquare: (clickedSquare: [number, number]) => void;
+	clearClickedSquare: () => void;
+
 	legalMoves: [number, number][] | null;
 	updateLegalMoves: (legalMoves: [number, number][]) => void;
 	clearLegalMoves: () => void;
@@ -24,6 +32,14 @@ const useGameplayStore = create<GameplayStore>((set) => ({
 	updateGameBoardState: (gameBoardState: GameState2DArray) =>
 		set({ gameBoardState }),
 	resetGameBoardState: () => set({ gameBoardState: null }),
+
+	prevClickedSquare: null,
+	updatePrevClickedSquare: (prevClickedSquare: [number, number]) => set({ prevClickedSquare }),
+	clearPrevClickedSquare: () => set({ prevClickedSquare: null }),
+
+	clickedSquare: null,
+	updateClickedSquare: (clickedSquare: [number, number]) => set({ clickedSquare }),
+	clearClickedSquare: () => set({ clickedSquare: null }),
 
 	legalMoves: null,
 	updateLegalMoves: (legalMoves: [number, number][]) =>
