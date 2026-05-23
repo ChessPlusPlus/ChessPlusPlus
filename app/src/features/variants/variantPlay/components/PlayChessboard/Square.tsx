@@ -137,7 +137,8 @@ function Square({
 				updateGameBoardState(gameBoardState);
 				updatePrevClickedSquare([squareFile, squareRank]);
 				clearClickedSquare();
-				handleSquareClick(currentPrevClickedSquare[0], currentPrevClickedSquare[1]);
+				
+				await handleSquareClick(currentPrevClickedSquare[0], currentPrevClickedSquare[1]);
 
 				return;
 			}
