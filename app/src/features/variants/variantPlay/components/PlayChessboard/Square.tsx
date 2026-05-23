@@ -1,4 +1,5 @@
 import PieceImage from "@/features/variants/variantPlay/components/PlayChessboard/PieceImage";
+import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
 import { useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";
 
@@ -29,13 +30,43 @@ function Square({
 		id: `${file}-${rank}`,
 	});
 
+	const {
+		prevClickedSquare,
+		clickedSquare,
+		updatePrevClickedSquare,
+		updateClickedSquare,
+		clearPrevClickedSquare,
+		clearClickedSquare,
+	} = useGameplayStore();
+
 	const isDark = (rank + file) % 2 === 0;
 
 	const isOnLeftEdge = isFlipped ? file === boardXSize - 1 : file === 0;
 	const isOnBottomEdge = isFlipped ? rank === boardYSize - 1 : rank === 0;
 
+	function handleSquareClick(squareFile: number, squareRank: number) {
+		if (!prevClickedSquare && !clickedSquare) {
+			if (!piece) return;
+
+			updatePrevClickedSquare([squareFile, squareRank]);
+			return;
+		}
+
+		if (prevClickedSquare && !clickedSquare) {
+			updateClickedSquare([squareFile, squareRank]);
+			return;
+		}
+
+		if (prevClickedSquare && clickedSquare) {
+			clearPrevClickedSquare();
+			clearClickedSquare();
+			return;
+		}
+	}
+
 	return (
 		<div
+			onClick={() => handleSquareClick(file, rank)}
 			ref={ref}
 			key={`${file}-${rank}`}
 			className={`${isDark ? "bg-chessboard-square-dark" : "bg-chessboard-square-light"} aspect-square relative`}
