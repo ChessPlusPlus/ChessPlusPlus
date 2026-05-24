@@ -29,20 +29,27 @@ function AddPlayerDialog() {
 	if (!setupRulesDraft) return null;
 
 	function handlePlayerNameInputChange(e: ChangeEvent<HTMLInputElement>) {
+		const trimmedPlayerName = e.target.value.trim();
+		updatePlayerName(trimmedPlayerName);
+	}
+
+	function handleAddPlayerButtonClick() {
 		if (!setupRulesDraft) return;
 
-		const trimmedPlayerName = e.target.value.trim();
-		if (trimmedPlayerName === "") {
+		if (playerName.trim() === "") {
 			updatePlayerNameErrors(["Player name cannot be empty"]);
 			return;
 		}
 
-		if (Object.keys(setupRulesDraft.pieceOwnership).includes(trimmedPlayerName)) {
+		if (
+			Object.keys(setupRulesDraft.pieceOwnership).includes(
+				playerName.trim(),
+			)
+		) {
 			updatePlayerNameErrors(["Player name already exists"]);
 			return;
 		}
 
-		updatePlayerName(trimmedPlayerName);
 		clearPlayerNameErrors();
 	}
 
@@ -86,7 +93,7 @@ function AddPlayerDialog() {
 				</Field>
 
 				<DialogFooter>
-					<Button className="w-full">Add player</Button>
+					<Button className="w-full" onClick={handleAddPlayerButtonClick}>Add player</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
