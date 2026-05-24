@@ -58,11 +58,6 @@ function RenamePlayerDialog() {
 			return;
 		}
 
-		if (Object.keys(setupRulesDraft.pieceOwnership).length >= 2) {
-			updatePlayerNameErrors(["Only 2 players are allowed (more coming soon)"]);
-			return;
-		}
-
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
 		delete updatedSetupRulesDraft.pieceOwnership[originalPlayerName];
 		updatedSetupRulesDraft.pieceOwnership[playerName.trim()] = [];
