@@ -29,8 +29,7 @@ function AddPlayerDialog() {
 	if (!setupRulesDraft) return null;
 
 	function handlePlayerNameInputChange(e: ChangeEvent<HTMLInputElement>) {
-		const trimmedPlayerName = e.target.value.trim();
-		updatePlayerName(trimmedPlayerName);
+		updatePlayerName(e.target.value);
 	}
 
 	function handleAddPlayerButtonClick() {
@@ -47,6 +46,11 @@ function AddPlayerDialog() {
 			)
 		) {
 			updatePlayerNameErrors(["Player name already exists"]);
+			return;
+		}
+
+		if (Object.keys(setupRulesDraft.pieceOwnership).length >= 2) {
+			updatePlayerNameErrors(["Only 2 players are allowed (more coming soon)"]);
 			return;
 		}
 
