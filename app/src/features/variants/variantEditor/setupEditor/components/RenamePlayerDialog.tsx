@@ -42,6 +42,7 @@ function RenamePlayerDialog() {
 
 	function handleRenamePlayerButtonClick() {
 		if (!setupRulesDraft) return;
+		if (!originalPlayerName) return;
 
 		if (playerName.trim() === "") {
 			updatePlayerNameErrors(["Player name cannot be empty"]);
@@ -63,6 +64,8 @@ function RenamePlayerDialog() {
 		}
 
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		delete updatedSetupRulesDraft.pieceOwnership[originalPlayerName];
+		updatedSetupRulesDraft.pieceOwnership[playerName.trim()] = [];
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
 		syncSetupRulesDraftToDB();
