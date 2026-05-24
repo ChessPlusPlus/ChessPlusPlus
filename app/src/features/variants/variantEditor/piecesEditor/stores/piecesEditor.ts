@@ -333,7 +333,18 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get) => ({
 
 			if (Object.keys(pieceEditorChanges).includes("pieceName")) {
 				if (isNullOrUndefined(pieceEditorChanges.pieceName)) return;
-				if (pieceEditorChanges.pieceName.trim() === "") return;
+
+				if (pieceEditorChanges.pieceName.trim() === "") {
+					get().updatePieceName(originalPieceName);
+					get().removePieceEditorChanges(["pieceName"]);
+					return;
+				};
+
+				if (Object.keys(pieceRulesetDraft).includes(pieceEditorChanges.pieceName.trim())) {
+					get().updatePieceName(originalPieceName);
+					get().removePieceEditorChanges(["pieceName"]);
+					return;
+				};
 				
 				handlePieceNameUpdate(
 					originalPieceName,
@@ -365,7 +376,17 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get) => ({
 
 			if (Object.keys(pieceEditorChanges).includes("pieceName")) {
 				if (isNullOrUndefined(pieceEditorChanges.pieceName)) return;
-				if (pieceEditorChanges.pieceName.trim() === "") return;
+				if (pieceEditorChanges.pieceName.trim() === "") {
+					get().updatePieceName(originalPieceName);
+					get().removePieceEditorChanges(["pieceName"]);
+					return;
+				};
+
+				if (Object.keys(pieceRulesetDraft).includes(pieceEditorChanges.pieceName.trim())) {
+					get().updatePieceName(originalPieceName);
+					get().removePieceEditorChanges(["pieceName"]);
+					return;
+				};
 
 				handlePieceNameUpdate(
 					originalPieceName,
