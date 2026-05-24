@@ -2,10 +2,19 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogTitle, DialogHeader, DialogContent, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import useAddPlayerDialogStore from "@/features/variants/variantEditor/setupEditor/stores/addPlayerDialog";
 
 function AddPlayerDialog() {
+	const { isAddPlayerDialogOpen, openAddPlayerDialog, closeAddPlayerDialog } = useAddPlayerDialogStore();
+
 	return (
-		<Dialog>
+		<Dialog open={isAddPlayerDialogOpen} onOpenChange={(open) => {
+			if (open) {
+				openAddPlayerDialog();
+			} else {
+				closeAddPlayerDialog();
+			}
+		}}>
 			<DialogContent>
 				<DialogHeader>
 					<DialogTitle>Add player</DialogTitle>
