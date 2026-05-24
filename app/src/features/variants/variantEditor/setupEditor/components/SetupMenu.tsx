@@ -101,7 +101,6 @@ function SetupMenu() {
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
 			if (!setupRulesDraft) return;
-			if (isNullOrUndefined(originalBoardXSize)) return;
 
 			const boardXSize = setupRulesDraft.boardXSize;
 			if (Number.isNaN(boardXSize)) return;
@@ -109,15 +108,12 @@ function SetupMenu() {
 			if (boardXSize < 1) return;
 			if (boardXSize > 32) return;
 
-			syncSetupRulesDraftToDB();
-
-			console.log("Board x size reset");
+			syncSetupRulesDraftToDB(["boardXSize"]);
 		}, 400);
 
 		return () => clearTimeout(saveTimeout);
 	}, [
 		setupRulesDraft,
-		originalBoardXSize,
 		setupRulesDraft?.boardXSize,
 		resetOriginalBoardXSize,
 		syncSetupRulesDraftToDB,
@@ -127,7 +123,6 @@ function SetupMenu() {
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
 			if (!setupRulesDraft) return;
-			if (isNullOrUndefined(originalBoardYSize)) return;
 
 			const boardYSize = setupRulesDraft.boardYSize;
 			if (Number.isNaN(boardYSize)) return;
@@ -135,15 +130,12 @@ function SetupMenu() {
 			if (boardYSize < 1) return;
 			if (boardYSize > 32) return;
 
-			syncSetupRulesDraftToDB();
-
-			console.log("Board y size reset");
+			syncSetupRulesDraftToDB(["boardYSize"]);
 		}, 400);
 
 		return () => clearTimeout(saveTimeout);
 	}, [
 		setupRulesDraft,
-		originalBoardYSize,
 		setupRulesDraft?.boardYSize,
 		resetOriginalBoardYSize,
 		syncSetupRulesDraftToDB,
@@ -170,7 +162,7 @@ function SetupMenu() {
 		if (setupRulesDraft.boardYSize > 32) return;
 
 		updateOriginalBoardYSize(setupRulesDraft.boardYSize);
-	}, [setupRulesDraft,updateOriginalBoardYSize]);
+	}, [setupRulesDraft, updateOriginalBoardYSize]);
 
 	if (!setupRulesDraft) return null;
 	if (!pieceRulesetDraft) return null;
@@ -273,7 +265,6 @@ function SetupMenu() {
 	function revertBoardYSize() {
 		const updatedOriginalBoardYSize =
 			useSetupMenuStore.getState().originalBoardYSize;
-		console.log(updatedOriginalBoardYSize);
 
 		if (!setupRulesDraft) return;
 		if (isNullOrUndefined(updatedOriginalBoardYSize)) return;
