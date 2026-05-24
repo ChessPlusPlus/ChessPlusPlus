@@ -245,6 +245,10 @@ function SetupMenu() {
 		updatePlayer(playerName);
 	}
 
+	function handleRenamePlayerButtonClick(playerName: string) {
+		openRenamePlayerDialog(playerName);
+	}
+
 	function handleBoardWidthInputChange(e: ChangeEvent<HTMLInputElement>) {
 		if (!setupRulesDraft) return;
 
@@ -524,9 +528,7 @@ function SetupMenu() {
 												</DropdownMenuItem>
 
 												<DropdownMenuItem
-													onClick={() =>
-														openRenamePlayerDialog(player)
-													}
+													onClick={() => handleRenamePlayerButtonClick(player)}
 												>
 													<IconPencil
 														className="size-4"
