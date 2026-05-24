@@ -101,7 +101,12 @@ function SetupMenu() {
 		collapsePieces,
 	} = useSetupMenuStore();
 
-	const { openAddPlayerDialog } = useAddPlayerDialogStore();
+	const {
+		openAddPlayerDialog,
+		clearPlayerNameErrors,
+		closeAddPlayerDialog,
+		clearPlayerName,
+	} = useAddPlayerDialogStore();
 
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
@@ -175,6 +180,22 @@ function SetupMenu() {
 
 		return () => clearTimeout(timeout);
 	}, [setupRulesDraft?.boardYSize, updateOriginalBoardYSize]);
+
+	useEffect(() => {
+		return () => {
+			clearPlayerNameErrors();
+			clearSearchQuery();
+			closePieceOwnershipSelectionDialog();
+			closeAddPlayerDialog();
+			clearPlayerName();
+		};
+	}, [
+		clearPlayerNameErrors,
+		clearSearchQuery,
+		closePieceOwnershipSelectionDialog,
+		closeAddPlayerDialog,
+		clearPlayerName,
+	]);
 
 	if (!setupRulesDraft) return null;
 	if (!pieceRulesetDraft) return null;
@@ -446,6 +467,8 @@ function SetupMenu() {
 								size="icon-xs"
 								className="hover:bg-gray-300"
 								onClick={handleAddPlayerButtonClick}
+								disabled={players.length >= 2}
+								aria-disabled={players.length >= 2}
 							>
 								<IconPlus className="size-4" />
 							</Button>
