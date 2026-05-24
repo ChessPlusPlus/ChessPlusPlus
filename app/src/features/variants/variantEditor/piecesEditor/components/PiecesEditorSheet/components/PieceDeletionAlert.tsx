@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import usePieceDeletionAlertStore from "@/features/variants/variantEditor/piecesEditor/stores/pieceDeletionAlert";
+import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
 import usePiecesEditorSheetStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditorSheet";
 
 function PieceDeletionAlert() {
@@ -28,6 +29,7 @@ function PieceDeletionAlert() {
 		syncPieceRulesetDraftToDB,
 	} = useVariantDraftStore();
 	const { updateCurrentMode } = usePiecesEditorSheetStore();
+	const { clearActivePiece } = usePiecesEditorStore();
 
 	if (!pieceRulesetDraft) return null;
 	if (!setupRulesDraft) return null;
@@ -54,7 +56,7 @@ function PieceDeletionAlert() {
 
 		updatedSetupRulesDraft.startingPosition =
 			updatedSetupRulesDraft.startingPosition.filter(
-				(square) => square.pieceName !== pieceToDelete,
+				([, pieceName]) => pieceName !== pieceToDelete,
 			);
 
 		updatePieceRulesetDraft(updatedPieceRulesetDraft);
@@ -65,6 +67,8 @@ function PieceDeletionAlert() {
 		
 		closePieceDeletionAlert();
 		updateCurrentMode("pieceSelection");
+
+		clearActivePiece();
 	}
 
 	return (
