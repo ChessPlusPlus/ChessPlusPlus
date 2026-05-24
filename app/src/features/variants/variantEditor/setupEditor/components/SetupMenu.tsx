@@ -477,6 +477,8 @@ function SetupMenu() {
 								onClick={handleAddPlayerButtonClick}
 								disabled={players.length >= 2}
 								aria-disabled={players.length >= 2}
+								aria-label="Add player"
+								title="Add player"
 							>
 								<IconPlus className="size-4" />
 							</Button>
