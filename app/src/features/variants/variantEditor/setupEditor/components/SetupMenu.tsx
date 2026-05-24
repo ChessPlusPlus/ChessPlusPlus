@@ -26,6 +26,7 @@ import {
 	IconChevronDown,
 	IconChevronUp,
 	IconDotsVertical,
+	IconPencil,
 	IconPlus,
 	IconX,
 } from "@tabler/icons-react";
@@ -518,6 +519,13 @@ function SetupMenu() {
 												>
 													<ChessKnight className="size-4" />
 													Edit pieces
+												</DropdownMenuItem>
+
+												<DropdownMenuItem>
+													<IconPencil
+														className="size-4"
+													/>
+													Rename
 												</DropdownMenuItem>
 											</DropdownMenuContent>
 										</DropdownMenu>
