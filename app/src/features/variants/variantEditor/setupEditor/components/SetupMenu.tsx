@@ -24,6 +24,7 @@ import {
 	IconChevronDown,
 	IconChevronUp,
 	IconDotsVertical,
+	IconPlus,
 	IconX,
 } from "@tabler/icons-react";
 import { ChessKnight } from "lucide-react";
@@ -431,19 +432,24 @@ function SetupMenu() {
 				>
 					<div className="flex flex-row items-center justify-between w-full p-2">
 						<span className="text-sm font-semibold">Players</span>
-						<CollapsibleTrigger asChild>
-							<Button
-								variant="ghost"
-								size="icon-xs"
-								className="hover:bg-gray-300 aria-expanded:hover:bg-gray-300"
-							>
-								{isPlayersExpanded ? (
-									<IconChevronUp className="size-4" />
-								) : (
-									<IconChevronDown className="size-4" />
-								)}
+						<div className="flex flex-row items-center">
+							<Button variant="ghost" size="icon-xs" className="hover:bg-gray-300">
+								<IconPlus className="size-4" />
 							</Button>
-						</CollapsibleTrigger>
+							<CollapsibleTrigger asChild>
+								<Button
+									variant="ghost"
+									size="icon-xs"
+									className="hover:bg-gray-300 aria-expanded:hover:bg-gray-300"
+								>
+									{isPlayersExpanded ? (
+										<IconChevronUp className="size-4" />
+									) : (
+										<IconChevronDown className="size-4" />
+									)}
+								</Button>
+							</CollapsibleTrigger>
+						</div>
 					</div>
 
 					<CollapsibleContent>
