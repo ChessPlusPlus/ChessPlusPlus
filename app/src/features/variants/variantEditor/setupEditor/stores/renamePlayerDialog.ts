@@ -2,7 +2,7 @@ import { create } from "zustand";
 
 type RenamePlayerDialogStore = {
 	isRenamePlayerDialogOpen: boolean;
-	openRenamePlayerDialog: (originalPlayerName: string) => void;
+	openRenamePlayerDialog: (originalPlayerName?: string) => void;
 	closeRenamePlayerDialog: () => void;
 
 	originalPlayerName: string | null;
@@ -20,11 +20,16 @@ type RenamePlayerDialogStore = {
 
 const useRenamePlayerDialogStore = create<RenamePlayerDialogStore>((set) => ({
 	isRenamePlayerDialogOpen: false,
-	openRenamePlayerDialog: (originalPlayerName) => set({ isRenamePlayerDialogOpen: true, originalPlayerName }),
+	openRenamePlayerDialog: (originalPlayerName) => set((state) => ({
+		isRenamePlayerDialogOpen: true,
+		originalPlayerName: originalPlayerName ?? state.originalPlayerName,
+	})),
+	
 	closeRenamePlayerDialog: () => set({ isRenamePlayerDialogOpen: false }),
 
 	originalPlayerName: null,
-	updateOriginalPlayerName: (originalPlayerName) => set({ originalPlayerName }),
+	updateOriginalPlayerName: (originalPlayerName) =>
+		set({ originalPlayerName }),
 	clearOriginalPlayerName: () => set({ originalPlayerName: null }),
 
 	playerName: "",
