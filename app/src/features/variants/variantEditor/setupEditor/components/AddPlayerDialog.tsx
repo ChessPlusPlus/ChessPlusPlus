@@ -25,7 +25,7 @@ function AddPlayerDialog() {
 		clearPlayerNameErrors,
 	} = useAddPlayerDialogStore();
 
-	const { setupRulesDraft, updateSetupRulesDraft } = useVariantDraftStore();
+	const { setupRulesDraft, updateSetupRulesDraft, syncSetupRulesDraftToDB } = useVariantDraftStore();
 	if (!setupRulesDraft) return null;
 
 	function handlePlayerNameInputChange(e: ChangeEvent<HTMLInputElement>) {
@@ -58,7 +58,9 @@ function AddPlayerDialog() {
 		updatedSetupRulesDraft.pieceOwnership[playerName.trim()] = [];
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
+		syncSetupRulesDraftToDB();
 
+		closeAddPlayerDialog();
 		clearPlayerNameErrors();
 	}
 
