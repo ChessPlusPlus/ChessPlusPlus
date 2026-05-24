@@ -16,6 +16,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import SelectionDialog from "@/features/variants/variantEditor/common/components/SelectionDialog";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
+import AddPlayerDialog from "@/features/variants/variantEditor/setupEditor/components/AddPlayerDialog";
 import usePieceOwnershipSelectionDialogStore from "@/features/variants/variantEditor/setupEditor/stores/pieceOwnershipSelectionDialog";
 import useSetupMenuStore from "@/features/variants/variantEditor/setupEditor/stores/setupMenu";
 import { isNullOrUndefined } from "@/shared/utils/typeChecks";
@@ -567,6 +568,8 @@ function SetupMenu() {
 				updateSearchQuery={updateSearchQuery}
 				clearSearchQuery={clearSearchQuery}
 			/>
+
+			<AddPlayerDialog />
 		</>
 	);
 }
