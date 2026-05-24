@@ -364,7 +364,8 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get) => ({
 			};
 
 			if (Object.keys(pieceEditorChanges).includes("pieceName")) {
-				if (!pieceEditorChanges.pieceName) return;
+				if (isNullOrUndefined(pieceEditorChanges.pieceName)) return;
+				if (pieceEditorChanges.pieceName.trim() === "") return;
 
 				handlePieceNameUpdate(
 					originalPieceName,
