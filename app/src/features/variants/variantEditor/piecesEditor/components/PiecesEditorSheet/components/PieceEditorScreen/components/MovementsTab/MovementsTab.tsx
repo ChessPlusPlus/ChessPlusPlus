@@ -28,6 +28,7 @@ import type {
 	RegularMove,
 } from "@/features/variants/common/types/pieceRules";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 
 export function MovementsTab() {
 	const {
@@ -166,7 +167,8 @@ export function MovementsTab() {
 
 	function handleMovementSelection(movementName: string) {
 		if (!pieceRulesetDraft) return;
-		if (!pieceName) return;
+		if (isNullOrUndefined(pieceName)) return;
+		if (pieceName.trim() === "") return;
 
 		const updatedPieceRulesetDraft = structuredClone(pieceRulesetDraft);
 

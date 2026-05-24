@@ -21,6 +21,7 @@ import PieceDeletionAlert from "@/features/variants/variantEditor/piecesEditor/c
 import usePieceDeletionAlertStore from "@/features/variants/variantEditor/piecesEditor/stores/pieceDeletionAlert";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useMovementSelectionDialogStore from "@/features/variants/variantEditor/piecesEditor/stores/movementSelectionDialog";
+import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 
 function PieceEditorScreen() {
 	const { updateCurrentMode } = usePiecesEditorSheetStore();
@@ -88,7 +89,7 @@ function PieceEditorScreen() {
 	]);
 
 	if (!activePiece) return null;
-	if (!pieceName) return null;
+	if (isNullOrUndefined(pieceName)) return null;
 
 	function handleBackClick() {
 		updateCurrentMode("pieceSelection");

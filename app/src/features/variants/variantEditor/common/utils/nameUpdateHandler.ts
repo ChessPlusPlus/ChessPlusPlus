@@ -33,11 +33,8 @@ function handlePieceNameUpdate(
 	);
 
 	setupRulesDraft.startingPosition = startingPosition.map((squareInfo) => {
-		if (squareInfo.pieceName === originalPieceName) {
-			return {
-				...squareInfo,
-				pieceName: newName,
-			};
+		if (squareInfo[1] === originalPieceName) {
+			return [squareInfo[0], newName];
 		} else {
 			return squareInfo;
 		}

@@ -7,6 +7,7 @@ import { IconUpload } from "@tabler/icons-react";
 import { TabsContent } from "@/components/ui/tabs";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
+import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 
 export function AppearanceTab() {
 	const { pieceName, updatePieceName, pieceImageId, addPieceEditorChanges, commitToDraft } = usePiecesEditorStore();
@@ -14,7 +15,7 @@ export function AppearanceTab() {
 	const { currentVariantId } = useVariantDraftStore();
 	const fileUploadInputRef = useRef<HTMLInputElement>(null);
 
-	if (!pieceName) return null;
+	if (isNullOrUndefined(pieceName)) return null;
 	if (!images) return null;
 	
 	function getPieceImageToDisplay() {
@@ -90,7 +91,7 @@ export function AppearanceTab() {
 				<div className="flex items-center justify-center">
 					<img
 						src={URL.createObjectURL(getPieceImageToDisplay()!)}
-						alt={pieceName}
+						alt={pieceName || "Piece image"}
 						className="w-1/2 select-none"
 					/>
 				</div>
