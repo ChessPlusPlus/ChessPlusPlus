@@ -19,6 +19,7 @@ import useVariantDraftStore from "@/features/variants/variantEditor/common/store
 import AddPlayerDialog from "@/features/variants/variantEditor/setupEditor/components/AddPlayerDialog";
 import useAddPlayerDialogStore from "@/features/variants/variantEditor/setupEditor/stores/addPlayerDialog";
 import usePieceOwnershipSelectionDialogStore from "@/features/variants/variantEditor/setupEditor/stores/pieceOwnershipSelectionDialog";
+import useRenamePlayerDialogStore from "@/features/variants/variantEditor/setupEditor/stores/renamePlayerDialog";
 import useSetupMenuStore from "@/features/variants/variantEditor/setupEditor/stores/setupMenu";
 import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 import { useDraggable } from "@dnd-kit/react";
@@ -108,6 +109,7 @@ function SetupMenu() {
 		closeAddPlayerDialog,
 		clearPlayerName,
 	} = useAddPlayerDialogStore();
+	const { openRenamePlayerDialog } = useRenamePlayerDialogStore();
 
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
@@ -491,13 +493,13 @@ function SetupMenu() {
 
 					<CollapsibleContent>
 						<div className="flex flex-col">
-							{players.map((color) => {
+							{players.map((player) => {
 								return (
 									<div
-										key={color}
+										key={player}
 										className="flex flex-row items-center justify-between w-full px-2"
 									>
-										<span className="text-sm">{color}</span>
+										<span className="text-sm">{player}</span>
 										<DropdownMenu>
 											<DropdownMenuTrigger asChild>
 												<Button
@@ -513,7 +515,7 @@ function SetupMenu() {
 												<DropdownMenuItem
 													onClick={() =>
 														handleEditPiecesButtonClick(
-															color,
+															player,
 														)
 													}
 												>
@@ -521,7 +523,11 @@ function SetupMenu() {
 													Edit pieces
 												</DropdownMenuItem>
 
-												<DropdownMenuItem>
+												<DropdownMenuItem
+													onClick={() =>
+														openRenamePlayerDialog(player)
+													}
+												>
 													<IconPencil
 														className="size-4"
 													/>
