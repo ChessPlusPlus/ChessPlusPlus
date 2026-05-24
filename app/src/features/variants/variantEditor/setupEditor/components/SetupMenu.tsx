@@ -101,7 +101,7 @@ function SetupMenu() {
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
 			const boardXSize = setupRulesDraft?.boardXSize;
-			
+
 			if (isNullOrUndefined(boardXSize)) return;
 			if (Number.isNaN(boardXSize)) return;
 			if (!Number.isFinite(boardXSize)) return;
@@ -109,6 +109,7 @@ function SetupMenu() {
 			if (boardXSize > 32) return;
 
 			syncSetupRulesDraftToDB(["boardXSize"]);
+			console.log("Board x size saved");
 		}, 400);
 
 		return () => clearTimeout(saveTimeout);
@@ -148,7 +149,11 @@ function SetupMenu() {
 		if (setupRulesDraft.boardXSize < 1) return;
 		if (setupRulesDraft.boardXSize > 32) return;
 
-		updateOriginalBoardXSize(setupRulesDraft.boardXSize);
+		const timeout = setTimeout(() => {
+			updateOriginalBoardXSize(setupRulesDraft.boardXSize);
+		}, 400);
+
+		return () => clearTimeout(timeout);
 	}, [setupRulesDraft?.boardXSize, updateOriginalBoardXSize]);
 
 	useEffect(() => {
@@ -159,7 +164,11 @@ function SetupMenu() {
 		if (setupRulesDraft.boardYSize < 1) return;
 		if (setupRulesDraft.boardYSize > 32) return;
 
-		updateOriginalBoardYSize(setupRulesDraft.boardYSize);
+		const timeout = setTimeout(() => {
+			updateOriginalBoardYSize(setupRulesDraft.boardYSize);
+		}, 400);
+
+		return () => clearTimeout(timeout);
 	}, [setupRulesDraft?.boardYSize, updateOriginalBoardYSize]);
 
 	if (!setupRulesDraft) return null;
