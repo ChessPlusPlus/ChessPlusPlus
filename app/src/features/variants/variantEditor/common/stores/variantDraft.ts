@@ -22,7 +22,7 @@ type VariantDraftStore = {
 	clearMovementRulesDraft: () => void;
 
 	syncFullDraftToDB: () => void;
-	syncSetupRulesDraftToDB: () => void;
+	syncSetupRulesDraftToDB: (fields?: (keyof SetupRules)[]) => void;
 	syncPieceRulesetDraftToDB: () => void;
 	syncMovementRulesDraftToDB: () => void;
 };
@@ -75,7 +75,7 @@ const useVariantDraftStore = create<VariantDraftStore>((set, get) => ({
 		});
 	},
 
-	syncSetupRulesDraftToDB: () => {
+	syncSetupRulesDraftToDB: (fields?: (keyof SetupRules)[]) => {
 		const currentVariantId = get().currentVariantId;
 		if (!currentVariantId) return;
 
@@ -88,13 +88,32 @@ const useVariantDraftStore = create<VariantDraftStore>((set, get) => ({
 
 		const updateVariant = useVariantsStore.getState().updateVariant;
 
-		updateVariant(currentVariantId, {
-			...originalVariantInfo,
-			variantRules: {
-				...originalVariantInfo.variantRules,
-				setupRules: setupRulesDraft,
-			},
-		});
+		if (!fields) {
+			updateVariant(currentVariantId, {
+				...originalVariantInfo,
+				variantRules: {
+					...originalVariantInfo.variantRules,
+					setupRules: setupRulesDraft,
+				},
+			});
+		} else {
+			const draftToSync = Object.fromEntries(
+				Object.entries(structuredClone(setupRulesDraft)).filter(
+					([key]) => (fields ?? []).includes(key as keyof SetupRules),
+				),
+			);
+
+			updateVariant(currentVariantId, {
+				...originalVariantInfo,
+				variantRules: {
+					...originalVariantInfo.variantRules,
+					setupRules: {
+						...originalVariantInfo.variantRules.setupRules,
+						...draftToSync,
+					},
+				},
+			});
+		}
 	},
 
 	syncPieceRulesetDraftToDB: () => {
