@@ -17,6 +17,7 @@ import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import SelectionDialog from "@/features/variants/variantEditor/common/components/SelectionDialog";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import AddPlayerDialog from "@/features/variants/variantEditor/setupEditor/components/AddPlayerDialog";
+import RenamePlayerDialog from "@/features/variants/variantEditor/setupEditor/components/RenamePlayerDialog";
 import useAddPlayerDialogStore from "@/features/variants/variantEditor/setupEditor/stores/addPlayerDialog";
 import usePieceOwnershipSelectionDialogStore from "@/features/variants/variantEditor/setupEditor/stores/pieceOwnershipSelectionDialog";
 import useRenamePlayerDialogStore from "@/features/variants/variantEditor/setupEditor/stores/renamePlayerDialog";
@@ -621,6 +622,7 @@ function SetupMenu() {
 			/>
 
 			<AddPlayerDialog />
+			<RenamePlayerDialog />
 		</>
 	);
 }
