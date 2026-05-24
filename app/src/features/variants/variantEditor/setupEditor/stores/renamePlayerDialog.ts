@@ -5,6 +5,10 @@ type RenamePlayerDialogStore = {
 	openRenamePlayerDialog: () => void;
 	closeRenamePlayerDialog: () => void;
 
+	originalPlayerName: string | null;
+	updateOriginalPlayerName: (originalPlayerName: string) => void;
+	clearOriginalPlayerName: () => void;
+
 	playerName: string;
 	updatePlayerName: (playerName: string) => void;
 	clearPlayerName: () => void;
@@ -18,6 +22,10 @@ const useRenamePlayerDialogStore = create<RenamePlayerDialogStore>((set) => ({
 	isRenamePlayerDialogOpen: false,
 	openRenamePlayerDialog: () => set({ isRenamePlayerDialogOpen: true }),
 	closeRenamePlayerDialog: () => set({ isRenamePlayerDialogOpen: false }),
+
+	originalPlayerName: null,
+	updateOriginalPlayerName: (originalPlayerName) => set({ originalPlayerName }),
+	clearOriginalPlayerName: () => set({ originalPlayerName: null }),
 
 	playerName: "",
 	updatePlayerName: (playerName) => set({ playerName }),
