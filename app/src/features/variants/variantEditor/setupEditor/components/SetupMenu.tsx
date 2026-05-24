@@ -100,9 +100,9 @@ function SetupMenu() {
 
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
-			if (!setupRulesDraft) return;
-
-			const boardXSize = setupRulesDraft.boardXSize;
+			const boardXSize = setupRulesDraft?.boardXSize;
+			
+			if (isNullOrUndefined(boardXSize)) return;
 			if (Number.isNaN(boardXSize)) return;
 			if (!Number.isFinite(boardXSize)) return;
 			if (boardXSize < 1) return;
@@ -113,7 +113,6 @@ function SetupMenu() {
 
 		return () => clearTimeout(saveTimeout);
 	}, [
-		setupRulesDraft,
 		setupRulesDraft?.boardXSize,
 		resetOriginalBoardXSize,
 		syncSetupRulesDraftToDB,
@@ -122,9 +121,9 @@ function SetupMenu() {
 
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
-			if (!setupRulesDraft) return;
+			const boardYSize = setupRulesDraft?.boardYSize;
 
-			const boardYSize = setupRulesDraft.boardYSize;
+			if (isNullOrUndefined(boardYSize)) return;
 			if (Number.isNaN(boardYSize)) return;
 			if (!Number.isFinite(boardYSize)) return;
 			if (boardYSize < 1) return;
@@ -135,7 +134,6 @@ function SetupMenu() {
 
 		return () => clearTimeout(saveTimeout);
 	}, [
-		setupRulesDraft,
 		setupRulesDraft?.boardYSize,
 		resetOriginalBoardYSize,
 		syncSetupRulesDraftToDB,
@@ -143,7 +141,7 @@ function SetupMenu() {
 	]);
 
 	useEffect(() => {
-		if (!setupRulesDraft) return;
+		if (isNullOrUndefined(setupRulesDraft?.boardXSize)) return;
 
 		if (Number.isNaN(setupRulesDraft.boardXSize)) return;
 		if (!Number.isFinite(setupRulesDraft.boardXSize)) return;
@@ -151,10 +149,10 @@ function SetupMenu() {
 		if (setupRulesDraft.boardXSize > 32) return;
 
 		updateOriginalBoardXSize(setupRulesDraft.boardXSize);
-	}, [setupRulesDraft, updateOriginalBoardXSize]);
+	}, [setupRulesDraft?.boardXSize, updateOriginalBoardXSize]);
 
 	useEffect(() => {
-		if (!setupRulesDraft) return;
+		if (isNullOrUndefined(setupRulesDraft?.boardYSize)) return;
 
 		if (Number.isNaN(setupRulesDraft.boardYSize)) return;
 		if (!Number.isFinite(setupRulesDraft.boardYSize)) return;
@@ -162,7 +160,7 @@ function SetupMenu() {
 		if (setupRulesDraft.boardYSize > 32) return;
 
 		updateOriginalBoardYSize(setupRulesDraft.boardYSize);
-	}, [setupRulesDraft, updateOriginalBoardYSize]);
+	}, [setupRulesDraft?.boardYSize, updateOriginalBoardYSize]);
 
 	if (!setupRulesDraft) return null;
 	if (!pieceRulesetDraft) return null;
