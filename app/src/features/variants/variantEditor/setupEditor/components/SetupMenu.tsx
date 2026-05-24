@@ -17,6 +17,7 @@ import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import SelectionDialog from "@/features/variants/variantEditor/common/components/SelectionDialog";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import AddPlayerDialog from "@/features/variants/variantEditor/setupEditor/components/AddPlayerDialog";
+import useAddPlayerDialogStore from "@/features/variants/variantEditor/setupEditor/stores/addPlayerDialog";
 import usePieceOwnershipSelectionDialogStore from "@/features/variants/variantEditor/setupEditor/stores/pieceOwnershipSelectionDialog";
 import useSetupMenuStore from "@/features/variants/variantEditor/setupEditor/stores/setupMenu";
 import { isNullOrUndefined } from "@/shared/utils/typeChecks";
@@ -99,6 +100,8 @@ function SetupMenu() {
 		expandPieces,
 		collapsePieces,
 	} = useSetupMenuStore();
+
+	const { openAddPlayerDialog } = useAddPlayerDialogStore();
 
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
@@ -338,6 +341,10 @@ function SetupMenu() {
 		syncSetupRulesDraftToDB();
 	}
 
+	function handleAddPlayerButtonClick() {
+		openAddPlayerDialog();
+	}
+
 	return (
 		<>
 			<div className="bg-muted p-2 rounded-lg">
@@ -434,7 +441,12 @@ function SetupMenu() {
 					<div className="flex flex-row items-center justify-between w-full p-2">
 						<span className="text-sm font-semibold">Players</span>
 						<div className="flex flex-row items-center">
-							<Button variant="ghost" size="icon-xs" className="hover:bg-gray-300">
+							<Button
+								variant="ghost"
+								size="icon-xs"
+								className="hover:bg-gray-300"
+								onClick={handleAddPlayerButtonClick}
+							>
 								<IconPlus className="size-4" />
 							</Button>
 							<CollapsibleTrigger asChild>
