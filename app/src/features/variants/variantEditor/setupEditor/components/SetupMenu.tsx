@@ -110,7 +110,13 @@ function SetupMenu() {
 		closeAddPlayerDialog,
 		clearPlayerName,
 	} = useAddPlayerDialogStore();
-	const { openRenamePlayerDialog } = useRenamePlayerDialogStore();
+	const {
+		openRenamePlayerDialog,
+		clearOriginalPlayerName,
+		clearPlayerName: clearRenamePlayerName,
+		clearPlayerNameErrors: clearRenamePlayerNameErrors,
+		closeRenamePlayerDialog,
+	} = useRenamePlayerDialogStore();
 
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
@@ -199,6 +205,20 @@ function SetupMenu() {
 		closePieceOwnershipSelectionDialog,
 		closeAddPlayerDialog,
 		clearPlayerName,
+	]);
+
+	useEffect(() => {
+		return () => {
+			clearOriginalPlayerName();
+			clearRenamePlayerName();
+			clearRenamePlayerNameErrors();
+			closeRenamePlayerDialog();
+		};
+	}, [
+		clearOriginalPlayerName,
+		clearRenamePlayerName,
+		clearRenamePlayerNameErrors,
+		closeRenamePlayerDialog,
 	]);
 
 	if (!setupRulesDraft) return null;
@@ -506,7 +526,9 @@ function SetupMenu() {
 										key={player}
 										className="flex flex-row items-center justify-between w-full px-2"
 									>
-										<span className="text-sm">{player}</span>
+										<span className="text-sm">
+											{player}
+										</span>
 										<DropdownMenu>
 											<DropdownMenuTrigger asChild>
 												<Button
@@ -531,11 +553,13 @@ function SetupMenu() {
 												</DropdownMenuItem>
 
 												<DropdownMenuItem
-													onClick={() => handleRenamePlayerButtonClick(player)}
+													onClick={() =>
+														handleRenamePlayerButtonClick(
+															player,
+														)
+													}
 												>
-													<IconPencil
-														className="size-4"
-													/>
+													<IconPencil className="size-4" />
 													Rename
 												</DropdownMenuItem>
 											</DropdownMenuContent>
