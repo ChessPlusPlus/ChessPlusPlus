@@ -25,7 +25,7 @@ function AddPlayerDialog() {
 		clearPlayerNameErrors,
 	} = useAddPlayerDialogStore();
 
-	const { setupRulesDraft } = useVariantDraftStore();
+	const { setupRulesDraft, updateSetupRulesDraft } = useVariantDraftStore();
 	if (!setupRulesDraft) return null;
 
 	function handlePlayerNameInputChange(e: ChangeEvent<HTMLInputElement>) {
@@ -53,6 +53,11 @@ function AddPlayerDialog() {
 			updatePlayerNameErrors(["Only 2 players are allowed (more coming soon)"]);
 			return;
 		}
+
+		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		updatedSetupRulesDraft.pieceOwnership[playerName.trim()] = [];
+
+		updateSetupRulesDraft(updatedSetupRulesDraft);
 
 		clearPlayerNameErrors();
 	}
