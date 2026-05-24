@@ -103,8 +103,6 @@ function SetupMenu() {
 			if (!setupRulesDraft) return;
 			if (isNullOrUndefined(originalBoardXSize)) return;
 
-			resetOriginalBoardXSize();
-
 			const boardXSize = setupRulesDraft.boardXSize;
 			if (Number.isNaN(boardXSize)) return;
 			if (!Number.isFinite(boardXSize)) return;
@@ -112,6 +110,8 @@ function SetupMenu() {
 			if (boardXSize > 32) return;
 
 			syncSetupRulesDraftToDB();
+
+			console.log("Board x size reset");
 		}, 400);
 
 		return () => clearTimeout(saveTimeout);
@@ -129,8 +129,6 @@ function SetupMenu() {
 			if (!setupRulesDraft) return;
 			if (isNullOrUndefined(originalBoardYSize)) return;
 
-			resetOriginalBoardYSize();
-
 			const boardYSize = setupRulesDraft.boardYSize;
 			if (Number.isNaN(boardYSize)) return;
 			if (!Number.isFinite(boardYSize)) return;
@@ -138,6 +136,8 @@ function SetupMenu() {
 			if (boardYSize > 32) return;
 
 			syncSetupRulesDraftToDB();
+
+			console.log("Board y size reset");
 		}, 400);
 
 		return () => clearTimeout(saveTimeout);
@@ -149,6 +149,28 @@ function SetupMenu() {
 		syncSetupRulesDraftToDB,
 		updateSetupRulesDraft,
 	]);
+
+	useEffect(() => {
+		if (!setupRulesDraft) return;
+
+		if (Number.isNaN(setupRulesDraft.boardXSize)) return;
+		if (!Number.isFinite(setupRulesDraft.boardXSize)) return;
+		if (setupRulesDraft.boardXSize < 1) return;
+		if (setupRulesDraft.boardXSize > 32) return;
+
+		updateOriginalBoardXSize(setupRulesDraft.boardXSize);
+	}, [setupRulesDraft, updateOriginalBoardXSize]);
+
+	useEffect(() => {
+		if (!setupRulesDraft) return;
+
+		if (Number.isNaN(setupRulesDraft.boardYSize)) return;
+		if (!Number.isFinite(setupRulesDraft.boardYSize)) return;
+		if (setupRulesDraft.boardYSize < 1) return;
+		if (setupRulesDraft.boardYSize > 32) return;
+
+		updateOriginalBoardYSize(setupRulesDraft.boardYSize);
+	}, [setupRulesDraft,updateOriginalBoardYSize]);
 
 	if (!setupRulesDraft) return null;
 	if (!pieceRulesetDraft) return null;
@@ -201,12 +223,17 @@ function SetupMenu() {
 		const newBoardXSize = e.target.valueAsNumber;
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
 
-		if (isNullOrUndefined(originalBoardXSize)) {
-			updateOriginalBoardXSize(newBoardXSize);
-		}
-
 		updatedSetupRulesDraft.boardXSize = newBoardXSize;
 		updateSetupRulesDraft(updatedSetupRulesDraft);
+
+		if (isNullOrUndefined(originalBoardXSize)) {
+			if (Number.isNaN(newBoardXSize)) return;
+			if (!Number.isFinite(newBoardXSize)) return;
+			if (newBoardXSize < 1) return;
+			if (newBoardXSize > 32) return;
+
+			updateOriginalBoardXSize(newBoardXSize);
+		}
 	}
 
 	function handleBoardHeightInputChange(e: ChangeEvent<HTMLInputElement>) {
@@ -215,31 +242,99 @@ function SetupMenu() {
 		const newBoardYSize = e.target.valueAsNumber;
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
 
-		if (isNullOrUndefined(originalBoardYSize)) {
-			updateOriginalBoardYSize(newBoardYSize);
-		}
-
 		updatedSetupRulesDraft.boardYSize = newBoardYSize;
 		updateSetupRulesDraft(updatedSetupRulesDraft);
+
+		if (isNullOrUndefined(originalBoardYSize)) {
+			if (Number.isNaN(newBoardYSize)) return;
+			if (!Number.isFinite(newBoardYSize)) return;
+			if (newBoardYSize < 1) return;
+			if (newBoardYSize > 32) return;
+
+			updateOriginalBoardYSize(newBoardYSize);
+		}
 	}
 
 	function revertBoardXSize() {
+		const updatedOriginalBoardXSize =
+			useSetupMenuStore.getState().originalBoardXSize;
+
 		if (!setupRulesDraft) return;
-		if (isNullOrUndefined(originalBoardXSize)) return;
+		if (isNullOrUndefined(updatedOriginalBoardXSize)) return;
 
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
-		updatedSetupRulesDraft.boardXSize = originalBoardXSize;
+		updatedSetupRulesDraft.boardXSize = updatedOriginalBoardXSize;
 		updateSetupRulesDraft(updatedSetupRulesDraft);
 		syncSetupRulesDraftToDB();
+
+		resetOriginalBoardXSize();
 	}
 
 	function revertBoardYSize() {
+		const updatedOriginalBoardYSize =
+			useSetupMenuStore.getState().originalBoardYSize;
+		console.log(updatedOriginalBoardYSize);
+
 		if (!setupRulesDraft) return;
-		if (isNullOrUndefined(originalBoardYSize)) return;
+		if (isNullOrUndefined(updatedOriginalBoardYSize)) return;
 
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
-		updatedSetupRulesDraft.boardYSize = originalBoardYSize;
+		updatedSetupRulesDraft.boardYSize = updatedOriginalBoardYSize;
 		updateSetupRulesDraft(updatedSetupRulesDraft);
+		syncSetupRulesDraftToDB();
+
+		resetOriginalBoardYSize();
+	}
+
+	function handleBoardWidthInputBlur() {
+		if (!setupRulesDraft) return;
+
+		if (Number.isNaN(boardXSize)) {
+			revertBoardXSize();
+			return;
+		}
+
+		if (!Number.isFinite(boardXSize)) {
+			revertBoardXSize();
+			return;
+		}
+
+		if (boardXSize < 1) {
+			revertBoardXSize();
+			return;
+		}
+
+		if (boardXSize > 32) {
+			revertBoardXSize();
+			return;
+		}
+
+		syncSetupRulesDraftToDB();
+	}
+
+	function handleBoardHeightInputBlur() {
+		if (!setupRulesDraft) return;
+
+		if (Number.isNaN(boardYSize)) {
+			revertBoardYSize();
+			return;
+		}
+
+		if (!Number.isFinite(boardYSize)) {
+			revertBoardYSize();
+			return;
+		}
+
+		if (boardYSize < 1) {
+			revertBoardYSize();
+			return;
+		}
+
+		if (boardYSize > 32) {
+			revertBoardYSize();
+			return;
+		}
+
 		syncSetupRulesDraftToDB();
 	}
 
@@ -300,6 +395,7 @@ function SetupMenu() {
 									max={32}
 									value={boardXSize}
 									onChange={handleBoardWidthInputChange}
+									onBlur={handleBoardWidthInputBlur}
 								/>
 							</Field>
 							<Field
@@ -318,6 +414,7 @@ function SetupMenu() {
 									max={32}
 									value={boardYSize}
 									onChange={handleBoardHeightInputChange}
+									onBlur={handleBoardHeightInputBlur}
 								/>
 							</Field>
 						</FieldSet>
