@@ -59,8 +59,10 @@ function RenamePlayerDialog() {
 		}
 
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		const originalPieces = updatedSetupRulesDraft.pieceOwnership[originalPlayerName];
+
 		delete updatedSetupRulesDraft.pieceOwnership[originalPlayerName];
-		updatedSetupRulesDraft.pieceOwnership[playerName.trim()] = [];
+		updatedSetupRulesDraft.pieceOwnership[playerName.trim()] = originalPieces;
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
 		syncSetupRulesDraftToDB();
