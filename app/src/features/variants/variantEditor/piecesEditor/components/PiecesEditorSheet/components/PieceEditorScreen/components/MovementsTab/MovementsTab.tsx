@@ -168,6 +168,7 @@ export function MovementsTab() {
 	function handleMovementSelection(movementName: string) {
 		if (!pieceRulesetDraft) return;
 		if (isNullOrUndefined(pieceName)) return;
+		if (pieceName.trim() === "") return;
 
 		const updatedPieceRulesetDraft = structuredClone(pieceRulesetDraft);
 
