@@ -18,6 +18,7 @@ import SelectionDialog from "@/features/variants/variantEditor/common/components
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import usePieceOwnershipSelectionDialogStore from "@/features/variants/variantEditor/setupEditor/stores/pieceOwnershipSelectionDialog";
 import useSetupMenuStore from "@/features/variants/variantEditor/setupEditor/stores/setupMenu";
+import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 import { useDraggable } from "@dnd-kit/react";
 import {
 	IconChevronDown,
@@ -26,7 +27,7 @@ import {
 	IconX,
 } from "@tabler/icons-react";
 import { ChessKnight } from "lucide-react";
-import type { ChangeEvent } from "react";
+import { useEffect, type ChangeEvent } from "react";
 
 type PieceImageProps = {
 	player: string;
@@ -83,6 +84,12 @@ function SetupMenu() {
 		isPlayersExpanded,
 		isPiecesExpanded,
 		isBoardSizeExpanded,
+		originalBoardXSize,
+		originalBoardYSize,
+		updateOriginalBoardYSize,
+		resetOriginalBoardYSize,
+		updateOriginalBoardXSize,
+		resetOriginalBoardXSize,
 		expandBoardSize,
 		collapseBoardSize,
 		expandPlayers,
@@ -90,6 +97,58 @@ function SetupMenu() {
 		expandPieces,
 		collapsePieces,
 	} = useSetupMenuStore();
+
+	useEffect(() => {
+		const saveTimeout = setTimeout(() => {
+			if (!setupRulesDraft) return;
+			if (isNullOrUndefined(originalBoardXSize)) return;
+
+			resetOriginalBoardXSize();
+
+			const boardXSize = setupRulesDraft.boardXSize;
+			if (Number.isNaN(boardXSize)) return;
+			if (!Number.isFinite(boardXSize)) return;
+			if (boardXSize < 1) return;
+			if (boardXSize > 32) return;
+
+			syncSetupRulesDraftToDB();
+		}, 400);
+
+		return () => clearTimeout(saveTimeout);
+	}, [
+		setupRulesDraft,
+		originalBoardXSize,
+		setupRulesDraft?.boardXSize,
+		resetOriginalBoardXSize,
+		syncSetupRulesDraftToDB,
+		updateSetupRulesDraft,
+	]);
+
+	useEffect(() => {
+		const saveTimeout = setTimeout(() => {
+			if (!setupRulesDraft) return;
+			if (isNullOrUndefined(originalBoardYSize)) return;
+
+			resetOriginalBoardYSize();
+
+			const boardYSize = setupRulesDraft.boardYSize;
+			if (Number.isNaN(boardYSize)) return;
+			if (!Number.isFinite(boardYSize)) return;
+			if (boardYSize < 1) return;
+			if (boardYSize > 32) return;
+
+			syncSetupRulesDraftToDB();
+		}, 400);
+
+		return () => clearTimeout(saveTimeout);
+	}, [
+		setupRulesDraft,
+		originalBoardYSize,
+		setupRulesDraft?.boardYSize,
+		resetOriginalBoardYSize,
+		syncSetupRulesDraftToDB,
+		updateSetupRulesDraft,
+	]);
 
 	if (!setupRulesDraft) return null;
 	if (!pieceRulesetDraft) return null;
@@ -138,21 +197,48 @@ function SetupMenu() {
 
 	function handleBoardWidthInputChange(e: ChangeEvent<HTMLInputElement>) {
 		if (!setupRulesDraft) return;
-		
+
 		const newBoardXSize = e.target.valueAsNumber;
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
-		
+
+		if (isNullOrUndefined(originalBoardXSize)) {
+			updateOriginalBoardXSize(newBoardXSize);
+		}
+
 		updatedSetupRulesDraft.boardXSize = newBoardXSize;
 		updateSetupRulesDraft(updatedSetupRulesDraft);
-		syncSetupRulesDraftToDB();
 	}
 
 	function handleBoardHeightInputChange(e: ChangeEvent<HTMLInputElement>) {
 		if (!setupRulesDraft) return;
-		
+
 		const newBoardYSize = e.target.valueAsNumber;
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+
+		if (isNullOrUndefined(originalBoardYSize)) {
+			updateOriginalBoardYSize(newBoardYSize);
+		}
+
 		updatedSetupRulesDraft.boardYSize = newBoardYSize;
+		updateSetupRulesDraft(updatedSetupRulesDraft);
+	}
+
+	function revertBoardXSize() {
+		if (!setupRulesDraft) return;
+		if (isNullOrUndefined(originalBoardXSize)) return;
+
+		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		updatedSetupRulesDraft.boardXSize = originalBoardXSize;
+		updateSetupRulesDraft(updatedSetupRulesDraft);
+		syncSetupRulesDraftToDB();
+	}
+
+	function revertBoardYSize() {
+		if (!setupRulesDraft) return;
+		if (isNullOrUndefined(originalBoardYSize)) return;
+
+		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		updatedSetupRulesDraft.boardYSize = originalBoardYSize;
 		updateSetupRulesDraft(updatedSetupRulesDraft);
 		syncSetupRulesDraftToDB();
 	}
@@ -178,7 +264,9 @@ function SetupMenu() {
 					}}
 				>
 					<div className="flex flex-row items-center justify-between w-full p-2">
-						<span className="text-sm font-semibold">Board size</span>
+						<span className="text-sm font-semibold">
+							Board size
+						</span>
 						<CollapsibleTrigger asChild>
 							<Button
 								variant="ghost"
