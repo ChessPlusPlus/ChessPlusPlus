@@ -7,6 +7,7 @@ import type {
 } from "@/features/variants/common/types/pieceRules";
 import { handlePieceNameUpdate } from "@/features/variants/variantEditor/common/utils/nameUpdateHandler";
 import { generateId } from "@/shared/utils/idGeneration";
+import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 
 type PieceEditorChanges = {
 	pieceName: string;
@@ -331,8 +332,9 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get) => ({
 			updatedPieceRulesetDraft[originalPieceName] = newPieceInfo;
 
 			if (Object.keys(pieceEditorChanges).includes("pieceName")) {
-				if (!pieceEditorChanges.pieceName) return;
-
+				if (isNullOrUndefined(pieceEditorChanges.pieceName)) return;
+				if (pieceEditorChanges.pieceName.trim() === "") return;
+				
 				handlePieceNameUpdate(
 					originalPieceName,
 					updatedPieceRulesetDraft,
