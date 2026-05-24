@@ -378,13 +378,15 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get) => ({
 
 			if (Object.keys(pieceEditorChanges).includes("pieceName")) {
 				if (isNullOrUndefined(pieceEditorChanges.pieceName)) return;
-				if (pieceEditorChanges.pieceName.trim() === "") {
+
+				const trimmedPieceName = pieceEditorChanges.pieceName.trim();
+				if (trimmedPieceName === "") {
 					get().updatePieceName(originalPieceName);
 					get().removePieceEditorChanges(["pieceName"]);
 					return;
 				};
 
-				if (Object.keys(pieceRulesetDraft).includes(pieceEditorChanges.pieceName.trim())) {
+				if (Object.keys(pieceRulesetDraft).includes(trimmedPieceName)) {
 					get().updatePieceName(originalPieceName);
 					get().removePieceEditorChanges(["pieceName"]);
 					return;
@@ -395,7 +397,7 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get) => ({
 					updatedPieceRulesetDraft,
 					updatedSetupRulesDraft,
 					newPieceInfo,
-					pieceEditorChanges.pieceName,
+					trimmedPieceName,
 				);
 			}
 
