@@ -15,7 +15,7 @@ export function AppearanceTab() {
 	const { currentVariantId } = useVariantDraftStore();
 	const fileUploadInputRef = useRef<HTMLInputElement>(null);
 
-	if (!isNullOrUndefined(pieceName)) return null;
+	if (isNullOrUndefined(pieceName)) return null;
 	if (!images) return null;
 	
 	function getPieceImageToDisplay() {
