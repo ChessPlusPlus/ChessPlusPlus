@@ -16,7 +16,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import SelectionDialog from "@/features/variants/variantEditor/common/components/SelectionDialog";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
+import AddPlayerDialog from "@/features/variants/variantEditor/setupEditor/components/AddPlayerDialog";
+import RenamePlayerDialog from "@/features/variants/variantEditor/setupEditor/components/RenamePlayerDialog";
+import useAddPlayerDialogStore from "@/features/variants/variantEditor/setupEditor/stores/addPlayerDialog";
 import usePieceOwnershipSelectionDialogStore from "@/features/variants/variantEditor/setupEditor/stores/pieceOwnershipSelectionDialog";
+import useRenamePlayerDialogStore from "@/features/variants/variantEditor/setupEditor/stores/renamePlayerDialog";
 import useSetupMenuStore from "@/features/variants/variantEditor/setupEditor/stores/setupMenu";
 import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 import { useDraggable } from "@dnd-kit/react";
@@ -24,6 +28,8 @@ import {
 	IconChevronDown,
 	IconChevronUp,
 	IconDotsVertical,
+	IconPencil,
+	IconPlus,
 	IconX,
 } from "@tabler/icons-react";
 import { ChessKnight } from "lucide-react";
@@ -98,6 +104,20 @@ function SetupMenu() {
 		collapsePieces,
 	} = useSetupMenuStore();
 
+	const {
+		openAddPlayerDialog,
+		clearPlayerNameErrors,
+		closeAddPlayerDialog,
+		clearPlayerName,
+	} = useAddPlayerDialogStore();
+	const {
+		openRenamePlayerDialog,
+		clearOriginalPlayerName,
+		clearPlayerName: clearRenamePlayerName,
+		clearPlayerNameErrors: clearRenamePlayerNameErrors,
+		closeRenamePlayerDialog,
+	} = useRenamePlayerDialogStore();
+
 	useEffect(() => {
 		const saveTimeout = setTimeout(() => {
 			const boardXSize = setupRulesDraft?.boardXSize;
@@ -171,6 +191,36 @@ function SetupMenu() {
 		return () => clearTimeout(timeout);
 	}, [setupRulesDraft?.boardYSize, updateOriginalBoardYSize]);
 
+	useEffect(() => {
+		return () => {
+			clearPlayerNameErrors();
+			clearSearchQuery();
+			closePieceOwnershipSelectionDialog();
+			closeAddPlayerDialog();
+			clearPlayerName();
+		};
+	}, [
+		clearPlayerNameErrors,
+		clearSearchQuery,
+		closePieceOwnershipSelectionDialog,
+		closeAddPlayerDialog,
+		clearPlayerName,
+	]);
+
+	useEffect(() => {
+		return () => {
+			clearOriginalPlayerName();
+			clearRenamePlayerName();
+			clearRenamePlayerNameErrors();
+			closeRenamePlayerDialog();
+		};
+	}, [
+		clearOriginalPlayerName,
+		clearRenamePlayerName,
+		clearRenamePlayerNameErrors,
+		closeRenamePlayerDialog,
+	]);
+
 	if (!setupRulesDraft) return null;
 	if (!pieceRulesetDraft) return null;
 	if (!images) return null;
@@ -214,6 +264,10 @@ function SetupMenu() {
 	function handleEditPiecesButtonClick(playerName: string) {
 		openPieceOwnershipSelectionDialog();
 		updatePlayer(playerName);
+	}
+
+	function handleRenamePlayerButtonClick(playerName: string) {
+		openRenamePlayerDialog(playerName);
 	}
 
 	function handleBoardWidthInputChange(e: ChangeEvent<HTMLInputElement>) {
@@ -336,6 +390,10 @@ function SetupMenu() {
 		syncSetupRulesDraftToDB();
 	}
 
+	function handleAddPlayerButtonClick() {
+		openAddPlayerDialog();
+	}
+
 	return (
 		<>
 			<div className="bg-muted p-2 rounded-lg">
@@ -431,30 +489,46 @@ function SetupMenu() {
 				>
 					<div className="flex flex-row items-center justify-between w-full p-2">
 						<span className="text-sm font-semibold">Players</span>
-						<CollapsibleTrigger asChild>
+						<div className="flex flex-row items-center">
 							<Button
 								variant="ghost"
 								size="icon-xs"
-								className="hover:bg-gray-300 aria-expanded:hover:bg-gray-300"
+								className="hover:bg-gray-300"
+								onClick={handleAddPlayerButtonClick}
+								disabled={players.length >= 2}
+								aria-disabled={players.length >= 2}
+								aria-label="Add player"
+								title="Add player"
 							>
-								{isPlayersExpanded ? (
-									<IconChevronUp className="size-4" />
-								) : (
-									<IconChevronDown className="size-4" />
-								)}
+								<IconPlus className="size-4" />
 							</Button>
-						</CollapsibleTrigger>
+							<CollapsibleTrigger asChild>
+								<Button
+									variant="ghost"
+									size="icon-xs"
+									className="hover:bg-gray-300 aria-expanded:hover:bg-gray-300"
+								>
+									{isPlayersExpanded ? (
+										<IconChevronUp className="size-4" />
+									) : (
+										<IconChevronDown className="size-4" />
+									)}
+								</Button>
+							</CollapsibleTrigger>
+						</div>
 					</div>
 
 					<CollapsibleContent>
 						<div className="flex flex-col">
-							{players.map((color) => {
+							{players.map((player) => {
 								return (
 									<div
-										key={color}
+										key={player}
 										className="flex flex-row items-center justify-between w-full px-2"
 									>
-										<span className="text-sm">{color}</span>
+										<span className="text-sm">
+											{player}
+										</span>
 										<DropdownMenu>
 											<DropdownMenuTrigger asChild>
 												<Button
@@ -470,12 +544,23 @@ function SetupMenu() {
 												<DropdownMenuItem
 													onClick={() =>
 														handleEditPiecesButtonClick(
-															color,
+															player,
 														)
 													}
 												>
 													<ChessKnight className="size-4" />
 													Edit pieces
+												</DropdownMenuItem>
+
+												<DropdownMenuItem
+													onClick={() =>
+														handleRenamePlayerButtonClick(
+															player,
+														)
+													}
+												>
+													<IconPencil className="size-4" />
+													Rename
 												</DropdownMenuItem>
 											</DropdownMenuContent>
 										</DropdownMenu>
@@ -561,6 +646,9 @@ function SetupMenu() {
 				updateSearchQuery={updateSearchQuery}
 				clearSearchQuery={clearSearchQuery}
 			/>
+
+			<AddPlayerDialog />
+			<RenamePlayerDialog />
 		</>
 	);
 }
