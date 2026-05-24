@@ -32,8 +32,8 @@ function ChessboardGrid({ boardState, legalMoves }: ChessboardGridProps) {
 		if (!currentVariantId) return null;
 
 		const imageBlob =
-			images[imageId][currentVariantId] ?? images[imageId].image;
-		const imageUrl = URL.createObjectURL(imageBlob);
+			images[imageId]?.[currentVariantId] ?? images[imageId]?.image;
+		const imageUrl = imageBlob ? URL.createObjectURL(imageBlob) : undefined;
 
 		return (
 			<div className="w-full h-full flex items-center justify-center">
