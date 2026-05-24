@@ -91,7 +91,7 @@ export function AppearanceTab() {
 				<div className="flex items-center justify-center">
 					<img
 						src={URL.createObjectURL(getPieceImageToDisplay()!)}
-						alt={pieceName}
+						alt={pieceName || "Piece image"}
 						className="w-1/2 select-none"
 					/>
 				</div>
