@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import useAddPlayerDialogStore from "@/features/variants/variantEditor/setupEditor/stores/addPlayerDialog";
 import type { ChangeEvent } from "react";
 
@@ -19,11 +20,30 @@ function AddPlayerDialog() {
 		closeAddPlayerDialog,
 		playerName,
 		updatePlayerName,
+		updatePlayerNameErrors,
 		playerNameErrors,
+		clearPlayerNameErrors,
 	} = useAddPlayerDialogStore();
 
+	const { setupRulesDraft } = useVariantDraftStore();
+	if (!setupRulesDraft) return null;
+
 	function handlePlayerNameInputChange(e: ChangeEvent<HTMLInputElement>) {
-		updatePlayerName(e.target.value);
+		if (!setupRulesDraft) return;
+
+		const trimmedPlayerName = e.target.value.trim();
+		if (trimmedPlayerName === "") {
+			updatePlayerNameErrors(["Player name cannot be empty"]);
+			return;
+		}
+
+		if (Object.keys(setupRulesDraft.pieceOwnership).includes(trimmedPlayerName)) {
+			updatePlayerNameErrors(["Player name already exists"]);
+			return;
+		}
+
+		updatePlayerName(trimmedPlayerName);
+		clearPlayerNameErrors();
 	}
 
 	return (
