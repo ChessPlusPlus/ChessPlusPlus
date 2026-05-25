@@ -20,6 +20,7 @@ function PieceCreationDialog() {
 		closePieceCreationDialog,
 		pieceName,
 		updatePieceName,
+		updatePieceImage,
 		updatePieceNameErrors,
 		pieceNameErrors,
 	} = usePieceCreationDialogStore();
@@ -66,6 +67,15 @@ function PieceCreationDialog() {
 		pieceImageInputRef.current?.click();
 	}
 
+	function handlePieceImageInputChange(e: ChangeEvent<HTMLInputElement>) {
+		if (!e.target.files) return;
+
+		const file = e.target.files[0];
+		if (!file) return;
+		
+		updatePieceImage(file);
+	};
+	
 	return (
 		<Dialog
 			open={isPieceCreationDialogOpen}
@@ -108,6 +118,7 @@ function PieceCreationDialog() {
 					</Button>
 					<Input
 						ref={pieceImageInputRef}
+						onChange={handlePieceImageInputChange}
 						id="pieceImageInput"
 						type="file"
 						accept="image/*"
