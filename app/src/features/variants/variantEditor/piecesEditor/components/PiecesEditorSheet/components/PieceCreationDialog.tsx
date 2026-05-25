@@ -81,8 +81,6 @@ function PieceCreationDialog() {
 	}
 
 	function handlePieceImageInputChange(e: ChangeEvent<HTMLInputElement>) {
-		console.log("On change")
-
 		if (!e.target.files) return;
 
 		const file = e.target.files[0];
