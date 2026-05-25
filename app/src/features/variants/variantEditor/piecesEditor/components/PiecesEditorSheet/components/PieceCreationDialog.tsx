@@ -20,9 +20,12 @@ function PieceCreationDialog() {
 		closePieceCreationDialog,
 		pieceName,
 		updatePieceName,
-		updatePieceImage,
 		updatePieceNameErrors,
 		pieceNameErrors,
+
+		pieceImage,
+		updatePieceImage,
+		clearPieceImage,
 	} = usePieceCreationDialogStore();
 
 	const {
@@ -72,10 +75,10 @@ function PieceCreationDialog() {
 
 		const file = e.target.files[0];
 		if (!file) return;
-		
+
 		updatePieceImage(file);
-	};
-	
+	}
+
 	return (
 		<Dialog
 			open={isPieceCreationDialogOpen}
@@ -107,15 +110,25 @@ function PieceCreationDialog() {
 				</Field>
 
 				<Field>
-					<FieldLabel htmlFor="pieceImageInput">Piece image</FieldLabel>
-					<Button
-						onClick={handleUploadImageButtonClick}
-						variant="outline"
-						className="w-full flex flex-col h-max p-4"
-					>
-						<IconUpload className="size-8" />
-						Upload image
-					</Button>
+					<FieldLabel htmlFor="pieceImageInput">
+						Piece image
+					</FieldLabel>
+
+					{pieceImage ? (
+						<div className="w-full flex flex-col items-center justify-center h-max p-4">
+							<img className="size-16" src={URL.createObjectURL(pieceImage)} alt="Piece image" />
+						</div>
+					) : (
+						<Button
+							onClick={handleUploadImageButtonClick}
+							variant="outline"
+							className="w-full flex flex-col h-max p-4"
+						>
+							<IconUpload className="size-8" />
+							Upload image
+						</Button>
+					)}
+
 					<Input
 						ref={pieceImageInputRef}
 						onChange={handlePieceImageInputChange}
