@@ -70,6 +70,14 @@ function PieceCreationDialog() {
 		pieceImageInputRef.current?.click();
 	}
 
+	function handleRemoveImageButtonClick() {
+		clearPieceImage();
+	}
+
+	function handleEditImageButtonClick() {
+		pieceImageInputRef.current?.click();
+	}
+
 	function handlePieceImageInputChange(e: ChangeEvent<HTMLInputElement>) {
 		if (!e.target.files) return;
 
@@ -124,11 +132,11 @@ function PieceCreationDialog() {
 								/>
 							</div>
 							<div className="w-full grid grid-cols-2 gap-2">
-								<Button variant="destructive" data-icon="inline-start">
+								<Button variant="destructive" data-icon="inline-start" onClick={handleRemoveImageButtonClick}>
 									<IconTrash className="size-4" />
 									Remove image
 								</Button>
-								<Button variant="outline" data-icon="inline-start">
+								<Button variant="outline" data-icon="inline-start" onClick={handleEditImageButtonClick}>
 									<IconPencil className="size-4" />
 									Edit image
 								</Button>
