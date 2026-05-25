@@ -8,7 +8,11 @@ type PieceImagesStore = {
 	images: Record<string, PieceImage>;
 	addImage: (imageBlob: Blob) => void;
 	updateImage: (imageId: string, imageBlob: Blob) => void;
-	updateImageForVariantId: (imageId: string, variantId: string, newImage: Blob) => void;
+	updateImageForVariantId: (
+		imageId: string,
+		variantId: string,
+		newImage: Blob,
+	) => void;
 	updateImages: (images: Record<string, PieceImage>) => void;
 	removeImage: (imageId: string) => void;
 
@@ -34,6 +38,8 @@ const usePieceImagesStore = create<PieceImagesStore>()(
 						[generatedImageId]: { image: imageBlob },
 					},
 				}));
+
+				return generatedImageId;
 			},
 
 			updateImage: (imageId, imageBlob) => {
@@ -51,10 +57,10 @@ const usePieceImagesStore = create<PieceImagesStore>()(
 						...state.images,
 						[imageId]: {
 							...state.images[imageId],
-							[variantId]: newImage
-						}
-					}
-				}))
+							[variantId]: newImage,
+						},
+					},
+				}));
 			},
 
 			updateImages: (images) => {
