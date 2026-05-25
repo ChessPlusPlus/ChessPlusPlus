@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import usePieceCreationDialogStore from "@/features/variants/variantEditor/piecesEditor/stores/pieceCreationDialog";
 import { IconPencil, IconTrash, IconUpload } from "@tabler/icons-react";
@@ -34,6 +35,8 @@ function PieceCreationDialog() {
 		syncPieceRulesetDraftToDB,
 	} = useVariantDraftStore();
 
+	const { addImage } = usePieceImagesStore();
+
 	const pieceImageInputRef = useRef<HTMLInputElement>(null);
 
 	if (!pieceRulesetDraft) return null;
@@ -44,7 +47,8 @@ function PieceCreationDialog() {
 
 	function handlePieceCreation() {
 		if (!pieceRulesetDraft) return;
-
+		if (!pieceImage) return;
+		
 		if (pieceName.trim() === "") {
 			updatePieceNameErrors(["Piece name is required"]);
 			return;
@@ -55,9 +59,12 @@ function PieceCreationDialog() {
 			return;
 		}
 
+		const imageId = addImage(pieceImage);
+
 		const updatedPieceRulesetDraft = structuredClone(pieceRulesetDraft);
 		updatedPieceRulesetDraft[pieceName.trim()] = {
 			moveset: [],
+			imageId: imageId,
 		};
 
 		updatePieceRulesetDraft(updatedPieceRulesetDraft);
