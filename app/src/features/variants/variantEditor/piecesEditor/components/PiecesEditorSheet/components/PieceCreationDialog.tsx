@@ -72,6 +72,8 @@ function PieceCreationDialog() {
 
 	function handleRemoveImageButtonClick() {
 		clearPieceImage();
+		
+		if (!pieceImageInputRef.current) return;
 	}
 
 	function handleEditImageButtonClick() {
@@ -79,12 +81,17 @@ function PieceCreationDialog() {
 	}
 
 	function handlePieceImageInputChange(e: ChangeEvent<HTMLInputElement>) {
+		console.log("On change")
+
 		if (!e.target.files) return;
 
 		const file = e.target.files[0];
 		if (!file) return;
 
 		updatePieceImage(file);
+		
+		if (!pieceImageInputRef.current) return;
+		pieceImageInputRef.current.value = "";
 	}
 
 	return (
@@ -164,7 +171,7 @@ function PieceCreationDialog() {
 				</Field>
 
 				<DialogFooter>
-					<Button onClick={handlePieceCreation} className="w-full -mt-2">
+					<Button disabled={!pieceImage || pieceName.trim() === ""} onClick={handlePieceCreation} className="w-full -mt-2">
 						Create
 					</Button>
 				</DialogFooter>
