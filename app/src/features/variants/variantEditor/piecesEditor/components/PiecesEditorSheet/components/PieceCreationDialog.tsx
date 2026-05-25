@@ -10,7 +10,7 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import usePieceCreationDialogStore from "@/features/variants/variantEditor/piecesEditor/stores/pieceCreationDialog";
-import { IconUpload } from "@tabler/icons-react";
+import { IconPencil, IconTrash, IconUpload } from "@tabler/icons-react";
 import { useRef, type ChangeEvent } from "react";
 
 function PieceCreationDialog() {
@@ -115,8 +115,24 @@ function PieceCreationDialog() {
 					</FieldLabel>
 
 					{pieceImage ? (
-						<div className="w-full flex flex-col items-center justify-center h-max p-4">
-							<img className="size-16" src={URL.createObjectURL(pieceImage)} alt="Piece image" />
+						<div className="flex flex-col gap-4">
+							<div className="w-full flex flex-col items-center justify-center h-max p-4">
+								<img
+									className="size-16"
+									src={URL.createObjectURL(pieceImage)}
+									alt="Piece image"
+								/>
+							</div>
+							<div className="w-full grid grid-cols-2 gap-2">
+								<Button variant="destructive" data-icon="inline-start">
+									<IconTrash className="size-4" />
+									Remove image
+								</Button>
+								<Button variant="outline" data-icon="inline-start">
+									<IconPencil className="size-4" />
+									Edit image
+								</Button>
+							</div>
 						</div>
 					) : (
 						<Button
@@ -140,7 +156,7 @@ function PieceCreationDialog() {
 				</Field>
 
 				<DialogFooter>
-					<Button onClick={handlePieceCreation} className="px-4">
+					<Button onClick={handlePieceCreation} className="w-full -mt-2">
 						Create
 					</Button>
 				</DialogFooter>
