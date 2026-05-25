@@ -1,13 +1,19 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import usePieceCreationDialogStore from "@/features/variants/variantEditor/piecesEditor/stores/pieceCreationDialog";
-import type { ChangeEvent } from "react";
+import { IconUpload } from "@tabler/icons-react";
+import { useRef, type ChangeEvent } from "react";
 
 function PieceCreationDialog() {
-
 	const {
 		isPieceCreationDialogOpen,
 		openPieceCreationDialog,
@@ -18,7 +24,13 @@ function PieceCreationDialog() {
 		pieceNameErrors,
 	} = usePieceCreationDialogStore();
 
-	const { pieceRulesetDraft, updatePieceRulesetDraft, syncPieceRulesetDraftToDB } = useVariantDraftStore();
+	const {
+		pieceRulesetDraft,
+		updatePieceRulesetDraft,
+		syncPieceRulesetDraftToDB,
+	} = useVariantDraftStore();
+
+	const pieceImageInputRef = useRef<HTMLInputElement>(null);
 
 	if (!pieceRulesetDraft) return null;
 
@@ -28,7 +40,7 @@ function PieceCreationDialog() {
 
 	function handlePieceCreation() {
 		if (!pieceRulesetDraft) return;
-		
+
 		if (pieceName.trim() === "") {
 			updatePieceNameErrors(["Piece name is required"]);
 			return;
@@ -49,11 +61,17 @@ function PieceCreationDialog() {
 
 		closePieceCreationDialog();
 	}
-	
+
+	function handleUploadImageButtonClick() {
+		pieceImageInputRef.current?.click();
+	}
+
 	return (
 		<Dialog
 			open={isPieceCreationDialogOpen}
-			onOpenChange={(open) => (open ? openPieceCreationDialog() : closePieceCreationDialog())}
+			onOpenChange={(open) =>
+				open ? openPieceCreationDialog() : closePieceCreationDialog()
+			}
 		>
 			<DialogContent>
 				<DialogHeader>
@@ -61,9 +79,7 @@ function PieceCreationDialog() {
 				</DialogHeader>
 
 				<Field>
-					<FieldLabel htmlFor="pieceNameInput">
-						Piece name
-					</FieldLabel>
+					<FieldLabel htmlFor="pieceNameInput">Piece name</FieldLabel>
 					<Input
 						id="pieceNameInput"
 						type="text"
@@ -80,8 +96,29 @@ function PieceCreationDialog() {
 					/>
 				</Field>
 
+				<Field>
+					<FieldLabel htmlFor="pieceImageInput">Piece image</FieldLabel>
+					<Button
+						onClick={handleUploadImageButtonClick}
+						variant="outline"
+						className="w-full flex flex-col h-max p-4"
+					>
+						<IconUpload className="size-8" />
+						Upload image
+					</Button>
+					<Input
+						ref={pieceImageInputRef}
+						id="pieceImageInput"
+						type="file"
+						accept="image/*"
+						className="hidden"
+					/>
+				</Field>
+
 				<DialogFooter>
-					<Button onClick={handlePieceCreation} className="px-4">Create</Button>
+					<Button onClick={handlePieceCreation} className="px-4">
+						Create
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
