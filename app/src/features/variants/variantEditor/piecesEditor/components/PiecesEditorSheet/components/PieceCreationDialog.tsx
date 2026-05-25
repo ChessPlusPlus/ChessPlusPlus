@@ -71,6 +71,9 @@ function PieceCreationDialog() {
 		syncPieceRulesetDraftToDB();
 
 		closePieceCreationDialog();
+		clearPieceImage();
+		updatePieceName("");
+		updatePieceNameErrors([]);
 	}
 
 	function handleUploadImageButtonClick() {
