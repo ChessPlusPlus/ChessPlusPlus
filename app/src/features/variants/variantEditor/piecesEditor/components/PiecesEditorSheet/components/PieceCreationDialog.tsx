@@ -1,13 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import usePieceCreationDialogStore from "@/features/variants/variantEditor/piecesEditor/stores/pieceCreationDialog";
-import type { ChangeEvent } from "react";
+import { IconPencil, IconTrash, IconUpload } from "@tabler/icons-react";
+import { useRef, type ChangeEvent } from "react";
 
 function PieceCreationDialog() {
-
 	const {
 		isPieceCreationDialogOpen,
 		openPieceCreationDialog,
@@ -16,9 +23,21 @@ function PieceCreationDialog() {
 		updatePieceName,
 		updatePieceNameErrors,
 		pieceNameErrors,
+
+		pieceImage,
+		updatePieceImage,
+		clearPieceImage,
 	} = usePieceCreationDialogStore();
 
-	const { pieceRulesetDraft, updatePieceRulesetDraft, syncPieceRulesetDraftToDB } = useVariantDraftStore();
+	const {
+		pieceRulesetDraft,
+		updatePieceRulesetDraft,
+		syncPieceRulesetDraftToDB,
+	} = useVariantDraftStore();
+
+	const { addImage } = usePieceImagesStore();
+
+	const pieceImageInputRef = useRef<HTMLInputElement>(null);
 
 	if (!pieceRulesetDraft) return null;
 
@@ -28,6 +47,7 @@ function PieceCreationDialog() {
 
 	function handlePieceCreation() {
 		if (!pieceRulesetDraft) return;
+		if (!pieceImage) return;
 		
 		if (pieceName.trim() === "") {
 			updatePieceNameErrors(["Piece name is required"]);
@@ -39,21 +59,55 @@ function PieceCreationDialog() {
 			return;
 		}
 
+		const imageId = addImage(pieceImage);
+
 		const updatedPieceRulesetDraft = structuredClone(pieceRulesetDraft);
 		updatedPieceRulesetDraft[pieceName.trim()] = {
 			moveset: [],
+			imageId: imageId,
 		};
 
 		updatePieceRulesetDraft(updatedPieceRulesetDraft);
 		syncPieceRulesetDraftToDB();
 
 		closePieceCreationDialog();
+		clearPieceImage();
+		updatePieceName("");
+		updatePieceNameErrors([]);
 	}
-	
+
+	function handleUploadImageButtonClick() {
+		pieceImageInputRef.current?.click();
+	}
+
+	function handleRemoveImageButtonClick() {
+		clearPieceImage();
+		
+		if (!pieceImageInputRef.current) return;
+	}
+
+	function handleEditImageButtonClick() {
+		pieceImageInputRef.current?.click();
+	}
+
+	function handlePieceImageInputChange(e: ChangeEvent<HTMLInputElement>) {
+		if (!e.target.files) return;
+
+		const file = e.target.files[0];
+		if (!file) return;
+
+		updatePieceImage(file);
+		
+		if (!pieceImageInputRef.current) return;
+		pieceImageInputRef.current.value = "";
+	}
+
 	return (
 		<Dialog
 			open={isPieceCreationDialogOpen}
-			onOpenChange={(open) => (open ? openPieceCreationDialog() : closePieceCreationDialog())}
+			onOpenChange={(open) =>
+				open ? openPieceCreationDialog() : closePieceCreationDialog()
+			}
 		>
 			<DialogContent>
 				<DialogHeader>
@@ -61,9 +115,7 @@ function PieceCreationDialog() {
 				</DialogHeader>
 
 				<Field>
-					<FieldLabel htmlFor="pieceNameInput">
-						Piece name
-					</FieldLabel>
+					<FieldLabel htmlFor="pieceNameInput">Piece name</FieldLabel>
 					<Input
 						id="pieceNameInput"
 						type="text"
@@ -80,8 +132,56 @@ function PieceCreationDialog() {
 					/>
 				</Field>
 
+				<Field>
+					<FieldLabel htmlFor="pieceImageInput">
+						Piece image
+					</FieldLabel>
+
+					{pieceImage ? (
+						<div className="flex flex-col gap-4">
+							<div className="w-full flex flex-col items-center justify-center h-max p-4">
+								<img
+									className="size-16"
+									src={URL.createObjectURL(pieceImage)}
+									alt="Piece image"
+								/>
+							</div>
+							<div className="w-full grid grid-cols-2 gap-2">
+								<Button variant="destructive" data-icon="inline-start" onClick={handleRemoveImageButtonClick}>
+									<IconTrash className="size-4" />
+									Remove image
+								</Button>
+								<Button variant="outline" data-icon="inline-start" onClick={handleEditImageButtonClick}>
+									<IconPencil className="size-4" />
+									Edit image
+								</Button>
+							</div>
+						</div>
+					) : (
+						<Button
+							onClick={handleUploadImageButtonClick}
+							variant="outline"
+							className="w-full flex flex-col h-max p-4"
+						>
+							<IconUpload className="size-8" />
+							Upload image
+						</Button>
+					)}
+
+					<Input
+						ref={pieceImageInputRef}
+						onChange={handlePieceImageInputChange}
+						id="pieceImageInput"
+						type="file"
+						accept="image/*"
+						className="hidden"
+					/>
+				</Field>
+
 				<DialogFooter>
-					<Button onClick={handlePieceCreation} className="px-4">Create</Button>
+					<Button disabled={!pieceImage || pieceName.trim() === ""} onClick={handlePieceCreation} className="w-full -mt-2">
+						Create
+					</Button>
 				</DialogFooter>
 			</DialogContent>
 		</Dialog>
