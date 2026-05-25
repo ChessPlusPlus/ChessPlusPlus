@@ -8,6 +8,10 @@ type PieceCreationDialogStore = {
 	pieceName: string;
 	updatePieceName: (name: string) => void;
 
+	pieceImage: Blob | null;
+	updatePieceImage: (image: Blob | null) => void;
+	clearPieceImage: () => void;
+
 	pieceNameErrors: string[];
 	updatePieceNameErrors: (errors: string[]) => void;
 }
@@ -19,6 +23,10 @@ const usePieceCreationDialogStore = create<PieceCreationDialogStore>((set) => ({
 	
 	pieceName: "",
 	updatePieceName: (name) => set({ pieceName: name }),
+	
+	pieceImage: null,
+	updatePieceImage: (image) => set({ pieceImage: image }),
+	clearPieceImage: () => set({ pieceImage: null }),
 	
 	pieceNameErrors: [],
 	updatePieceNameErrors: (errors) => set({ pieceNameErrors: errors }),
