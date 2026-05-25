@@ -6,7 +6,7 @@ import { persist } from "zustand/middleware";
 
 type PieceImagesStore = {
 	images: Record<string, PieceImage>;
-	addImage: (imageBlob: Blob) => void;
+	addImage: (imageBlob: Blob) => string;
 	updateImage: (imageId: string, imageBlob: Blob) => void;
 	updateImageForVariantId: (
 		imageId: string,
