@@ -1,6 +1,10 @@
 import { create } from "zustand";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
-import type { MoveDefinitionChanges } from "@/features/variants/common/types/movementRules";
+import type {
+	MoveDefinitionChanges,
+	MoveDefinition,
+	NumericFieldConstraints,
+} from "@/features/variants/common/types/movementRules";
 import { handleMovementNameUpdate } from "@/features/variants/variantEditor/common/utils/nameUpdateHandler";
 
 type MovementsEditorChanges = {
@@ -146,6 +150,10 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 				"range",
 			];
 
+			const numericConstraintsConfig: NumericFieldConstraints = {
+				range: { min: 1, max: null }
+			}
+
 			const updateMovementRulesDraft =
 				useVariantDraftStore.getState().updateMovementRulesDraft;
 			const updatePieceRulesetDraft =
@@ -175,14 +183,65 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 					),
 				);
 
+				const filteredMoveDefinitionChanges = Object.fromEntries(
+					Object.entries(moveDefinitionChanges).filter(
+						([key, value]) => {
+							if (
+								!Object.keys(numericConstraintsConfig).includes(
+									key as keyof MovementsEditorChanges,
+								)
+							) {
+								return true;
+							}
+
+							if (Number.isNaN(value)) return false;
+							if (!Number.isFinite(value)) return false;
+
+							return true;
+						},
+					),
+				);
+
+				const changesToRevert = Object.fromEntries(
+					Object.entries(moveDefinitionChanges)
+						.filter(([key, value]) => {
+							if (
+								!Object.keys(numericConstraintsConfig).includes(
+									key as keyof MovementsEditorChanges,
+								)
+							) {
+								return false;
+							}
+
+							if (Number.isNaN(value)) return true;
+							if (!Number.isFinite(value)) return true;
+
+							return false;
+						})
+						.map(([key]) => {
+							return [
+								key,
+								movementRulesDraft[originalMovementName]
+									.moveDefinition[
+									key as keyof MoveDefinition
+								],
+							];
+						}),
+				);
+
 				const newMovementInfo = {
 					...originalMovementInfo,
 					...topLevelChanges,
 
 					moveDefinition: {
 						...originalMovementInfo.moveDefinition,
-						...moveDefinitionChanges,
+						...filteredMoveDefinitionChanges,
 					},
+				};
+
+				newMovementInfo.moveDefinition = {
+					...newMovementInfo.moveDefinition,
+					...changesToRevert,
 				};
 
 				updatedMovementRulesDraft[originalMovementName] =
@@ -236,8 +295,64 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 					),
 				);
 
+				const filteredMoveDefinitionChanges = Object.fromEntries(
+					Object.entries(moveDefinitionChanges).filter(
+						([key, value]) => {
+							if (
+								!Object.keys(numericConstraintsConfig).includes(
+									key as keyof MovementsEditorChanges,
+								)
+							) {
+								return true;
+							}
+
+							if (Number.isNaN(value)) return false;
+							if (!Number.isFinite(value)) return false;
+
+							return true;
+						},
+					),
+				);
+
+				const changesToRevert = Object.fromEntries(
+					Object.entries(moveDefinitionChanges)
+						.filter(([key, value]) => {
+							if (
+								!Object.keys(numericConstraintsConfig).includes(
+									key as keyof MovementsEditorChanges,
+								)
+							) {
+								return false;
+							}
+
+							if (Number.isNaN(value)) return true;
+							if (!Number.isFinite(value)) return true;
+							
+							if (value as number < (numericConstraintsConfig[key]?.min ?? -Infinity)) {
+								return true;
+							}
+
+							if (value as number > (numericConstraintsConfig[key]?.max ?? Infinity)) {
+								return true;
+							}
+
+							return false;
+						})
+						.map(([key]) => {
+							return [
+								key,
+								movementRulesDraft[originalMovementName]
+									.moveDefinition[
+									key as keyof MoveDefinition
+								],
+							];
+						}),
+				);
+
+				console.log(changesToRevert);
+
 				const renamedMoveDefinitionChanges = Object.fromEntries(
-					Object.entries(moveDefinitionChanges).map(
+					Object.entries(filteredMoveDefinitionChanges).map(
 						([key, value]) => {
 							if (key === "offsetX") {
 								return ["moveX", value];
@@ -260,6 +375,16 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 						...originalMovementInfo.moveDefinition,
 						...renamedMoveDefinitionChanges,
 					},
+				};
+
+				console.log(JSON.stringify(newMovementInfo, null, 2));
+				console.log(
+					JSON.stringify(renamedMoveDefinitionChanges, null, 2),
+				);
+
+				newMovementInfo.moveDefinition = {
+					...newMovementInfo.moveDefinition,
+					...changesToRevert,
 				};
 
 				updatedMovementRulesDraft[originalMovementName] =
