@@ -25,4 +25,4 @@ type MovementRule = {
 
 type MovementRules = Record<string, MovementRule>;
 
-export type { MovementRule, MovementRules, MoveDefinitionChanges };
+export type { MovementRule, MovementRules, MoveDefinitionChanges, MoveDefinition };
