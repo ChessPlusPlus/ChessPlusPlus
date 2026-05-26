@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { Button } from "@/components/ui/button";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
@@ -80,7 +82,7 @@ function VariantPlayPage() {
 	useEffect(() => {
 		return () => {
 			clearLegalMoves();
-		}
+		};
 	}, [clearLegalMoves]);
 
 	function handleBackToHomePage() {
@@ -138,35 +140,37 @@ function VariantPlayPage() {
 		if (!validMove || !newGameState) {
 			updateGameBoardState(gameBoardState);
 			return;
-		};
+		}
 
 		updateGameBoardState(newGameState);
 	}
 
-	async function handleDragStart(
-		...args: Parameters<NonNullable<OnDragStart>>
-	) {
-		clearLegalMoves();
-		
-		if (!activeGameId) return;
+	const handleDragStart = _.debounce(
+		async (...args: Parameters<NonNullable<OnDragStart>>) => {
+			clearLegalMoves();
 
-		const [event] = args;
+			if (!activeGameId) return;
 
-		if (event.operation.canceled) return;
+			const [event] = args;
 
-		const startLocation = event.operation.source?.data.startLocation;
-		if (!startLocation) return;
+			if (event.operation.canceled) return;
 
-		const [file, rank] = startLocation;
+			const startLocation = event.operation.source?.data.startLocation;
+			if (!startLocation) return;
 
-		const legalMoves = (
-			await generateLegalMoves(activeGameId, [file, rank])
-		)?.legalMoves;
+			const [file, rank] = startLocation;
 
-		if (!legalMoves) return;
+			const legalMoves = (
+				await generateLegalMoves(activeGameId, [file, rank])
+			)?.legalMoves;
 
-		updateLegalMoves(legalMoves);
-	}
+			if (!legalMoves) return;
+
+			updateLegalMoves(legalMoves);
+		},
+		500,
+		{ leading: true, trailing: false },
+	);
 
 	return (
 		<div className="flex flex-col w-full h-full">
