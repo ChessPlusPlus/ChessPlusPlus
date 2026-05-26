@@ -128,8 +128,8 @@ function VariantPlayPage() {
 				location[1] !== Number(startLocation[1]),
 		);
 
-		updateGameBoardState(locallyUpdatedGameBoardState as GameState2DArray);
 		clearLegalMoves();
+		updateGameBoardState(locallyUpdatedGameBoardState as GameState2DArray);
 
 		const { validMove, newGameState } = await processMove(
 			activeGameId,
