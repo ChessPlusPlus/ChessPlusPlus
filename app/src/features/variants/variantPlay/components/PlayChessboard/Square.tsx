@@ -2,7 +2,10 @@ import _ from "lodash";
 
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import PieceImage from "@/features/variants/variantPlay/components/PlayChessboard/PieceImage";
-import { generateLegalMoves, processMove } from "@/features/variants/variantPlay/services/moveProcessing";
+import {
+	generateLegalMoves,
+	processMove,
+} from "@/features/variants/variantPlay/services/moveProcessing";
 import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
 import { useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";
@@ -52,11 +55,12 @@ function Square({
 	const isOnLeftEdge = isFlipped ? file === boardXSize - 1 : file === 0;
 	const isOnBottomEdge = isFlipped ? rank === boardYSize - 1 : rank === 0;
 
-	const handleSquareClick = _.debounce(async (squareFile: number, squareRank: number) => {
+	async function handleSquareClick(squareFile: number, squareRank: number) {
 		if (!activeGameId) return;
 		if (!gameBoardState) return;
 
-		const currentPrevClickedSquare = useGameplayStore.getState().prevClickedSquare;
+		const currentPrevClickedSquare =
+			useGameplayStore.getState().prevClickedSquare;
 		const currentClickedSquare = useGameplayStore.getState().clickedSquare;
 
 		if (!currentPrevClickedSquare && !currentClickedSquare) {
@@ -97,14 +101,16 @@ function Square({
 			);
 
 			if (!isLocallyLegal) {
+				console.log("not legal");
+
 				clearLegalMoves();
 				clearPrevClickedSquare();
 				clearClickedSquare();
 
 				await handleSquareClick(squareFile, squareRank);
-				
+
 				return;
-			};
+			}
 
 			const pieceAtStartLocation = gameBoardState.find(
 				([location]) =>
@@ -117,25 +123,23 @@ function Square({
 				clearClickedSquare();
 				clearLegalMoves();
 				return;
-			};
+			}
 
-			console.log([[squareFile, squareRank], pieceAtStartLocation])
+			console.log([[squareFile, squareRank], pieceAtStartLocation]);
 
 			const newGameBoardState = [
 				...gameBoardState,
 				[[squareFile, squareRank], pieceAtStartLocation],
-			].filter(
-				([location]) => {
-					if (location[0] !== currentPrevClickedSquare[0]) {
-						return true;
-					}
-
-					if (location[1] !== currentPrevClickedSquare[1]) {
-						return true;
-					}
-					return false;
+			].filter(([location]) => {
+				if (location[0] !== currentPrevClickedSquare[0]) {
+					return true;
 				}
-			);
+
+				if (location[1] !== currentPrevClickedSquare[1]) {
+					return true;
+				}
+				return false;
+			});
 
 			clearLegalMoves();
 			updateGameBoardState(newGameBoardState as GameState2DArray);
@@ -151,8 +155,11 @@ function Square({
 				updateGameBoardState(gameBoardState);
 				updatePrevClickedSquare([squareFile, squareRank]);
 				clearClickedSquare();
-				
-				await handleSquareClick(currentPrevClickedSquare[0], currentPrevClickedSquare[1]);
+
+				await handleSquareClick(
+					currentPrevClickedSquare[0],
+					currentPrevClickedSquare[1],
+				);
 
 				return;
 			}
@@ -161,11 +168,16 @@ function Square({
 			clearPrevClickedSquare();
 			clearClickedSquare();
 		}
-	}, 500, { leading: true, trailing: false });
+	}
+
+	const handleSquareClickDebounced = _.debounce(handleSquareClick, 500, {
+		leading: true,
+		trailing: false,
+	});
 
 	return (
 		<div
-			onClick={() => handleSquareClick(file, rank)}
+			onClick={() => handleSquareClickDebounced(file, rank)}
 			ref={ref}
 			key={`${file}-${rank}`}
 			className={`${isDark ? "bg-chessboard-square-dark" : "bg-chessboard-square-light"} aspect-square relative`}
