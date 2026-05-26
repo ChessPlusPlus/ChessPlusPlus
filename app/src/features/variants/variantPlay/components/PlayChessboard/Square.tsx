@@ -173,7 +173,7 @@ function Square({
 			(file: number, rank: number) => {
 				handleSquareClickRef.current?.(file, rank);
 			},
-			500,
+			300,
 			{
 				leading: true,
 				trailing: false,
