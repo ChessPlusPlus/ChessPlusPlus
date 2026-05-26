@@ -112,6 +112,8 @@ function VariantPlayPage() {
 		if (!startLocation) return;
 		if (!piece) return;
 
+		if (startLocation[0] === Number(file) && startLocation[1] === Number(rank)) return;
+
 		const isLocallyLegal = locallyComputedLegalMoves.some(
 			(legalMove) =>
 				legalMove[0] === Number(file) && legalMove[1] === Number(rank),
@@ -147,8 +149,6 @@ function VariantPlayPage() {
 
 	const handleDragStart = _.debounce(
 		async (...args: Parameters<NonNullable<OnDragStart>>) => {
-			clearLegalMoves();
-
 			if (!activeGameId) return;
 
 			const [event] = args;
