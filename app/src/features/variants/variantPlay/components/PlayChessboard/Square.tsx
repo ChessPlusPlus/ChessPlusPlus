@@ -9,6 +9,7 @@ import {
 import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
 import { useDroppable } from "@dnd-kit/react";
 import clsx from "clsx";
+import { useEffect, useRef } from "react";
 
 type SquareProps = {
 	file: number;
@@ -49,11 +50,6 @@ function Square({
 		gameBoardState,
 		updateGameBoardState,
 	} = useGameplayStore();
-
-	const isDark = (rank + file) % 2 === 0;
-
-	const isOnLeftEdge = isFlipped ? file === boardXSize - 1 : file === 0;
-	const isOnBottomEdge = isFlipped ? rank === boardYSize - 1 : rank === 0;
 
 	async function handleSquareClick(squareFile: number, squareRank: number) {
 		if (!activeGameId) return;
@@ -101,8 +97,6 @@ function Square({
 			);
 
 			if (!isLocallyLegal) {
-				console.log("not legal");
-
 				clearLegalMoves();
 				clearPrevClickedSquare();
 				clearClickedSquare();
@@ -124,8 +118,6 @@ function Square({
 				clearLegalMoves();
 				return;
 			}
-
-			console.log([[squareFile, squareRank], pieceAtStartLocation]);
 
 			const newGameBoardState = [
 				...gameBoardState,
@@ -170,14 +162,36 @@ function Square({
 		}
 	}
 
-	const handleSquareClickDebounced = _.debounce(handleSquareClick, 500, {
-		leading: true,
-		trailing: false,
+	const handleSquareClickRef = useRef(handleSquareClick);
+	const handleSquareClickDebouncedRef = useRef<_.DebouncedFunc<
+		(file: number, rank: number) => void
+	> | null>(null);
+
+	useEffect(() => {
+		handleSquareClickRef.current = handleSquareClick;
 	});
+
+	useEffect(() => {
+		handleSquareClickDebouncedRef.current = _.debounce(
+			(file: number, rank: number) => {
+				handleSquareClickRef.current?.(file, rank);
+			},
+			500,
+			{
+				leading: true,
+				trailing: false,
+			},
+		);
+	}, []);
+
+	const isDark = (rank + file) % 2 === 0;
+
+	const isOnLeftEdge = isFlipped ? file === boardXSize - 1 : file === 0;
+	const isOnBottomEdge = isFlipped ? rank === boardYSize - 1 : rank === 0;
 
 	return (
 		<div
-			onClick={() => handleSquareClickDebounced(file, rank)}
+			onClick={() => handleSquareClickDebouncedRef.current?.(file, rank)}
 			ref={ref}
 			key={`${file}-${rank}`}
 			className={`${isDark ? "bg-chessboard-square-dark" : "bg-chessboard-square-light"} aspect-square relative`}
