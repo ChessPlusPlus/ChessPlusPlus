@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import PieceImage from "@/features/variants/variantPlay/components/PlayChessboard/PieceImage";
 import { generateLegalMoves, processMove } from "@/features/variants/variantPlay/services/moveProcessing";
@@ -50,7 +52,7 @@ function Square({
 	const isOnLeftEdge = isFlipped ? file === boardXSize - 1 : file === 0;
 	const isOnBottomEdge = isFlipped ? rank === boardYSize - 1 : rank === 0;
 
-	async function handleSquareClick(squareFile: number, squareRank: number) {
+	const handleSquareClick = _.debounce(async (squareFile: number, squareRank: number) => {
 		if (!activeGameId) return;
 		if (!gameBoardState) return;
 
@@ -159,7 +161,7 @@ function Square({
 			clearClickedSquare();
 			clearLegalMoves();
 		}
-	}
+	}, 500, { leading: true, trailing: false });
 
 	return (
 		<div
