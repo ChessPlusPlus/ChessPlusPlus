@@ -80,9 +80,6 @@ function Square({
 				currentPrevClickedSquare[0] === squareFile &&
 				currentPrevClickedSquare[1] === squareRank
 			) {
-				clearPrevClickedSquare();
-				clearClickedSquare();
-				clearLegalMoves();
 				return;
 			}
 
