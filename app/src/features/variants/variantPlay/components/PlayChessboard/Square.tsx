@@ -137,6 +137,7 @@ function Square({
 				}
 			);
 
+			clearLegalMoves();
 			updateGameBoardState(newGameBoardState as GameState2DArray);
 
 			const { validMove, newGameState } = await processMove(
@@ -159,7 +160,6 @@ function Square({
 			updateGameBoardState(newGameState);
 			clearPrevClickedSquare();
 			clearClickedSquare();
-			clearLegalMoves();
 		}
 	}, 500, { leading: true, trailing: false });
 
