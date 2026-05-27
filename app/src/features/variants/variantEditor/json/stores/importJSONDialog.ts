@@ -9,6 +9,10 @@ type ImportJSONDialogStore = {
 	updateJsonFile: (jsonFile: Blob | null) => void;
 	clearJsonFile: () => void;
 
+	jsonFileName: string;
+	updateJsonFileName: (jsonFileName: string) => void;
+	clearJsonFileName: () => void;
+
 	jsonFileErrors: string[];
 	updateJsonFileErrors: (jsonFileErrors: string[]) => void;
 	clearJsonFileErrors: () => void;
@@ -22,6 +26,10 @@ const useImportJSONDialogStore = create<ImportJSONDialogStore>((set) => ({
 	jsonFile: null,
 	updateJsonFile: (jsonFile) => set({ jsonFile }),
 	clearJsonFile: () => set({ jsonFile: null }),
+
+	jsonFileName: "",
+	updateJsonFileName: (jsonFileName) => set({ jsonFileName }),
+	clearJsonFileName: () => set({ jsonFileName: "" }),
 
 	jsonFileErrors: [],
 	updateJsonFileErrors: (jsonFileErrors) => set({ jsonFileErrors }),
