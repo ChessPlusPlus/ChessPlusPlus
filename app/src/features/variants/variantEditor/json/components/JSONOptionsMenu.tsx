@@ -4,6 +4,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
+import { serialiseJSONForExport } from "@/features/variants/variantEditor/json/utils/serialiser";
 import { IconFileExport, IconFileImport } from "@tabler/icons-react";
 
 function JSONOptionsMenu() {
@@ -16,7 +17,7 @@ function JSONOptionsMenu() {
 		const variant = variants[currentVariantId];
 		if (!variant) return;
 
-		const json = JSON.stringify(variant, null, 2);
+		const json = JSON.stringify(serialiseJSONForExport(variant), null, 2);
 		const fileName = `${variant.variantName}.json`;
 
 		const blob = new Blob([json], { type: "application/json" });
