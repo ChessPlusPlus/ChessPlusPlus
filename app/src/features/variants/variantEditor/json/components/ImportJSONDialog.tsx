@@ -23,10 +23,13 @@ function ImportJSONDialog() {
 
 		jsonFile,
 		updateJsonFile,
+		clearJsonFile,
 
 		jsonFileName,
 		updateJsonFileName,
+		clearJsonFileName,
 		updateJsonFileErrors,
+		clearJsonFileErrors,
 		jsonFileErrors,
 	} = useImportJSONDialogStore();
 
@@ -54,6 +57,16 @@ function ImportJSONDialog() {
 
 		updateJsonFile(file);
 		updateJsonFileName(file.name);
+	}
+
+	function handleJSONFileEdit() {
+		jsonFileInputRef.current?.click();
+	}
+
+	function handleJSONFileDelete() {
+		clearJsonFile();
+		clearJsonFileName();
+		clearJsonFileErrors();
 	}
 
 	return (
@@ -85,6 +98,7 @@ function ImportJSONDialog() {
 
 							<div className="flex flex-row gap-2">
 								<Button
+									onClick={handleJSONFileEdit}
 									variant="ghost"
 									data-icon="inline-start"
 									size="icon-xs"
@@ -92,7 +106,7 @@ function ImportJSONDialog() {
 									<IconPencil className="size-4" />
 								</Button>
 
-								<Button size="icon-xs" variant="ghost" data-icon="inline-start">
+								<Button onClick={handleJSONFileDelete} size="icon-xs" variant="ghost" data-icon="inline-start">
 									<IconTrash className="size-4 stroke-destructive" />
 								</Button>
 							</div>
