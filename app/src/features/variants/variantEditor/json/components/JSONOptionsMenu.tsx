@@ -2,17 +2,17 @@ import {
 	DropdownMenuContent,
 	DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { IconLogin2, IconLogout2 } from "@tabler/icons-react";
+import { IconFileExport, IconFileImport } from "@tabler/icons-react";
 
 function JSONOptionsMenu() {
 	return (
-		<DropdownMenuContent>
+		<DropdownMenuContent side="left" sideOffset={8} className="w-max">
 			<DropdownMenuItem>
-				<IconLogin2 />
+				<IconFileImport className="size-4" />
 				Import JSON
 			</DropdownMenuItem>
 			<DropdownMenuItem>
-				<IconLogout2 />
+				<IconFileExport className="size-4" />
 				Export JSON
 			</DropdownMenuItem>
 		</DropdownMenuContent>
