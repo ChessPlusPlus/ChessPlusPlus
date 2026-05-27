@@ -4,7 +4,7 @@ description: This page explains the main areas of the website and how to move be
 
 # Navigation Overview
 
-The homepage contains 3 buttons.
+**The homepage contains 3 buttons.**
 
 ### Create Variant
 

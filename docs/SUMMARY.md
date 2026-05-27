@@ -6,3 +6,4 @@
 
 * [Getting Started](user-guide/getting-started.md)
 * [Navigation Overview](user-guide/navigation-overview.md)
+* [Core Features](user-guide/core-features.md)
