@@ -23,9 +23,11 @@ function ExportJSONDialog() {
 
 		fileName,
 		updateFileName,
+		clearFileName,
 
 		fileNameErrors,
 		updateFileNameErrors,
+		clearFileNameErrors,
 	} = useExportJSONDialogStore();
 
 	const { currentVariantId } = useVariantDraftStore();
@@ -64,6 +66,8 @@ function ExportJSONDialog() {
 		URL.revokeObjectURL(objectUrl);
 
 		closeExportJSONDialog();
+		clearFileNameErrors();
+		clearFileName();
 	}
 
 	return (
