@@ -6,7 +6,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import useExportJSONDialogStore from "@/features/variants/variantEditor/json/stores/exportJSONDialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,9 @@ function ExportJSONDialog() {
 
 		fileName,
 		updateFileName,
+
+		fileNameErrors,
+		updateFileNameErrors,
 	} = useExportJSONDialogStore();
 
 	const { currentVariantId } = useVariantDraftStore();
@@ -32,6 +35,11 @@ function ExportJSONDialog() {
 
 		const variant = variants[currentVariantId];
 		if (!variant) return;
+
+		if (fileName.trim() === "") {
+			updateFileNameErrors(["File name cannot be empty"]);
+			return;
+		}
 
 		const json = JSON.stringify(serialiseJSONForExport(variant), null, 2);
 		const exportedFileName = `${fileName}.json`;
@@ -76,7 +84,10 @@ function ExportJSONDialog() {
 						type="text"
 						value={fileName}
 						onChange={(e) => updateFileName(e.target.value)}
+						data-invalid={fileNameErrors.length > 0}
+						aria-invalid={fileNameErrors.length > 0}
 					/>
+					<FieldError errors={fileNameErrors.map((error) => ({ message: error }))} />
 				</Field>
 
 				<DialogFooter>
