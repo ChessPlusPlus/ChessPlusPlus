@@ -1,9 +1,18 @@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
 import { IconLogin2, IconLogout2 } from "@tabler/icons-react";
 
 function JSONOptionsMenu() {
+	const { currentOpenMenu, updateCurrentOpenMenu, clearCurrentOpenMenu } = useSidebarStore();
+	
 	return (
-		<DropdownMenu>
+		<DropdownMenu open={currentOpenMenu === "jsonOptions"} onOpenChange={(open) => {
+			if (open) {
+				updateCurrentOpenMenu("jsonOptions");
+			} else {
+				clearCurrentOpenMenu();
+			}
+		}}>
 			<DropdownMenuContent>
 				<DropdownMenuItem>
 					<IconLogin2 />
