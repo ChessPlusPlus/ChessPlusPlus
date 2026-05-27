@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { Button } from "@/components/ui/button";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
@@ -80,7 +82,7 @@ function VariantPlayPage() {
 	useEffect(() => {
 		return () => {
 			clearLegalMoves();
-		}
+		};
 	}, [clearLegalMoves]);
 
 	function handleBackToHomePage() {
@@ -110,6 +112,8 @@ function VariantPlayPage() {
 		if (!startLocation) return;
 		if (!piece) return;
 
+		if (startLocation[0] === Number(file) && startLocation[1] === Number(rank)) return;
+
 		const isLocallyLegal = locallyComputedLegalMoves.some(
 			(legalMove) =>
 				legalMove[0] === Number(file) && legalMove[1] === Number(rank),
@@ -126,8 +130,8 @@ function VariantPlayPage() {
 				location[1] !== Number(startLocation[1]),
 		);
 
-		updateGameBoardState(locallyUpdatedGameBoardState as GameState2DArray);
 		clearLegalMoves();
+		updateGameBoardState(locallyUpdatedGameBoardState as GameState2DArray);
 
 		const { validMove, newGameState } = await processMove(
 			activeGameId,
@@ -138,35 +142,35 @@ function VariantPlayPage() {
 		if (!validMove || !newGameState) {
 			updateGameBoardState(gameBoardState);
 			return;
-		};
+		}
 
 		updateGameBoardState(newGameState);
 	}
 
-	async function handleDragStart(
-		...args: Parameters<NonNullable<OnDragStart>>
-	) {
-		clearLegalMoves();
-		
-		if (!activeGameId) return;
+	const handleDragStart = _.debounce(
+		async (...args: Parameters<NonNullable<OnDragStart>>) => {
+			if (!activeGameId) return;
 
-		const [event] = args;
+			const [event] = args;
 
-		if (event.operation.canceled) return;
+			if (event.operation.canceled) return;
 
-		const startLocation = event.operation.source?.data.startLocation;
-		if (!startLocation) return;
+			const startLocation = event.operation.source?.data.startLocation;
+			if (!startLocation) return;
 
-		const [file, rank] = startLocation;
+			const [file, rank] = startLocation;
 
-		const legalMoves = (
-			await generateLegalMoves(activeGameId, [file, rank])
-		)?.legalMoves;
+			const legalMoves = (
+				await generateLegalMoves(activeGameId, [file, rank])
+			)?.legalMoves;
 
-		if (!legalMoves) return;
+			if (!legalMoves) return;
 
-		updateLegalMoves(legalMoves);
-	}
+			updateLegalMoves(legalMoves);
+		},
+		500,
+		{ leading: true, trailing: false },
+	);
 
 	return (
 		<div className="flex flex-col w-full h-full">
