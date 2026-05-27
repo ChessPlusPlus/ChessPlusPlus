@@ -93,7 +93,7 @@ function ImportJSONDialog() {
 				<DialogHeader>
 					<DialogTitle>Import JSON</DialogTitle>
 					<DialogDescription>
-						Import a JSON file to the current variant.
+						Create a variant from a JSON file configuration.
 					</DialogDescription>
 				</DialogHeader>
 
