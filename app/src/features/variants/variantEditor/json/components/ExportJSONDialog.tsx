@@ -9,13 +9,6 @@ import {
 import { Field, FieldLabel } from "@/components/ui/field";
 import useExportJSONDialogStore from "@/features/variants/variantEditor/json/stores/exportJSONDialog";
 import { Input } from "@/components/ui/input";
-import {
-	Select,
-	SelectItem,
-	SelectContent,
-	SelectTrigger,
-	SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
@@ -29,9 +22,6 @@ function ExportJSONDialog() {
 
 		fileName,
 		updateFileName,
-
-		exportCasing,
-		updateExportCasing,
 	} = useExportJSONDialogStore();
 
 	const { currentVariantId } = useVariantDraftStore();
@@ -87,24 +77,6 @@ function ExportJSONDialog() {
 						value={fileName}
 						onChange={(e) => updateFileName(e.target.value)}
 					/>
-				</Field>
-
-				<Field>
-					<FieldLabel>Casing</FieldLabel>
-					<Select
-						value={exportCasing}
-						onValueChange={(value) =>
-							updateExportCasing(value as "camel" | "snake")
-						}
-					>
-						<SelectTrigger>
-							<SelectValue placeholder="Select casing" />
-						</SelectTrigger>
-						<SelectContent>
-							<SelectItem value="camel">Camel case</SelectItem>
-							<SelectItem value="snake">Snake case</SelectItem>
-						</SelectContent>
-					</Select>
 				</Field>
 
 				<DialogFooter>

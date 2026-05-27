@@ -8,10 +8,6 @@ type ExportJSONDialogStore = {
 	fileName: string;
 	updateFileName: (fileName: string) => void;
 	clearFileName: () => void;
-
-	exportCasing: "camel" | "snake";
-	updateExportCasing: (exportCasing: "camel" | "snake") => void;
-	clearExportCasing: () => void;
 }
 
 const useExportJSONDialogStore = create<ExportJSONDialogStore>((set) => ({
@@ -22,10 +18,6 @@ const useExportJSONDialogStore = create<ExportJSONDialogStore>((set) => ({
 	fileName: "",
 	updateFileName: (fileName) => set({ fileName }),
 	clearFileName: () => set({ fileName: "" }),
-
-	exportCasing: "snake",
-	updateExportCasing: (exportCasing) => set({ exportCasing }),
-	clearExportCasing: () => set({ exportCasing: "snake" }),
 }));
 
 export default useExportJSONDialogStore;
