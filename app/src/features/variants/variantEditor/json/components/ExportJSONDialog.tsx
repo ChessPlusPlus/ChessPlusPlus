@@ -2,13 +2,24 @@ import {
 	Dialog,
 	DialogContent,
 	DialogDescription,
+	DialogFooter,
 	DialogHeader,
 	DialogTitle,
 } from "@/components/ui/dialog";
 import { Field, FieldLabel } from "@/components/ui/field";
 import useExportJSONDialogStore from "@/features/variants/variantEditor/json/stores/exportJSONDialog";
 import { Input } from "@/components/ui/input";
-import { Select, SelectItem, SelectContent, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+	Select,
+	SelectItem,
+	SelectContent,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import useVariantsStore from "@/features/variants/common/stores/variantsStore";
+import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
+import { serialiseJSONForExport } from "@/features/variants/variantEditor/json/utils/serialiser";
 
 function ExportJSONDialog() {
 	const {
@@ -22,6 +33,32 @@ function ExportJSONDialog() {
 		exportCasing,
 		updateExportCasing,
 	} = useExportJSONDialogStore();
+
+	const { currentVariantId } = useVariantDraftStore();
+	const { variants } = useVariantsStore();
+
+	function handleExportJSON() {
+		if (!currentVariantId) return;
+
+		const variant = variants[currentVariantId];
+		if (!variant) return;
+
+		const json = JSON.stringify(serialiseJSONForExport(variant), null, 2);
+		const exportedFileName = `${fileName}.json`;
+
+		const blob = new Blob([json], { type: "application/json" });
+		const objectUrl = URL.createObjectURL(blob);
+
+		const a = document.createElement("a");
+		a.href = objectUrl;
+		a.download = exportedFileName;
+
+		a.click();
+		a.remove();
+		URL.revokeObjectURL(objectUrl);
+
+		closeExportJSONDialog();
+	}
 
 	return (
 		<Dialog
@@ -56,7 +93,9 @@ function ExportJSONDialog() {
 					<FieldLabel>Casing</FieldLabel>
 					<Select
 						value={exportCasing}
-						onValueChange={(value) => updateExportCasing(value as "camel" | "snake")}
+						onValueChange={(value) =>
+							updateExportCasing(value as "camel" | "snake")
+						}
 					>
 						<SelectTrigger>
 							<SelectValue placeholder="Select casing" />
@@ -67,6 +106,10 @@ function ExportJSONDialog() {
 						</SelectContent>
 					</Select>
 				</Field>
+
+				<DialogFooter>
+					<Button className="w-full" onClick={handleExportJSON} disabled={fileName === ""}>Export</Button>
+				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	);
