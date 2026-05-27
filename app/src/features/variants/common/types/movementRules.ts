@@ -23,6 +23,8 @@ type MovementRule = {
 	moveDefinition: MoveDefinition;
 };
 
+type NumericFieldConstraints = Record<string, { min: number | null, max: number | null }>
+
 type MovementRules = Record<string, MovementRule>;
 
-export type { MovementRule, MovementRules, MoveDefinitionChanges };
+export type { MovementRule, MovementRules, MoveDefinitionChanges, MoveDefinition, NumericFieldConstraints };

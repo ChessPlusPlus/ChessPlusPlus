@@ -127,10 +127,8 @@ export function MovementEditorScreen() {
 
 	function handleRangeInputChange(e: ChangeEvent<HTMLInputElement>) {
 		const newRange = e.target.valueAsNumber;
-		if (Number.isNaN(newRange)) return;
-		if (!Number.isFinite(newRange)) return;
-
 		updateRange(newRange);
+		
 		previousRangeInputRef.current = newRange;
 		addMovementsEditorChanges({ range: newRange });
 	}
@@ -144,18 +142,12 @@ export function MovementEditorScreen() {
 
 	function handleOffsetXInputChange(e: ChangeEvent<HTMLInputElement>) {
 		const newOffsetX = e.target.valueAsNumber;
-		if (Number.isNaN(newOffsetX)) return;
-		if (!Number.isFinite(newOffsetX)) return;
-
 		updateOffsetX(newOffsetX);
 		addMovementsEditorChanges({ offsetX: newOffsetX });
 	}
 
 	function handleOffsetYInputChange(e: ChangeEvent<HTMLInputElement>) {
 		const newOffsetY = e.target.valueAsNumber;
-		if (Number.isNaN(newOffsetY)) return;
-		if (!Number.isFinite(newOffsetY)) return;
-
 		updateOffsetY(newOffsetY);
 		addMovementsEditorChanges({ offsetY: newOffsetY });
 	}
