@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 type SidebarStore = {
-    currentOpenMenu: "boardSettings" | "pieces" | "movements" | null;
-    updateCurrentOpenMenu: (openMenu: "boardSettings" | "pieces" | "movements") => void;
+    currentOpenMenu: "boardSettings" | "pieces" | "movements" | "jsonOptions" | null;
+    updateCurrentOpenMenu: (openMenu: "boardSettings" | "pieces" | "movements" | "jsonOptions") => void;
     clearCurrentOpenMenu: () => void;
 }
 
