@@ -1,0 +1,19 @@
+---
+description: This page explains the main areas of the website and how to move between them.
+---
+
+# Navigation Overview
+
+The homepage contains 3 buttons.
+
+### Create Variant
+
+Create a brand new variant to customise and configure.
+
+### My variants
+
+Where all your created variants are, where you can continue to customise and configure them.
+
+### Play variants
+
+Play your very own variants, to test them out or play with friends.
