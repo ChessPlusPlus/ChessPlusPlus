@@ -78,6 +78,8 @@ function ExportJSONDialog() {
 					openExportJSONDialog();
 				} else {
 					closeExportJSONDialog();
+					clearFileNameErrors();
+					clearFileName();
 				}
 			}}
 		>
