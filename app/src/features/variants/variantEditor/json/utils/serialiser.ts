@@ -11,6 +11,8 @@ type ExportedJSON = {
 function serialiseStartingPositionForExport(
 	startingPosition: GameState2DArray,
 ) {
+	console.log(startingPosition);
+
 	return startingPosition.map((squareInfo) => {
 		return {
 			pieceName: squareInfo[1],
@@ -27,9 +29,9 @@ function serialiseJSONForExport(rawJSON: VariantInfo) {
 		pieces: {},
 	};
 
-	newJSON.setup = rawJSON.variantRules.setupRules;
-	newJSON.moves = rawJSON.variantRules.movementRules;
-	newJSON.pieces = rawJSON.variantRules.pieceRuleset;
+	newJSON.setup = structuredClone(rawJSON.variantRules.setupRules);
+	newJSON.moves = structuredClone(rawJSON.variantRules.movementRules);
+	newJSON.pieces = structuredClone(rawJSON.variantRules.pieceRuleset);
 
 	newJSON.setup.startingPosition = serialiseStartingPositionForExport(
 		rawJSON.variantRules.setupRules.startingPosition,
