@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { validateJSON } from "@/features/test/services/jsonValidatorTest";
+import { validateJSON } from "@/features/variants/variantEditor/json/services/jsonValidation";
 import useImportJSONDialogStore from "@/features/variants/variantEditor/json/stores/importJSONDialog";
 import { readJSONFromBlob } from "@/features/variants/variantEditor/json/utils/jsonReader";
 import { IconBraces, IconFileUpload, IconPencil, IconTrash } from "@tabler/icons-react";
@@ -44,9 +44,9 @@ function ImportJSONDialog() {
 		const validationResponse = await validateJSON(json);
 		if (!validationResponse) return;
 
-		const isJsonValid = validationResponse.validation_status[0];
+		const isJsonValid = validationResponse.validationStatus;
 		if (!isJsonValid) {
-			updateJsonFileErrors([validationResponse.validation_status[1]]);
+			updateJsonFileErrors([validationResponse.validationMessage]);
 		};
 	}
 
@@ -57,6 +57,7 @@ function ImportJSONDialog() {
 
 		updateJsonFile(file);
 		updateJsonFileName(file.name);
+		clearJsonFileErrors();
 	}
 
 	function handleJSONFileEdit() {
@@ -88,11 +89,11 @@ function ImportJSONDialog() {
 					</DialogDescription>
 				</DialogHeader>
 
-				<Field>
+				<Field data-invalid={jsonFileErrors.length > 0}>
 					<FieldLabel>JSON File</FieldLabel>
 
 					{jsonFile ? (
-						<div className="grid grid-cols-[2fr_24fr_2fr] items-center bg-muted p-2 rounded-md">
+						<div aria-invalid={jsonFileErrors.length > 0} className="grid grid-cols-[2fr_24fr_2fr] items-center bg-muted p-2 rounded-md">
 							<IconBraces className="size-4" />
 							<span>{jsonFileName}</span>
 
