@@ -1,6 +1,6 @@
 # Getting Started
 
-Click \[here]\(chessplusplus.vercel.app) to get to Chess++
+Click [here](https://chessplusplus.vercel.app/) to get to Chess++
 
 You should be seeing this:
 
