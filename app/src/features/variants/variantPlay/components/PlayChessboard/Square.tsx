@@ -52,6 +52,8 @@ function Square({
 	} = useGameplayStore();
 
 	async function handleSquareClick(squareFile: number, squareRank: number) {
+		console.log("clicked");
+		
 		if (!activeGameId) return;
 		if (!gameBoardState) return;
 
@@ -59,11 +61,16 @@ function Square({
 			useGameplayStore.getState().prevClickedSquare;
 		const currentClickedSquare = useGameplayStore.getState().clickedSquare;
 
+		console.log("currentPrevClickedSquare", currentPrevClickedSquare);
+		console.log("currentClickedSquare", currentClickedSquare);
+
 		if (!currentPrevClickedSquare && !currentClickedSquare) {
 			if (!piece) return;
 
 			updatePrevClickedSquare([squareFile, squareRank]);
-
+			console.log("new prev clicked square", useGameplayStore.getState().prevClickedSquare);
+			console.log("new clicked square", useGameplayStore.getState().clickedSquare);
+			
 			const legalMoves = (
 				await generateLegalMoves(activeGameId, [squareFile, squareRank])
 			).legalMoves;
@@ -84,6 +91,8 @@ function Square({
 			}
 
 			updateClickedSquare([squareFile, squareRank]);
+			console.log("new prev clicked square", [squareFile, squareRank]);
+			console.log("new clicked square", [squareFile, squareRank]);
 
 			const locallyComputedLegalMoves = legalMoves;
 			if (!locallyComputedLegalMoves) return;
@@ -94,11 +103,16 @@ function Square({
 			);
 
 			if (!isLocallyLegal) {
+				console.log("not locally legal");
+
 				clearLegalMoves();
 				clearPrevClickedSquare();
 				clearClickedSquare();
 
-				await handleSquareClick(squareFile, squareRank);
+				const legalMoves = await generateLegalMoves(activeGameId, [squareFile, squareRank]);
+				if (!legalMoves.legalMoves) return;
+
+				updateLegalMoves(legalMoves.legalMoves);
 
 				return;
 			}
@@ -156,6 +170,8 @@ function Square({
 			updateGameBoardState(newGameState);
 			clearPrevClickedSquare();
 			clearClickedSquare();
+
+			return;
 		}
 	}
 
