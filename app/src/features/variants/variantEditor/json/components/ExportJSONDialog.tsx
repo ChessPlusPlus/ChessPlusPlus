@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import { serialiseJSONForExport } from "@/features/variants/variantEditor/json/utils/serialiser";
+import isValidFileName from "valid-filename";
 
 function ExportJSONDialog() {
 	const {
@@ -40,6 +41,11 @@ function ExportJSONDialog() {
 
 		if (trimmedFileName === "") {
 			updateFileNameErrors(["File name cannot be empty"]);
+			return;
+		}
+
+		if (!isValidFileName(trimmedFileName)) {
+			updateFileNameErrors(["File name contains invalid characters"]);
 			return;
 		}
 
