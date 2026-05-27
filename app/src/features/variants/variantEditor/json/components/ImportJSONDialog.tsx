@@ -78,6 +78,9 @@ function ImportJSONDialog() {
 					openImportJSONDialog();
 				} else {
 					closeImportJSONDialog();
+					clearJsonFileErrors();
+					clearJsonFile();
+					clearJsonFileName();
 				}
 			}}
 		>
