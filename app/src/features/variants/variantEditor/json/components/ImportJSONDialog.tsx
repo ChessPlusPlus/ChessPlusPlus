@@ -12,7 +12,12 @@ import { Input } from "@/components/ui/input";
 import { validateJSON } from "@/features/variants/variantEditor/json/services/jsonValidation";
 import useImportJSONDialogStore from "@/features/variants/variantEditor/json/stores/importJSONDialog";
 import { readJSONFromBlob } from "@/features/variants/variantEditor/json/utils/jsonReader";
-import { IconBraces, IconFileUpload, IconPencil, IconTrash } from "@tabler/icons-react";
+import {
+	IconBraces,
+	IconFileUpload,
+	IconPencil,
+	IconTrash,
+} from "@tabler/icons-react";
 import { useRef, type ChangeEvent } from "react";
 
 function ImportJSONDialog() {
@@ -47,7 +52,7 @@ function ImportJSONDialog() {
 		const isJsonValid = validationResponse.validationStatus;
 		if (!isJsonValid) {
 			updateJsonFileErrors([validationResponse.validationMessage]);
-		};
+		}
 	}
 
 	function handleJSONFileInputChange(e: ChangeEvent<HTMLInputElement>) {
@@ -92,11 +97,15 @@ function ImportJSONDialog() {
 					</DialogDescription>
 				</DialogHeader>
 
-				<Field data-invalid={jsonFileErrors.length > 0}>
+				<Field>
 					<FieldLabel>JSON File</FieldLabel>
 
 					{jsonFile ? (
-						<div aria-invalid={jsonFileErrors.length > 0} className="grid grid-cols-[2fr_24fr_2fr] items-center bg-muted p-2 rounded-md">
+						<div
+							data-invalid={jsonFileErrors.length > 0}
+							aria-invalid={jsonFileErrors.length > 0}
+							className="grid grid-cols-[2fr_24fr_2fr] items-center bg-muted p-2 rounded-md aria-invalid:ring-3 aria-invalid:ring-destructive/20"
+						>
 							<IconBraces className="size-4" />
 							<span>{jsonFileName}</span>
 
@@ -110,7 +119,12 @@ function ImportJSONDialog() {
 									<IconPencil className="size-4" />
 								</Button>
 
-								<Button onClick={handleJSONFileDelete} size="icon-xs" variant="ghost" data-icon="inline-start">
+								<Button
+									onClick={handleJSONFileDelete}
+									size="icon-xs"
+									variant="ghost"
+									data-icon="inline-start"
+								>
 									<IconTrash className="size-4 stroke-destructive" />
 								</Button>
 							</div>
@@ -135,7 +149,11 @@ function ImportJSONDialog() {
 						className="hidden"
 					/>
 
-					<FieldError errors={jsonFileErrors.map((error) => ({ message: error }))} />
+					<FieldError
+						errors={jsonFileErrors.map((error) => ({
+							message: error,
+						}))}
+					/>
 				</Field>
 
 				<DialogFooter>
