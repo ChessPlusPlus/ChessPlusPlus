@@ -6,7 +6,7 @@ import { IconFileExport, IconFileImport } from "@tabler/icons-react";
 
 function JSONOptionsMenu() {
 	return (
-		<DropdownMenuContent side="left" sideOffset={8} className="w-max">
+		<DropdownMenuContent  side="left" sideOffset={8} className="w-max p-2">
 			<DropdownMenuItem>
 				<IconFileImport className="size-4" />
 				Import JSON
