@@ -52,33 +52,33 @@ function ImportJSONDialog() {
 						Import a JSON file to the current variant.
 					</DialogDescription>
 				</DialogHeader>
+
+				<Field>
+					<FieldLabel>JSON File</FieldLabel>
+					<Button
+						className="w-full h-max p-4 flex flex-col gap-2"
+						variant="outline"
+						data-icon="inline-start"
+						onClick={() => jsonFileInputRef.current?.click()}
+					>
+						<IconFileUpload className="size-8" />
+						Upload JSON File
+					</Button>
+					<Input
+						type="file"
+						accept=".json"
+						ref={jsonFileInputRef}
+						onChange={handleJSONFileInputChange}
+						className="hidden"
+					/>
+				</Field>
+
+				<DialogFooter>
+					<Button className="w-full" onClick={handleImportJSON}>
+						Import
+					</Button>
+				</DialogFooter>
 			</DialogContent>
-
-			<Field>
-				<FieldLabel>JSON File</FieldLabel>
-				<Button
-					className="w-full h-max p-4"
-					variant="outline"
-					data-icon="inline-start"
-					onClick={() => jsonFileInputRef.current?.click()}
-				>
-					<IconFileUpload />
-					Upload JSON File
-				</Button>
-				<Input
-					type="file"
-					accept=".json"
-					ref={jsonFileInputRef}
-					onChange={handleJSONFileInputChange}
-					className="hidden"
-				/>
-			</Field>
-
-			<DialogFooter>
-				<Button className="w-full" onClick={handleImportJSON}>
-					Import
-				</Button>
-			</DialogFooter>
 		</Dialog>
 	);
 }
