@@ -36,13 +36,15 @@ function ExportJSONDialog() {
 		const variant = variants[currentVariantId];
 		if (!variant) return;
 
-		if (fileName.trim() === "") {
+		const trimmedFileName = fileName.trim();
+
+		if (trimmedFileName === "") {
 			updateFileNameErrors(["File name cannot be empty"]);
 			return;
 		}
 
 		const json = JSON.stringify(serialiseJSONForExport(variant), null, 2);
-		const exportedFileName = `${fileName}.json`;
+		const exportedFileName = `${trimmedFileName}.json`;
 
 		const blob = new Blob([json], { type: "application/json" });
 		const objectUrl = URL.createObjectURL(blob);
