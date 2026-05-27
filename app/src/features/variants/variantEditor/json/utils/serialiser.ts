@@ -1,6 +1,7 @@
 import type { PieceRules } from "@/features/variants/common/types/pieceRules";
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import type { VariantInfo } from "@/features/variants/common/types/variants";
+import { convertDictToSnakeCase } from "@/features/variants/common/utils/caseConverter";
 
 type ExportedJSON = {
 	setup: Record<string, unknown>;
@@ -78,6 +79,11 @@ function serialiseJSONForExport(rawJSON: VariantInfo) {
 			];
 		}),
 	);
+
+	newJSON.pieces = convertDictToSnakeCase(newJSON.pieces, [0]) as Record<string, unknown>;
+	newJSON.setup = convertDictToSnakeCase(newJSON.setup, [0]) as Record<string, unknown>;
+	newJSON.moves = convertDictToSnakeCase(newJSON.moves, [0]) as Record<string, unknown>;
+
 
 	return newJSON;
 }
