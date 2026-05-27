@@ -7,9 +7,11 @@ import {
 	DialogTitle,
 	DialogFooter,
 } from "@/components/ui/dialog";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { validateJSON } from "@/features/test/services/jsonValidatorTest";
 import useImportJSONDialogStore from "@/features/variants/variantEditor/json/stores/importJSONDialog";
+import { readJSONFromBlob } from "@/features/variants/variantEditor/json/utils/jsonReader";
 import { IconBraces, IconFileUpload, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useRef, type ChangeEvent } from "react";
 
@@ -24,11 +26,26 @@ function ImportJSONDialog() {
 
 		jsonFileName,
 		updateJsonFileName,
+		updateJsonFileErrors,
+		jsonFileErrors,
 	} = useImportJSONDialogStore();
 
 	const jsonFileInputRef = useRef<HTMLInputElement>(null);
 
-	function handleImportJSON() {}
+	async function handleImportJSON() {
+		if (!jsonFile) return;
+
+		const json = await readJSONFromBlob(jsonFile);
+		if (!json) return;
+
+		const validationResponse = await validateJSON(json);
+		if (!validationResponse) return;
+
+		const isJsonValid = validationResponse.validation_status[0];
+		if (!isJsonValid) {
+			updateJsonFileErrors([validationResponse.validation_status[1]]);
+		};
+	}
 
 	function handleJSONFileInputChange(e: ChangeEvent<HTMLInputElement>) {
 		if (!e.target.files) return;
@@ -99,6 +116,8 @@ function ImportJSONDialog() {
 						onChange={handleJSONFileInputChange}
 						className="hidden"
 					/>
+
+					<FieldError errors={jsonFileErrors.map((error) => ({ message: error }))} />
 				</Field>
 
 				<DialogFooter>
