@@ -10,7 +10,7 @@ import {
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import useImportJSONDialogStore from "@/features/variants/variantEditor/json/stores/importJSONDialog";
-import { IconFileUpload } from "@tabler/icons-react";
+import { IconBraces, IconFileUpload, IconPencil, IconTrash } from "@tabler/icons-react";
 import { useRef, type ChangeEvent } from "react";
 
 function ImportJSONDialog() {
@@ -19,7 +19,11 @@ function ImportJSONDialog() {
 		openImportJSONDialog,
 		closeImportJSONDialog,
 
+		jsonFile,
 		updateJsonFile,
+
+		jsonFileName,
+		updateJsonFileName,
 	} = useImportJSONDialogStore();
 
 	const jsonFileInputRef = useRef<HTMLInputElement>(null);
@@ -32,6 +36,7 @@ function ImportJSONDialog() {
 		if (!file) return;
 
 		updateJsonFile(file);
+		updateJsonFileName(file.name);
 	}
 
 	return (
@@ -55,15 +60,38 @@ function ImportJSONDialog() {
 
 				<Field>
 					<FieldLabel>JSON File</FieldLabel>
-					<Button
-						className="w-full h-max p-4 flex flex-col gap-2"
-						variant="outline"
-						data-icon="inline-start"
-						onClick={() => jsonFileInputRef.current?.click()}
-					>
-						<IconFileUpload className="size-8" />
-						Upload JSON File
-					</Button>
+
+					{jsonFile ? (
+						<div className="grid grid-cols-[2fr_24fr_2fr] items-center bg-muted p-2 rounded-md">
+							<IconBraces className="size-4" />
+							<span>{jsonFileName}</span>
+
+							<div className="flex flex-row gap-2">
+								<Button
+									variant="ghost"
+									data-icon="inline-start"
+									size="icon-xs"
+								>
+									<IconPencil className="size-4" />
+								</Button>
+
+								<Button size="icon-xs" variant="ghost" data-icon="inline-start">
+									<IconTrash className="size-4 stroke-destructive" />
+								</Button>
+							</div>
+						</div>
+					) : (
+						<Button
+							className="w-full h-max p-4 flex flex-col gap-2"
+							variant="outline"
+							data-icon="inline-start"
+							onClick={() => jsonFileInputRef.current?.click()}
+						>
+							<IconFileUpload className="size-8" />
+							Upload JSON File
+						</Button>
+					)}
+
 					<Input
 						type="file"
 						accept=".json"
