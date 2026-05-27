@@ -1,3 +1,4 @@
+import type { PieceRules } from "@/features/variants/common/types/pieceRules";
 import type { VariantInfo } from "@/features/variants/common/types/variants";
 
 type ExportedJSON = {
@@ -24,10 +25,37 @@ function serialiseJSONForExport(rawJSON: VariantInfo) {
 			return [
 				pieceName,
 				Object.fromEntries(
-					Object.entries(pieceRuleset as Record<string, unknown>).filter(
-						([key]) => key !== "imageId",
-					),
+					Object.entries(
+						pieceRuleset as Record<string, unknown>,
+					).filter(([key]) => key !== "imageId"),
 				),
+			];
+		}),
+	);
+
+	newJSON.pieces = Object.fromEntries(
+		Object.entries(newJSON.pieces).map(([pieceName, pieceRuleset]) => {
+			return [
+				pieceName,
+				{
+					...(pieceRuleset as Record<string, unknown>),
+					moveset: (pieceRuleset as PieceRules).moveset.map(
+						(move) => {
+							if (Array.isArray(move)) {
+								return move.map((chainedMove) => {
+									return {
+										moveName: chainedMove.moveName,
+										validMove: chainedMove.validMove,
+										terminateOnStop:
+											chainedMove.terminateOnStop,
+									};
+								});
+							} else {
+								return move;
+							}
+						},
+					),
+				},
 			];
 		}),
 	);
