@@ -81,7 +81,7 @@ function serialiseJSONForExport(rawJSON: VariantInfo) {
 	);
 
 	newJSON.pieces = convertDictToSnakeCase(newJSON.pieces, [0]) as Record<string, unknown>;
-	newJSON.setup = convertDictToSnakeCase(newJSON.setup, [0]) as Record<string, unknown>;
+	newJSON.setup = convertDictToSnakeCase(newJSON.setup, []) as Record<string, unknown>;
 	newJSON.moves = convertDictToSnakeCase(newJSON.moves, [0]) as Record<string, unknown>;
 
 
