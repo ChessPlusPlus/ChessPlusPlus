@@ -36,6 +36,13 @@ function ImportJSONDialog() {
 		updateJsonFileErrors,
 		clearJsonFileErrors,
 		jsonFileErrors,
+
+		variantName,
+		updateVariantName,
+		clearVariantName,
+		variantNameErrors,
+		updateVariantNameErrors,
+		clearVariantNameErrors,
 	} = useImportJSONDialogStore();
 
 	const jsonFileInputRef = useRef<HTMLInputElement>(null);
@@ -63,6 +70,8 @@ function ImportJSONDialog() {
 		updateJsonFile(file);
 		updateJsonFileName(file.name);
 		clearJsonFileErrors();
+		clearVariantName();
+		clearVariantNameErrors();
 	}
 
 	function handleJSONFileEdit() {
@@ -73,6 +82,8 @@ function ImportJSONDialog() {
 		clearJsonFile();
 		clearJsonFileName();
 		clearJsonFileErrors();
+		clearVariantName();
+		clearVariantNameErrors();
 	}
 
 	return (
@@ -96,6 +107,22 @@ function ImportJSONDialog() {
 						Create a variant from a JSON file configuration.
 					</DialogDescription>
 				</DialogHeader>
+
+				<Field>
+					<FieldLabel>Variant Name</FieldLabel>
+					<Input
+						type="text"
+						value={variantName}
+						onChange={(e) => updateVariantName(e.target.value)}
+						data-invalid={variantNameErrors.length > 0}
+						aria-invalid={variantNameErrors.length > 0}
+					/>
+					<FieldError
+						errors={variantNameErrors.map((error) => ({
+							message: error,
+						}))}
+					/>
+				</Field>
 
 				<Field>
 					<FieldLabel>JSON File</FieldLabel>
