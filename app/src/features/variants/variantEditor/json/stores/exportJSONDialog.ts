@@ -8,6 +8,10 @@ type ExportJSONDialogStore = {
 	fileName: string;
 	updateFileName: (fileName: string) => void;
 	clearFileName: () => void;
+
+	fileNameErrors: string[];
+	updateFileNameErrors: (fileNameErrors: string[]) => void;
+	clearFileNameErrors: () => void;
 }
 
 const useExportJSONDialogStore = create<ExportJSONDialogStore>((set) => ({
@@ -18,6 +22,10 @@ const useExportJSONDialogStore = create<ExportJSONDialogStore>((set) => ({
 	fileName: "",
 	updateFileName: (fileName) => set({ fileName }),
 	clearFileName: () => set({ fileName: "" }),
+
+	fileNameErrors: [],
+	updateFileNameErrors: (fileNameErrors) => set({ fileNameErrors }),
+	clearFileNameErrors: () => set({ fileNameErrors: [] }),
 }));
 
 export default useExportJSONDialogStore;
