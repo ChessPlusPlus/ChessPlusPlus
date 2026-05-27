@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 function Sidebar() {
-	const { updateCurrentOpenMenu } = useSidebarStore();
+	const { updateCurrentOpenMenu, clearCurrentOpenMenu, currentOpenMenu } = useSidebarStore();
 
 	const { currentVariantId } = useVariantDraftStore();
 
@@ -88,7 +88,13 @@ function Sidebar() {
 					</TooltipContent>
 				</Tooltip>
 
-				<DropdownMenu>
+				<DropdownMenu open={currentOpenMenu === "jsonOptions"} onOpenChange={(open) => {
+					if (open) {
+						updateCurrentOpenMenu("jsonOptions");
+					} else {
+						clearCurrentOpenMenu();
+					}
+				}}>
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<DropdownMenuTrigger asChild>
