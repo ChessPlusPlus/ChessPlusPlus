@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
-import { serialiseJSONForExport } from "@/features/variants/variantEditor/json/utils/serialiser";
+import { serialiseJSONForExport } from "@/features/variants/variantEditor/json/utils/exportSerialiser";
 import isValidFileName from "valid-filename";
 
 function ExportJSONDialog() {
