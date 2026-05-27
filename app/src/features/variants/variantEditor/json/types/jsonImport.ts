@@ -1,5 +1,6 @@
 import type { MovementRule } from "@/features/variants/common/types/movementRules";
 import type { RegularMove } from "@/features/variants/common/types/pieceRules";
+import type { PieceOwnershipRules } from "@/features/variants/common/types/setupRules";
 
 type SquareInfo = {
 	pieceName: string;
@@ -8,7 +9,7 @@ type SquareInfo = {
 }
 
 type ImportedSetupRules = {
-	pieceOwnership: Record<string, unknown>;
+	pieceOwnership: PieceOwnershipRules;
 	boardXSize: number;
 	boardYSize: number;
 	startingPosition: SquareInfo[];
@@ -26,8 +27,8 @@ type ImportedPiece = {
 
 type ImportedJSON = {
 	setup: ImportedSetupRules;
-	moves: Record<string, unknown>;
-	pieces: Record<string, MovementRule>;
+	moves: Record<string, MovementRule>;
+	pieces: Record<string, ImportedPiece>;
 }
 
 export type { ImportedJSON, ImportedSetupRules, ImportedChainedMoveSequence, ImportedPiece };
