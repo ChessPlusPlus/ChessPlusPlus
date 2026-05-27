@@ -5,6 +5,14 @@ type ImportJSONDialogStore = {
 	openImportJSONDialog: () => void;
 	closeImportJSONDialog: () => void;
 
+	variantName: string;
+	updateVariantName: (variantName: string) => void;
+	clearVariantName: () => void;
+
+	variantNameErrors: string[];
+	updateVariantNameErrors: (variantNameErrors: string[]) => void;
+	clearVariantNameErrors: () => void;
+
 	jsonFile: Blob | null;
 	updateJsonFile: (jsonFile: Blob | null) => void;
 	clearJsonFile: () => void;
@@ -22,6 +30,14 @@ const useImportJSONDialogStore = create<ImportJSONDialogStore>((set) => ({
 	isImportJSONDialogOpen: false,
 	openImportJSONDialog: () => set({ isImportJSONDialogOpen: true }),
 	closeImportJSONDialog: () => set({ isImportJSONDialogOpen: false }),
+
+	variantName: "",
+	updateVariantName: (variantName) => set({ variantName }),
+	clearVariantName: () => set({ variantName: "" }),
+
+	variantNameErrors: [],
+	updateVariantNameErrors: (variantNameErrors) => set({ variantNameErrors }),
+	clearVariantNameErrors: () => set({ variantNameErrors: [] }),
 
 	jsonFile: null,
 	updateJsonFile: (jsonFile) => set({ jsonFile }),
