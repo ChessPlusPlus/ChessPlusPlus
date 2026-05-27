@@ -1,6 +1,6 @@
 import ChessboardGridIcon from "@/features/variants/common/icons/ChessboardGridIcon";
 import { ChessKnightIcon } from "lucide-react";
-import { IconArrowsMove } from "@tabler/icons-react";
+import { IconArrowsMove, IconBraces } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import {
 	Tooltip,
@@ -82,6 +82,25 @@ function Sidebar() {
 					</TooltipTrigger>
 					<TooltipContent side="left" sideOffset={8}>
 						Movements
+					</TooltipContent>
+				</Tooltip>
+
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button
+							variant="ghost"
+							className="p-1 hover:bg-(--sidebar-primary-hover)"
+							aria-label="JSON options"
+							onClick={() => updateCurrentOpenMenu("jsonOptions")}
+						>
+							<IconBraces
+								strokeWidth={1.5}
+								className="size-6"
+							/>
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent side="left" sideOffset={8}>
+						JSON options
 					</TooltipContent>
 				</Tooltip>
 			</div>
