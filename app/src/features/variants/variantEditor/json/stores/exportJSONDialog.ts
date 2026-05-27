@@ -23,9 +23,9 @@ const useExportJSONDialogStore = create<ExportJSONDialogStore>((set) => ({
 	updateFileName: (fileName) => set({ fileName }),
 	clearFileName: () => set({ fileName: "" }),
 
-	exportCasing: "camel",
+	exportCasing: "snake",
 	updateExportCasing: (exportCasing) => set({ exportCasing }),
-	clearExportCasing: () => set({ exportCasing: "camel" }),
+	clearExportCasing: () => set({ exportCasing: "snake" }),
 }));
 
 export default useExportJSONDialogStore;
