@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 function Sidebar() {
-	const { updateCurrentOpenMenu, clearCurrentOpenMenu, currentOpenMenu } = useSidebarStore();
+	const { updateCurrentOpenMenu, clearCurrentOpenMenu, currentOpenMenu } =
+		useSidebarStore();
 
 	const { currentVariantId } = useVariantDraftStore();
 
@@ -88,19 +89,22 @@ function Sidebar() {
 					</TooltipContent>
 				</Tooltip>
 
-				<DropdownMenu open={currentOpenMenu === "jsonOptions"} onOpenChange={(open) => {
-					if (open) {
-						updateCurrentOpenMenu("jsonOptions");
-					} else {
-						clearCurrentOpenMenu();
-					}
-				}}>
+				<DropdownMenu
+					open={currentOpenMenu === "jsonOptions"}
+					onOpenChange={(open) => {
+						if (open) {
+							updateCurrentOpenMenu("jsonOptions");
+						} else {
+							clearCurrentOpenMenu();
+						}
+					}}
+				>
 					<Tooltip>
 						<TooltipTrigger asChild>
 							<DropdownMenuTrigger asChild>
 								<Button
 									variant="ghost"
-									className="p-1 hover:bg-(--sidebar-primary-hover)"
+									className="p-1 hover:bg-(--sidebar-primary-hover) aria-expanded:bg-sidebar-primary-muted"
 									aria-label="JSON options"
 									onClick={() =>
 										updateCurrentOpenMenu("jsonOptions")
