@@ -1,4 +1,8 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useDraggable } from "@dnd-kit/react";
 
 type PieceImageProps = {
@@ -19,12 +23,13 @@ function PieceImage({ piece, imageUrl, file, rank }: PieceImageProps) {
 	if (!imageUrl) return null;
 
 	return (
-		<Tooltip>
+		<Tooltip delayDuration={500}>
 			<TooltipTrigger asChild>
 				<img
 					className="size-full object-contain absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 					ref={ref}
 					src={imageUrl}
+					draggable={false}
 					alt={piece}
 				/>
 			</TooltipTrigger>
@@ -32,6 +37,14 @@ function PieceImage({ piece, imageUrl, file, rank }: PieceImageProps) {
 				{piece}
 			</TooltipContent>
 		</Tooltip>
+
+		// <img
+		// 	className="size-full object-contain absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+		// 	ref={ref}
+		// 	src={imageUrl}
+		// 	draggable={false}
+		// 	alt={piece}
+		// />
 	);
 }
 
