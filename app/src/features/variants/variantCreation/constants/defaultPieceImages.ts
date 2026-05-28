@@ -51,7 +51,7 @@ const defaultPieceImages: Record<string, PieceImage> = {
 	black_king: {
 		image: new Blob([blackKingSvg], { type: "image/svg+xml" }),
 	},
-	placeholder_image: {
+	placeholder: {
 		image: new Blob([placeholderImageSvg], { type: "image/svg+xml" }),
 	},
 };
