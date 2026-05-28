@@ -267,7 +267,7 @@ function SetupMenu() {
 		}
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
-		syncSetupRulesDraftToDB();
+		syncSetupRulesDraftToDB(["pieceOwnership"]);
 	}
 
 	function handleEditPiecesButtonClick(playerName: string) {
@@ -370,7 +370,7 @@ function SetupMenu() {
 			return;
 		}
 
-		syncSetupRulesDraftToDB();
+		syncSetupRulesDraftToDB(["boardXSize"]);
 	}
 
 	function handleBoardHeightInputBlur() {
@@ -396,7 +396,7 @@ function SetupMenu() {
 			return;
 		}
 
-		syncSetupRulesDraftToDB();
+		syncSetupRulesDraftToDB(["boardYSize"]);
 	}
 
 	function handleAddPlayerButtonClick() {
