@@ -25,6 +25,7 @@ import { useRef, type ChangeEvent } from "react";
 import { serialiseJSONForImport } from "@/features/variants/variantEditor/json/utils/importSerialiser";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
+import { useNavigate } from "react-router-dom";
 
 function ImportJSONDialog() {
 	const {
@@ -54,9 +55,11 @@ function ImportJSONDialog() {
 	const { variants, createVariant } = useVariantsStore();
 	const { images, defaultImagesCreated, markAsDefaultImagesCreated, updateImages } = usePieceImagesStore();
 
+	const navigate = useNavigate();
+
 	const jsonFileInputRef = useRef<HTMLInputElement>(null);
 
-	async function handleImportJSON() {
+	async function handleImportJSON(shouldOpen: boolean) {
 		if (!jsonFile) return;
 
 		const trimmedVariantName = variantName.trim();
@@ -92,7 +95,7 @@ function ImportJSONDialog() {
 
 		const serialisedVariantRules = serialiseJSONForImport(json);
 
-		createVariant({
+		const variantId = createVariant({
 			variantName: trimmedVariantName,
 			variantRules: serialisedVariantRules,
 		});
@@ -108,6 +111,10 @@ function ImportJSONDialog() {
 		clearJsonFileErrors();
 		clearVariantName();
 		clearVariantNameErrors();
+
+		if (shouldOpen) {
+			navigate(`/variants/${variantId}`);
+		}
 	}
 
 	function handleJSONFileInputChange(e: ChangeEvent<HTMLInputElement>) {
@@ -232,8 +239,16 @@ function ImportJSONDialog() {
 				<DialogFooter>
 					<Button
 						disabled={variantName === "" || !jsonFile}
-						className="w-full"
-						onClick={handleImportJSON}
+						className="px-4"
+						onClick={() => handleImportJSON(true)}
+					>
+						Import and open
+					</Button>
+					<Button
+						variant="outline"
+						disabled={variantName === "" || !jsonFile}
+						className="px-4"
+						onClick={() => handleImportJSON(false)}
 					>
 						Import
 					</Button>
