@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import { Button } from "@/components/ui/button";
 import {
 	DialogDescription,
@@ -21,6 +23,8 @@ import {
 } from "@tabler/icons-react";
 import { useRef, type ChangeEvent } from "react";
 import { serialiseJSONForImport } from "@/features/variants/variantEditor/json/utils/importSerialiser";
+import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
+import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
 
 function ImportJSONDialog() {
 	const {
@@ -48,6 +52,7 @@ function ImportJSONDialog() {
 	} = useImportJSONDialogStore();
 
 	const { variants, createVariant } = useVariantsStore();
+	const { images, defaultImagesCreated, markAsDefaultImagesCreated, updateImages } = usePieceImagesStore();
 
 	const jsonFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -91,6 +96,11 @@ function ImportJSONDialog() {
 			variantName: trimmedVariantName,
 			variantRules: serialisedVariantRules,
 		});
+
+		if (!_.isEqual(images, defaultPieceImages) || !defaultImagesCreated) {
+			updateImages(defaultPieceImages);
+			markAsDefaultImagesCreated();
+		}
 
 		closeImportJSONDialog();
 		clearJsonFile();
