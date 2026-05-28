@@ -19,7 +19,7 @@ function PieceImage({ piece, imageUrl, file, rank }: PieceImageProps) {
 
 	return (
 		<img
-			className="size-9/10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+			className="size-full object-contain absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
 			ref={ref}
 			src={imageUrl}
 			alt={piece}
