@@ -53,6 +53,9 @@ function ImportJSONDialog() {
 	async function handleImportJSON() {
 		if (!jsonFile) return;
 
+		clearVariantNameErrors();
+		clearJsonFileErrors();
+
 		const trimmedVariantName = variantName.trim();
 		if (trimmedVariantName === "") {
 			updateVariantNameErrors(["Variant name cannot be empty"]);
