@@ -1,3 +1,5 @@
+import { clamp } from "lodash";
+
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import { generateNumberSequence } from "@/features/variants/variantEditor/common/utils/boardGeneration";
@@ -23,12 +25,15 @@ function SetupChessboard() {
 		setupRulesDraft.startingPosition,
 	);
 
+	const clampedBoardXSize = clamp(boardXSize, 1, 32);
+	const clampedBoardYSize = clamp(boardYSize, 1, 32);
+
 	const ranks = isFlipped
-		? generateNumberSequence(boardYSize)
-		: generateNumberSequence(boardYSize).reverse();
+		? generateNumberSequence(clampedBoardYSize)
+		: generateNumberSequence(clampedBoardYSize).reverse();
 	const files = isFlipped
-		? generateNumberSequence(boardXSize).reverse()
-		: generateNumberSequence(boardXSize);
+		? generateNumberSequence(clampedBoardXSize).reverse()
+		: generateNumberSequence(clampedBoardXSize);
 
 	function getImageUrl(imageId: string) {
 		if (!currentVariantId) return null;
@@ -40,8 +45,7 @@ function SetupChessboard() {
 		return imageUrl;
 	}
 
-	const boardY = Math.max(boardYSize, 1);
-	const gridWidth = `min(100%, calc(100% * ${boardXSize} / 8), calc(28rem * ${boardXSize} / ${boardY}))`;
+	const gridWidth = `min(100%, calc(100% * ${clampedBoardXSize} / 8), calc(28rem * ${clampedBoardXSize} / ${clampedBoardYSize}))`;
 
 	return (
 		<div className="w-full max-w-md">
@@ -49,7 +53,7 @@ function SetupChessboard() {
 				className="grid min-w-0"
 				style={{
 					width: gridWidth,
-					gridTemplateColumns: `repeat(${boardXSize}, minmax(0, 1fr))`,
+					gridTemplateColumns: `repeat(${clampedBoardXSize}, minmax(0, 1fr))`,
 				}}
 			>
 				{ranks.map((rank) =>
@@ -67,8 +71,8 @@ function SetupChessboard() {
 								rank={rank}
 								imageUrl={imageUrl ?? null}
 								piece={foundSquare ?? ""}
-								boardXSize={boardXSize}
-								boardYSize={boardYSize}
+								boardXSize={clampedBoardXSize}
+								boardYSize={clampedBoardYSize}
 								isFlipped={isFlipped}
 							/>
 						);
