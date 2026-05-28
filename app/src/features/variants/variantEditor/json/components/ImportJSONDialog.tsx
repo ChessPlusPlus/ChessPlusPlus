@@ -20,6 +20,7 @@ import {
 	IconTrash,
 } from "@tabler/icons-react";
 import { useRef, type ChangeEvent } from "react";
+import { serialiseJSONForImport } from "@/features/variants/variantEditor/json/utils/importSerialiser";
 
 function ImportJSONDialog() {
 	const {
@@ -46,15 +47,12 @@ function ImportJSONDialog() {
 		clearVariantNameErrors,
 	} = useImportJSONDialogStore();
 
-	const { variants } = useVariantsStore();
+	const { variants, createVariant } = useVariantsStore();
 
 	const jsonFileInputRef = useRef<HTMLInputElement>(null);
 
 	async function handleImportJSON() {
 		if (!jsonFile) return;
-
-		clearVariantNameErrors();
-		clearJsonFileErrors();
 
 		const trimmedVariantName = variantName.trim();
 		if (trimmedVariantName === "") {
@@ -71,6 +69,8 @@ function ImportJSONDialog() {
 			return;
 		}
 
+		clearVariantNameErrors();
+
 		const json = await readJSONFromBlob(jsonFile);
 		if (!json) return;
 
@@ -81,6 +81,13 @@ function ImportJSONDialog() {
 		if (!isJsonValid) {
 			updateJsonFileErrors([validationResponse.validationMessage]);
 		}
+
+		const serialisedVariantRules = serialiseJSONForImport(json);
+
+		createVariant({
+			variantName: trimmedVariantName,
+			variantRules: serialisedVariantRules,
+		});
 	}
 
 	function handleJSONFileInputChange(e: ChangeEvent<HTMLInputElement>) {
