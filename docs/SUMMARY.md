@@ -8,4 +8,5 @@
 * [Navigation Overview](user-guide/navigation-overview.md)
 * [Core Features](user-guide/core-features/README.md)
   * [Creating a variant](user-guide/core-features/creating-a-variant.md)
-  * [Variant Editor](user-guide/core-features/variant-editor.md)
+  * [Variant Editor](user-guide/core-features/variant-editor/README.md)
+    * [Board Settings](user-guide/core-features/variant-editor/board-settings.md)

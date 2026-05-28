@@ -1,7 +1,3 @@
----
-description: This page explains the main areas of the website and how to move between them.
----
-
 # Navigation Overview
 
 **The homepage contains 4 buttons.**

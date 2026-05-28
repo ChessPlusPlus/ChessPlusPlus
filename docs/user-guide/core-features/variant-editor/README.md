@@ -2,11 +2,11 @@
 
 The variant editor can be accessed from either after creating and opening a new variant or selecting a variant through the "My variants" button.
 
-<figure><img src="../../.gitbook/assets/image_2026-05-28_100333282.png" alt=""><figcaption><p>What you should see after clicking the "My variant" button</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image_2026-05-28_100333282.png" alt=""><figcaption><p>What you should see after clicking the "My variant" button</p></figcaption></figure>
 
 ## Inside the variant editor
 
-<figure><img src="../../.gitbook/assets/image_2026-05-28_101356174.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image_2026-05-28_101356174.png" alt=""><figcaption></figcaption></figure>
 
 ### The main sections
 
