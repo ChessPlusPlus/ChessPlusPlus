@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { validateJSON } from "@/features/variants/variantEditor/json/services/jsonValidation";
 import useImportJSONDialogStore from "@/features/variants/variantEditor/json/stores/importJSONDialog";
 import { readJSONFromBlob } from "@/features/variants/variantEditor/json/utils/jsonReader";
+import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import {
 	IconBraces,
 	IconFileUpload,
@@ -45,10 +46,27 @@ function ImportJSONDialog() {
 		clearVariantNameErrors,
 	} = useImportJSONDialogStore();
 
+	const { variants } = useVariantsStore();
+
 	const jsonFileInputRef = useRef<HTMLInputElement>(null);
 
 	async function handleImportJSON() {
 		if (!jsonFile) return;
+
+		const trimmedVariantName = variantName.trim();
+		if (trimmedVariantName === "") {
+			updateVariantNameErrors(["Variant name cannot be empty"]);
+			return;
+		}
+
+		const createdVariants = Object.entries(variants).map(
+			([, variantInfo]) => variantInfo.variantName.trim(),
+		);
+
+		if (createdVariants.includes(trimmedVariantName)) {
+			updateVariantNameErrors(["Variant name already exists"]);
+			return;
+		}
 
 		const json = await readJSONFromBlob(jsonFile);
 		if (!json) return;
@@ -70,8 +88,6 @@ function ImportJSONDialog() {
 		updateJsonFile(file);
 		updateJsonFileName(file.name);
 		clearJsonFileErrors();
-		clearVariantName();
-		clearVariantNameErrors();
 	}
 
 	function handleJSONFileEdit() {
@@ -82,8 +98,6 @@ function ImportJSONDialog() {
 		clearJsonFile();
 		clearJsonFileName();
 		clearJsonFileErrors();
-		clearVariantName();
-		clearVariantNameErrors();
 	}
 
 	return (
@@ -97,6 +111,8 @@ function ImportJSONDialog() {
 					clearJsonFileErrors();
 					clearJsonFile();
 					clearJsonFileName();
+					clearVariantName();
+					clearVariantNameErrors();
 				}
 			}}
 		>
@@ -184,7 +200,11 @@ function ImportJSONDialog() {
 				</Field>
 
 				<DialogFooter>
-					<Button className="w-full" onClick={handleImportJSON}>
+					<Button
+						disabled={variantName === "" || !jsonFile}
+						className="w-full"
+						onClick={handleImportJSON}
+					>
 						Import
 					</Button>
 				</DialogFooter>
