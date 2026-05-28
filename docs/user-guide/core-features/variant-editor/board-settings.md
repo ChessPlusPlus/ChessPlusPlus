@@ -21,5 +21,15 @@ You can drag pieces from each player onto the board to create any sort of starti
 
 <figure><img src="../../../.gitbook/assets/image_2026-05-28_144657999.png" alt=""><figcaption><p>Go crazy</p></figcaption></figure>
 
-You can set the board width and height to any number from 1 to 32.
+You can set the board width and height to any number from **1 to 32**.
+
+{% hint style="info" %}
+Tip: Set your board width and height first, as changing it at the end may mess up with some of your piece placements.
+{% endhint %}
+
+***
+
+**Note: The features mentioned below have no real purpose yet, but they will be given one in the near future!**
+
+***
 
