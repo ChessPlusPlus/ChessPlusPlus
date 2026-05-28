@@ -1,6 +1,6 @@
 import ChessboardGridIcon from "@/features/variants/common/icons/ChessboardGridIcon";
 import { ChessKnightIcon } from "lucide-react";
-import { IconArrowsMove } from "@tabler/icons-react";
+import { IconArrowsMove, IconBraces } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import {
 	Tooltip,
@@ -12,9 +12,14 @@ import MovementsEditorSheet from "@/features/variants/variantEditor/movementsEdi
 import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
 import PiecesEditorSheet from "@/features/variants/variantEditor/piecesEditor/components/PiecesEditorSheet/PiecesEditorSheet";
 import { useNavigate } from "react-router-dom";
+import JSONOptionsMenu from "@/features/variants/variantEditor/json/components/JSONOptionsMenu";
+import {
+	DropdownMenu,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function Sidebar() {
-	const { updateCurrentOpenMenu } =
+	const { updateCurrentOpenMenu, clearCurrentOpenMenu, currentOpenMenu } =
 		useSidebarStore();
 
 	const { currentVariantId } = useVariantDraftStore();
@@ -25,7 +30,6 @@ function Sidebar() {
 		if (!currentVariantId) return;
 		navigate(`/variants/${currentVariantId}/setup`);
 	}
-
 
 	return (
 		<>
@@ -84,6 +88,43 @@ function Sidebar() {
 						Movements
 					</TooltipContent>
 				</Tooltip>
+
+				<DropdownMenu
+					open={currentOpenMenu === "jsonOptions"}
+					onOpenChange={(open) => {
+						if (open) {
+							updateCurrentOpenMenu("jsonOptions");
+						} else {
+							clearCurrentOpenMenu();
+						}
+					}}
+				>
+					<Tooltip>
+						<TooltipTrigger asChild>
+							<DropdownMenuTrigger asChild>
+								<Button
+									variant="ghost"
+									className="p-1 hover:bg-(--sidebar-primary-hover) aria-expanded:bg-sidebar-primary-muted"
+									aria-label="JSON options"
+									onClick={() =>
+										updateCurrentOpenMenu("jsonOptions")
+									}
+								>
+									<IconBraces
+										strokeWidth={1.5}
+										className="size-6"
+									/>
+								</Button>
+							</DropdownMenuTrigger>
+						</TooltipTrigger>
+
+						<TooltipContent side="left" sideOffset={8}>
+							JSON options
+						</TooltipContent>
+					</Tooltip>
+
+					<JSONOptionsMenu />
+				</DropdownMenu>
 			</div>
 
 			<MovementsEditorSheet />

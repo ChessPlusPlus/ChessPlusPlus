@@ -1,17 +1,20 @@
 import { Button } from "@/components/ui/button";
-import { IconChess, IconFolder, IconPlus } from "@tabler/icons-react";
+import { IconChess, IconFileImport, IconFolder, IconPlus } from "@tabler/icons-react";
 import CreateVariantDialog from "@/features/variants/variantCreation/components/CreateVariantDialog";
 import useCreateVariantDialogStore from "@/features/variants/variantCreation/stores/createVariantDialog";
 import MyVariantsDialog from "@/features/variants/variantListing/components/MyVariantsDialog";
 import useMyVariantsDialogStore from "@/features/variants/variantListing/stores/myVariantsDialog";
 import useVariantPlaySelectionDialogStore from "@/features/variants/variantPlay/stores/variantPlaySelectionDialog";
 import VariantPlaySelectionDialog from "@/features/variants/variantPlay/components/VariantPlaySelectionDialog";
+import useImportJSONDialogStore from "@/features/variants/variantEditor/json/stores/importJSONDialog";
+import ImportJSONDialog from "@/features/variants/variantEditor/json/components/ImportJSONDialog";
 
 function HomePage() {
 	const { openDialog: openCreateVariantDialog } =
 		useCreateVariantDialogStore();
 	const { openDialog: openMyVariantsDialog } = useMyVariantsDialogStore();
 	const { openVariantPlaySelectionDialog } = useVariantPlaySelectionDialogStore();
+	const { openImportJSONDialog } = useImportJSONDialogStore();
 
 	return (
 		<>
@@ -23,6 +26,10 @@ function HomePage() {
 					<Button onClick={openCreateVariantDialog} className="px-4">
 						<IconPlus />
 						Create variant
+					</Button>
+					<Button onClick={openImportJSONDialog} className="px-4">
+						<IconFileImport />
+						Import variant
 					</Button>
 					<Button onClick={openMyVariantsDialog} className="px-4">
 						<IconFolder />
@@ -38,6 +45,7 @@ function HomePage() {
 			<CreateVariantDialog />
 			<MyVariantsDialog />
 			<VariantPlaySelectionDialog />
+			<ImportJSONDialog />
 		</>
 	);
 }

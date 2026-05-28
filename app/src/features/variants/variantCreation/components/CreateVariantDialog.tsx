@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import {
 	Dialog,
 	DialogContent,
@@ -44,8 +46,12 @@ function CreateVariantDialog() {
 	} = useCreateVariantDialogStore();
 
 	const { createVariant, hasHydrated, variants } = useVariantsStore();
-	const { defaultImagesCreated, markAsDefaultImagesCreated, updateImages } =
-		usePieceImagesStore();
+	const {
+		images,
+		defaultImagesCreated,
+		markAsDefaultImagesCreated,
+		updateImages,
+	} = usePieceImagesStore();
 
 	const navigate = useNavigate();
 
@@ -105,7 +111,7 @@ function CreateVariantDialog() {
 		clearVariantName();
 		closeDialog();
 
-		if (!defaultImagesCreated) {
+		if (!_.isEqual(images, defaultPieceImages) || !defaultImagesCreated) {
 			updateImages(defaultPieceImages);
 			markAsDefaultImagesCreated();
 		}

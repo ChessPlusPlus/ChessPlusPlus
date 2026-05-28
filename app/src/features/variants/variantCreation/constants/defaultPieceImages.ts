@@ -12,6 +12,7 @@ import whiteKnightSvg from "@/features/variants/common/assets/wN.svg?raw";
 import blackKnightSvg from "@/features/variants/common/assets/bN.svg?raw";
 import whiteKingSvg from "@/features/variants/common/assets/wK.svg?raw";
 import blackKingSvg from "@/features/variants/common/assets/bK.svg?raw";
+import placeholderImageSvg from "@/features/variants/common/assets/placeholder.svg?raw";
 
 const defaultPieceImages: Record<string, PieceImage> = {
 	white_pawn: {
@@ -49,6 +50,9 @@ const defaultPieceImages: Record<string, PieceImage> = {
 	},
 	black_king: {
 		image: new Blob([blackKingSvg], { type: "image/svg+xml" }),
+	},
+	placeholder: {
+		image: new Blob([placeholderImageSvg], { type: "image/svg+xml" }),
 	},
 };
 

@@ -19,7 +19,7 @@ function PieceImage({ imageUrl, piece, file, rank }: PieceImageProps) {
 
 	if (!imageUrl) return null;
 
-	return <img ref={ref} src={imageUrl} alt={piece} />;
+	return <img ref={ref} src={imageUrl} alt={piece} draggable={false}/>;
 }
 
 export default PieceImage;

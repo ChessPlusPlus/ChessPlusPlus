@@ -13,6 +13,7 @@ import {
 import { Field, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import SelectionDialog from "@/features/variants/variantEditor/common/components/SelectionDialog";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
@@ -38,9 +39,10 @@ import { useEffect, type ChangeEvent } from "react";
 type PieceImageProps = {
 	player: string;
 	piece: string;
+	imageId: string;
 };
 
-function PieceImage({ player, piece }: PieceImageProps) {
+function PieceImage({ player, piece, imageId }: PieceImageProps) {
 	const { images } = usePieceImagesStore();
 	const { currentVariantId } = useVariantDraftStore();
 
@@ -52,17 +54,24 @@ function PieceImage({ player, piece }: PieceImageProps) {
 	if (!currentVariantId) return null;
 
 	const pieceImage = URL.createObjectURL(
-		images[piece][currentVariantId] ?? images[piece].image,
+		images[imageId][currentVariantId] ?? images[imageId].image,
 	);
 
 	return (
-		<img
-			ref={ref}
-			key={`${player}-${piece}`}
-			className="size-14 hover:bg-gray-300 rounded-md"
-			src={pieceImage}
-			alt={piece}
-		/>
+		<Tooltip>
+			<TooltipTrigger asChild>
+				<img
+					ref={ref}
+					key={`${player}-${piece}`}
+					className="size-14 hover:bg-gray-300 rounded-md"
+					src={pieceImage}
+					alt={piece}
+				/>
+			</TooltipTrigger>
+			<TooltipContent>
+				{piece}
+			</TooltipContent>
+		</Tooltip>
 	);
 }
 
@@ -616,6 +625,10 @@ function SetupMenu() {
 										].map((piece) => (
 											<PieceImage
 												key={piece}
+												imageId={
+													pieceRulesetDraft[piece]
+														.imageId ?? ""
+												}
 												piece={piece}
 												player={color}
 											/>
