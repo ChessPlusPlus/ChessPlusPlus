@@ -32,7 +32,7 @@ function serialiseJSONForImport(json: Record<string, Record<string, unknown>>): 
 		Object.entries(caseConvertedJSON.pieces).map(([pieceName, pieceRuleset]) => {
 			return [pieceName, {
 				...(pieceRuleset as PieceRules),
-				imageId: "pladeholder_image"
+				imageId: "placeholder"
 			}]
 		}).map(([pieceName, pieceRuleset]) => {
 			return [pieceName, {
