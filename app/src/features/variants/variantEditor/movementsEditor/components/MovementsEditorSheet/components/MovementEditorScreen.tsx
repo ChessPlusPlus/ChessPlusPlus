@@ -141,13 +141,13 @@ export function MovementEditorScreen() {
 	}
 
 	function handleOffsetXInputChange(e: ChangeEvent<HTMLInputElement>) {
-		const newOffsetX = e.target.valueAsNumber;
+		const newOffsetX = e.target.value;
 		updateOffsetX(newOffsetX);
 		addMovementsEditorChanges({ offsetX: newOffsetX });
 	}
 
 	function handleOffsetYInputChange(e: ChangeEvent<HTMLInputElement>) {
-		const newOffsetY = e.target.valueAsNumber;
+		const newOffsetY = e.target.value;
 		updateOffsetY(newOffsetY);
 		addMovementsEditorChanges({ offsetY: newOffsetY });
 	}
