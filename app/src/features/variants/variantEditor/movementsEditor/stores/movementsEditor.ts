@@ -308,8 +308,12 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 								return true;
 							}
 
+							
+							if (value === "") return false;
 							if (Number.isNaN(Number(value))) return false;
 							if (!Number.isFinite(Number(value))) return false;
+
+							console.log(value);
 
 							return true;
 						})
@@ -331,6 +335,7 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 								return false;
 							}
 
+							if (value === "") return true;
 							if (Number.isNaN(Number(value))) return true;
 							if (!Number.isFinite(Number(value))) return true;
 
@@ -366,6 +371,7 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 						}),
 				);
 
+				console.log(JSON.stringify(movementEditorChanges, null, 2));
 				console.log(
 					JSON.stringify(filteredMoveDefinitionChanges, null, 2),
 				);
