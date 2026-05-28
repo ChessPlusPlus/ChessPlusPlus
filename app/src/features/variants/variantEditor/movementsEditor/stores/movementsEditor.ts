@@ -11,8 +11,8 @@ type MovementsEditorChanges = {
 	movementName: string;
 	forMovement: boolean;
 	forCapture: boolean;
-	offsetX: number;
-	offsetY: number;
+	offsetX: string | number;
+	offsetY: string | number;
 	range: number | "inf";
 };
 
@@ -44,12 +44,12 @@ type MovementsEditorStore = {
 	updateForCapture: (newForCapture: boolean) => void;
 	clearForCapture: () => void;
 
-	offsetX: number | null;
-	updateOffsetX: (newOffset: number) => void;
+	offsetX: number | string | null;
+	updateOffsetX: (newOffset: string | number) => void;
 	clearOffsetX: () => void;
 
-	offsetY: number | null;
-	updateOffsetY: (newOffset: number) => void;
+	offsetY: number | string | null;
+	updateOffsetY: (newOffset: string | number) => void;
 	clearOffsetY: () => void;
 
 	range: number | "inf" | null;
@@ -151,8 +151,10 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 			];
 
 			const numericConstraintsConfig: NumericFieldConstraints = {
-				range: { min: 1, max: null }
-			}
+				range: { min: 1, max: null },
+				offsetX: { min: null, max: null },
+				offsetY: { min: null, max: null },
+			};
 
 			const updateMovementRulesDraft =
 				useVariantDraftStore.getState().updateMovementRulesDraft;
@@ -296,8 +298,8 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 				);
 
 				const filteredMoveDefinitionChanges = Object.fromEntries(
-					Object.entries(moveDefinitionChanges).filter(
-						([key, value]) => {
+					Object.entries(moveDefinitionChanges)
+						.filter(([key, value]) => {
 							if (
 								!Object.keys(numericConstraintsConfig).includes(
 									key as keyof MovementsEditorChanges,
@@ -306,17 +308,25 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 								return true;
 							}
 
-							if (Number.isNaN(value)) return false;
-							if (!Number.isFinite(value)) return false;
+							
+							if (value === "") return false;
+							if (Number.isNaN(Number(value))) return false;
+							if (!Number.isFinite(Number(value))) return false;
+
+							console.log(value);
 
 							return true;
-						},
-					),
+						})
+						.map(([key, value]) => {
+							return [key, Number(value)];
+						}),
 				);
 
 				const changesToRevert = Object.fromEntries(
 					Object.entries(moveDefinitionChanges)
 						.filter(([key, value]) => {
+							console.log(key, value);
+
 							if (
 								!Object.keys(numericConstraintsConfig).includes(
 									key as keyof MovementsEditorChanges,
@@ -325,14 +335,24 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 								return false;
 							}
 
-							if (Number.isNaN(value)) return true;
-							if (!Number.isFinite(value)) return true;
-							
-							if (value as number < (numericConstraintsConfig[key]?.min ?? -Infinity)) {
+							if (value === "") return true;
+							if (Number.isNaN(Number(value))) return true;
+							if (!Number.isFinite(Number(value))) return true;
+
+							if (
+								(value as number) <
+								(numericConstraintsConfig[key]?.min ??
+									-Infinity)
+							) {
+								console.log("less than min");
 								return true;
 							}
 
-							if (value as number > (numericConstraintsConfig[key]?.max ?? Infinity)) {
+							if (
+								(value as number) >
+								(numericConstraintsConfig[key]?.max ?? Infinity)
+							) {
+								console.log("greater than max");
 								return true;
 							}
 
@@ -341,15 +361,20 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 						.map(([key]) => {
 							return [
 								key,
-								movementRulesDraft[originalMovementName]
-									.moveDefinition[
-									key as keyof MoveDefinition
-								],
+								Number(
+									movementRulesDraft[originalMovementName]
+										.moveDefinition[
+										key as keyof MoveDefinition
+									],
+								),
 							];
 						}),
 				);
 
-				console.log(changesToRevert);
+				console.log(JSON.stringify(movementEditorChanges, null, 2));
+				console.log(
+					JSON.stringify(filteredMoveDefinitionChanges, null, 2),
+				);
 
 				const renamedMoveDefinitionChanges = Object.fromEntries(
 					Object.entries(filteredMoveDefinitionChanges).map(
