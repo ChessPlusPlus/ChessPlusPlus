@@ -4,11 +4,15 @@ description: This page explains the main areas of the website and how to move be
 
 # Navigation Overview
 
-**The homepage contains 3 buttons.**
+**The homepage contains 4 buttons.**
 
 ### Create Variant
 
 Create a brand new variant to customise and configure.
+
+### Import Variant
+
+Check out other people's variants! You can use this to import other variants from other people.
 
 ### My variants
 
