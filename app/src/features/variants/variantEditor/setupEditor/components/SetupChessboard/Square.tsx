@@ -27,7 +27,7 @@ function Square({ file, rank, imageUrl, piece, isFlipped, boardXSize, boardYSize
 		<div
 			ref={ref}
 			key={`${file}-${rank}`}
-			className={`${isDark ? "bg-chessboard-square-dark" : "bg-chessboard-square-light"} aspect-square relative`}
+			className={`${isDark ? "bg-chessboard-square-dark" : "bg-chessboard-square-light"} aspect-square relative select-none`}
 		>
 			<PieceImage
 				imageUrl={imageUrl ?? null}
