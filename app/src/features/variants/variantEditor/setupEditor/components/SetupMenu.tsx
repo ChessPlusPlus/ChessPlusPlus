@@ -37,15 +37,16 @@ import { useEffect, type ChangeEvent } from "react";
 
 type PieceImageProps = {
 	player: string;
+	piece: string;
 	imageId: string;
 };
 
-function PieceImage({ player, imageId }: PieceImageProps) {
+function PieceImage({ player, piece, imageId }: PieceImageProps) {
 	const { images } = usePieceImagesStore();
 	const { currentVariantId } = useVariantDraftStore();
 
 	const { ref } = useDraggable({
-		id: `${player}-${imageId}`,
+		id: `${player}-${piece}`,
 	});
 
 	if (!images) return null;
@@ -58,10 +59,10 @@ function PieceImage({ player, imageId }: PieceImageProps) {
 	return (
 		<img
 			ref={ref}
-			key={`${player}-${imageId}`}
+			key={`${player}-${piece}`}
 			className="size-14 hover:bg-gray-300 rounded-md"
 			src={pieceImage}
-			alt={imageId}
+			alt={piece}
 		/>
 	);
 }
@@ -617,6 +618,7 @@ function SetupMenu() {
 											<PieceImage
 												key={piece}
 												imageId={pieceRulesetDraft[piece].imageId ?? ""}
+												piece={piece}
 												player={color}
 											/>
 										))}
