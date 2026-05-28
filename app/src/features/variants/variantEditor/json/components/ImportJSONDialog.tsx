@@ -125,6 +125,9 @@ function ImportJSONDialog() {
 		updateJsonFile(file);
 		updateJsonFileName(file.name);
 		clearJsonFileErrors();
+
+		if (!jsonFileInputRef.current) return;
+		jsonFileInputRef.current.value = "";
 	}
 
 	function handleJSONFileEdit() {
