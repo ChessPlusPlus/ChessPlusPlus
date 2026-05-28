@@ -13,7 +13,15 @@ type SquareProps = {
 	boardYSize: number;
 };
 
-function Square({ file, rank, imageUrl, piece, isFlipped, boardXSize, boardYSize }: SquareProps) {
+function Square({
+	file,
+	rank,
+	imageUrl,
+	piece,
+	isFlipped,
+	boardXSize,
+	boardYSize,
+}: SquareProps) {
 	const { ref } = useDroppable({
 		id: `${file}-${rank}`,
 	});
@@ -22,18 +30,19 @@ function Square({ file, rank, imageUrl, piece, isFlipped, boardXSize, boardYSize
 
 	const isOnLeftEdge = isFlipped ? file === boardXSize - 1 : file === 0;
 	const isOnBottomEdge = isFlipped ? rank === boardYSize - 1 : rank === 0;
-
 	return (
 		<div
 			ref={ref}
 			className={`${isDark ? "bg-chessboard-square-dark" : "bg-chessboard-square-light"} aspect-square relative select-none`}
 		>
-			<PieceImage
-				imageUrl={imageUrl ?? null}
-				piece={piece}
-				file={file}
-				rank={rank}
-			/>
+			{imageUrl && piece && (
+				<PieceImage
+					imageUrl={imageUrl}
+					piece={piece}
+					file={file}
+					rank={rank}
+				/>
+			)}
 
 			{isOnLeftEdge && (
 				<span
