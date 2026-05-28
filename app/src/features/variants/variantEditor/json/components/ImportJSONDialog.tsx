@@ -80,7 +80,10 @@ function ImportJSONDialog() {
 		const isJsonValid = validationResponse.validationStatus;
 		if (!isJsonValid) {
 			updateJsonFileErrors([validationResponse.validationMessage]);
+			return;
 		}
+
+		clearJsonFileErrors();
 
 		const serialisedVariantRules = serialiseJSONForImport(json);
 
@@ -88,6 +91,13 @@ function ImportJSONDialog() {
 			variantName: trimmedVariantName,
 			variantRules: serialisedVariantRules,
 		});
+
+		closeImportJSONDialog();
+		clearJsonFile();
+		clearJsonFileName();
+		clearJsonFileErrors();
+		clearVariantName();
+		clearVariantNameErrors();
 	}
 
 	function handleJSONFileInputChange(e: ChangeEvent<HTMLInputElement>) {
