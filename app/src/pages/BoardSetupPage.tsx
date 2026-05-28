@@ -93,6 +93,8 @@ function BoardSetupPage() {
 			...setupRulesDraft,
 			startingPosition: updatedSetupRulesDraft.startingPosition,
 		});
+		
+		syncSetupRulesDraftToDB(["startingPosition"]);
 	}
 
 	function handleBackToVariantEditor() {
