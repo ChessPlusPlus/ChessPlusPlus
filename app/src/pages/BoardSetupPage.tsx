@@ -9,6 +9,7 @@ import { DragDropProvider } from "@dnd-kit/react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IconChevronLeft } from "@tabler/icons-react";
+import useSetupMenuStore from "@/features/variants/variantEditor/setupEditor/stores/setupMenu";
 
 type OnDragEnd = React.ComponentProps<typeof DragDropProvider>["onDragEnd"];
 
@@ -26,6 +27,8 @@ function BoardSetupPage() {
 	const { images, hasHydrated } = usePieceImagesStore();
 	const { variants } = useVariantsStore();
 	const { variantId } = useParams();
+	const { originalBoardXSize, originalBoardYSize, updateOriginalBoardXSize, updateOriginalBoardYSize } = useSetupMenuStore();
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -71,7 +74,11 @@ function BoardSetupPage() {
 		if (!identifier) return;
 		if (!piece) return;
 
-		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		const currentSetupRulesDraft = useVariantDraftStore.getState().setupRulesDraft;
+		if (!currentSetupRulesDraft) return;
+
+		const updatedSetupRulesDraft = structuredClone(currentSetupRulesDraft);
+		console.log(updatedSetupRulesDraft);
 
 		const startLocation = event.operation.source?.data.startLocation;
 
@@ -89,12 +96,20 @@ function BoardSetupPage() {
 			[[Number(file), Number(rank)], piece],
 		];
 
-		updateSetupRulesDraft({
-			...setupRulesDraft,
-			startingPosition: updatedSetupRulesDraft.startingPosition,
-		});
+		updateSetupRulesDraft(updatedSetupRulesDraft);
+
+		if (originalBoardXSize !== updatedSetupRulesDraft.boardXSize) {
+			updateOriginalBoardXSize(updatedSetupRulesDraft.boardXSize);
+		}
+		if (originalBoardYSize !== updatedSetupRulesDraft.boardYSize) {
+			updateOriginalBoardYSize(updatedSetupRulesDraft.boardYSize);
+		}
 		
-		syncSetupRulesDraftToDB(["startingPosition"]);
+		syncSetupRulesDraftToDB([
+			"startingPosition",
+			"boardXSize",
+			"boardYSize",
+		]);
 	}
 
 	function handleBackToVariantEditor() {
