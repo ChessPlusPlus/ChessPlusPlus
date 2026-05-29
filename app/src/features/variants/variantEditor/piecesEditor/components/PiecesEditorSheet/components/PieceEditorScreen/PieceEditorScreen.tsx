@@ -146,7 +146,7 @@ function PieceEditorScreen() {
 				<SheetFooter>
 					{currentTab === "movements" && (
 						<Button onClick={handleAddMovementButtonClick}>
-							Add movement
+							Edit moveset
 						</Button>
 					)}
 					<Button
