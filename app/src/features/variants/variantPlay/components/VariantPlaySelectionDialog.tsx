@@ -2,6 +2,7 @@ import VariantSelectionDialog, {
 	type VariantActions,
 } from "@/features/variants/common/components/VariantSelectionDialog";
 import useVariantPlaySelectionDialogStore from "@/features/variants/variantPlay/stores/variantPlaySelectionDialog";
+import posthog from "posthog-js";
 import { useNavigate } from "react-router-dom";
 
 function VariantPlaySelectionDialog() {
@@ -29,6 +30,7 @@ function VariantPlaySelectionDialog() {
 			label: "Play",
 			variant: "default",
 			execute: (variantId) => {
+				posthog.capture("variant_played");
 				navigate(`/variants/${variantId}/play`);
 			},
 		},
