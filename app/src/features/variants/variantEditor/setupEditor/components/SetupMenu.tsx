@@ -81,7 +81,6 @@ function SetupMenu() {
 	const {
 		setupRulesDraft,
 		updateSetupRulesDraft,
-		syncSetupRulesDraftToDB,
 		pieceRulesetDraft,
 		currentVariantId,
 	} = useVariantDraftStore();
@@ -216,7 +215,6 @@ function SetupMenu() {
 		}
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
-		syncSetupRulesDraftToDB(["pieceOwnership"]);
 	}
 
 	function handleEditPiecesButtonClick(playerName: string) {
@@ -266,7 +264,7 @@ function SetupMenu() {
 		}
 	}
 
-	function revertBoardXSize(sync: boolean = true) {
+	function revertBoardXSize() {
 		const updatedOriginalBoardXSize =
 			useSetupMenuStore.getState().originalBoardXSize;
 		const currentSetupRulesDraft = useVariantDraftStore.getState().setupRulesDraft;
@@ -276,13 +274,12 @@ function SetupMenu() {
 
 		const updatedSetupRulesDraft = structuredClone(currentSetupRulesDraft);
 		updatedSetupRulesDraft.boardXSize = updatedOriginalBoardXSize;
-		updateSetupRulesDraft(updatedSetupRulesDraft);
-		if (sync) syncSetupRulesDraftToDB();
 
+		updateSetupRulesDraft(updatedSetupRulesDraft);
 		updateOriginalBoardXSize(updatedOriginalBoardXSize);
 	}
 
-	function revertBoardYSize(sync: boolean = true) {
+	function revertBoardYSize() {
 		const updatedOriginalBoardYSize =
 			useSetupMenuStore.getState().originalBoardYSize;
 		const currentSetupRulesDraft = useVariantDraftStore.getState().setupRulesDraft;
@@ -294,7 +291,6 @@ function SetupMenu() {
 		updatedSetupRulesDraft.boardYSize = updatedOriginalBoardYSize;
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
-		if (sync) syncSetupRulesDraftToDB();
 
 		updateOriginalBoardYSize(updatedOriginalBoardYSize);
 	}
@@ -364,18 +360,13 @@ function SetupMenu() {
 			});
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
-		syncSetupRulesDraftToDB([
-			"boardXSize",
-			"boardYSize",
-			"startingPosition",
-		]);
 
 		updateOriginalBoardXSize(updatedSetupRulesDraft.boardXSize);
 		updateOriginalBoardYSize(updatedSetupRulesDraft.boardYSize);
 	}
 
 	function handleRevertBoardSizeButtonClick() {
-		revertBoardXSize(false);
+		revertBoardXSize();
 		revertBoardYSize();
 	}
 
