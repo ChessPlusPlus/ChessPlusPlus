@@ -640,10 +640,12 @@ function SetupMenu() {
 					</CollapsibleContent>
 				</Collapsible>
 
-				<div className="flex flex-row gap-2 p-2">
-					<Button>Save</Button>
-					<Button variant="destructive">Revert</Button>
-				</div>
+				{(originalBoardXSize !== boardXSize || originalBoardYSize !== boardYSize) && (
+					<div className="flex flex-row gap-2 p-2">
+						<Button>Save</Button>
+						<Button variant="destructive">Revert</Button>
+					</div>
+				)}
 			</div>
 
 			<SelectionDialog
