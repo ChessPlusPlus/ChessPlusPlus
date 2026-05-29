@@ -35,6 +35,7 @@ function VariantPlaySelectionDialog() {
 			},
 		},
 	};
+	
 	return (
 		<VariantSelectionDialog
 			title="Select a variant"
