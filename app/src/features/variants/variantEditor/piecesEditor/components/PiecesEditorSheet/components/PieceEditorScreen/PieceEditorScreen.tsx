@@ -23,6 +23,7 @@ import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useMovementSelectionDialogStore from "@/features/variants/variantEditor/piecesEditor/stores/movementSelectionDialog";
 import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 import { ChessKnightIcon } from "lucide-react";
+import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
 
 function PieceEditorScreen() {
 	const { updateCurrentMode } = usePiecesEditorSheetStore();
@@ -30,6 +31,7 @@ function PieceEditorScreen() {
 	const { syncPieceRulesetDraftToDB, syncSetupRulesDraftToDB } =
 		useVariantDraftStore();
 	const { pieceRulesetDraft } = useVariantDraftStore();
+	const { updateCurrentOpenMenu } = useSidebarStore();
 
 	const {
 		activePiece,
@@ -109,6 +111,10 @@ function PieceEditorScreen() {
 		updateMovementSelectionDialogPieceName(activePiece);
 	}
 
+
+	function handleMovementsEditorButtonClick() {
+		updateCurrentOpenMenu("movements");
+	}
 	return (
 		<>
 			<>
@@ -138,6 +144,7 @@ function PieceEditorScreen() {
 								/>
 							</Button>
 							<Button
+								onClick={handleMovementsEditorButtonClick}
 								variant="ghost"
 								className="p-0 hover:bg-(--sidebar-primary-hover)"
 							>

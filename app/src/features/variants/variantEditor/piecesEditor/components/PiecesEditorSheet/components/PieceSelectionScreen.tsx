@@ -13,18 +13,24 @@ import PieceCreationDialog from "@/features/variants/variantEditor/piecesEditor/
 import usePieceCreationDialogStore from "@/features/variants/variantEditor/piecesEditor/stores/pieceCreationDialog";
 import { IconArrowsMove } from "@tabler/icons-react";
 import { ChessKnightIcon } from "lucide-react";
+import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
 
 export function PieceSelectionScreen() {
 	const { pieceRulesetDraft } = useVariantDraftStore();
 	const { updateCurrentMode } = usePiecesEditorSheetStore();
 	const { updateActivePiece } = usePiecesEditorStore();
 	const { openPieceCreationDialog } = usePieceCreationDialogStore();
+	const { updateCurrentOpenMenu } = useSidebarStore();
 
 	if (!pieceRulesetDraft) return null;
 
 	function handlePieceClick(pieceName: string) {
 		updateActivePiece(pieceName);
 		updateCurrentMode("pieceEditing");
+	}
+
+	function handleMovementsEditorButtonClick() {
+		updateCurrentOpenMenu("movements");
 	}
 
 	return (
@@ -46,6 +52,7 @@ export function PieceSelectionScreen() {
 								/>
 							</Button>
 							<Button
+								onClick={handleMovementsEditorButtonClick}
 								variant="ghost"
 								className="p-0 hover:bg-(--sidebar-primary-hover)"
 							>
