@@ -13,7 +13,7 @@ import type {
 import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
 import usePiecesEditorSheetStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditorSheet";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
-import { IconChevronLeft } from "@tabler/icons-react";
+import { IconArrowsMove, IconChevronLeft } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { AppearanceTab } from "@/features/variants/variantEditor/piecesEditor/components/PiecesEditorSheet/components/PieceEditorScreen/components/AppearanceTab";
 import { MovementsTab } from "@/features/variants/variantEditor/piecesEditor/components/PiecesEditorSheet/components/PieceEditorScreen/components/MovementsTab/MovementsTab";
@@ -22,6 +22,10 @@ import usePieceDeletionAlertStore from "@/features/variants/variantEditor/pieces
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useMovementSelectionDialogStore from "@/features/variants/variantEditor/piecesEditor/stores/movementSelectionDialog";
 import { isNullOrUndefined } from "@/shared/utils/typeChecks";
+import { ChessKnightIcon } from "lucide-react";
+import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import useMovementsEditorStore from "@/features/variants/variantEditor/movementsEditor/stores/movementsEditor";
 
 function PieceEditorScreen() {
 	const { updateCurrentMode } = usePiecesEditorSheetStore();
@@ -29,6 +33,7 @@ function PieceEditorScreen() {
 	const { syncPieceRulesetDraftToDB, syncSetupRulesDraftToDB } =
 		useVariantDraftStore();
 	const { pieceRulesetDraft } = useVariantDraftStore();
+	const { updateCurrentOpenMenu } = useSidebarStore();
 
 	const {
 		activePiece,
@@ -48,6 +53,7 @@ function PieceEditorScreen() {
 		openMovementSelectionDialog,
 		updatePieceName: updateMovementSelectionDialogPieceName,
 	} = useMovementSelectionDialogStore();
+	const { activeMovementName } = useMovementsEditorStore();
 
 	useEffect(() => {
 		if (!hasHydrated) return;
@@ -69,7 +75,10 @@ function PieceEditorScreen() {
 
 		updateMovementsInActivePiece(regularMoves as RegularMove[]);
 		updateChainedMoveSequences(
-			chainedMoveSequences.map(({ move, index }) => [index, move as ChainedMoveSequence]),
+			chainedMoveSequences.map(({ move, index }) => [
+				index,
+				move as ChainedMoveSequence,
+			]),
 		);
 		updatePieceName(activePiece);
 
@@ -105,20 +114,59 @@ function PieceEditorScreen() {
 		updateMovementSelectionDialogPieceName(activePiece);
 	}
 
+	function handleMovementsEditorButtonClick() {
+		updateCurrentOpenMenu("movements");
+	}
 	return (
 		<>
 			<>
 				<SheetHeader>
-					<div className="flex flex-row gap-2 items-center">
-						<Button
-							className="p-0 hover:bg-(--sidebar-primary-hover)"
-							variant="ghost"
-							onClick={handleBackClick}
-						>
-							<IconChevronLeft className="size-5" />
-						</Button>
+					<div className="flex flex-row gap-2 items-center justify-between">
+						<div className="flex flex-row gap-2 items-center">
+							<Button
+								className="p-0 hover:bg-(--sidebar-primary-hover)"
+								variant="ghost"
+								onClick={handleBackClick}
+							>
+								<IconChevronLeft className="size-5" />
+							</Button>
 
-						<SheetTitle>Piece editor</SheetTitle>
+							<SheetTitle>Piece editor</SheetTitle>
+						</div>
+
+						<div className="flex flex-row gap-2">
+							<Button
+								disabled
+								variant="ghost"
+								className="p-0 hover:bg-(--sidebar-primary-hover)"
+							>
+								<ChessKnightIcon
+									className="size-5"
+									strokeWidth={1.5}
+								/>
+							</Button>
+
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Button
+										onClick={
+											handleMovementsEditorButtonClick
+										}
+										variant="ghost"
+										className="p-0 hover:bg-(--sidebar-primary-hover)"
+									>
+										<IconArrowsMove
+											className="size-5"
+											strokeWidth={1.5}
+										/>
+									</Button>
+								</TooltipTrigger>
+
+								<TooltipContent side="left" sideOffset={8}>
+									{activeMovementName ?? "No movement selected"}
+								</TooltipContent>
+							</Tooltip>
+						</div>
 					</div>
 
 					<SheetDescription>

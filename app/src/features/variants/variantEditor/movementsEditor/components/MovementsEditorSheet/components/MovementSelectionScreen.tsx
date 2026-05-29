@@ -11,12 +11,23 @@ import {
 import { Button } from "@/components/ui/button";
 import useCreateMovementDialogStore from "@/features/variants/variantEditor/movementsEditor/stores/createMovementDialog";
 import MovementCreationDialog from "@/features/variants/variantEditor/movementsEditor/components/MovementsEditorSheet/components/MovementCreationDialog";
+import { ChessKnightIcon } from "lucide-react";
+import { IconArrowsMove } from "@tabler/icons-react";
+import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
+import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
 
 export function MovementSelectionScreen() {
 	const { movementRulesDraft } = useVariantDraftStore();
 	const { updateCurrentMode } = useMovementsEditorSheetStore();
 	const { updateActiveMovementName } = useMovementsEditorStore();
 	const { openCreateMovementDialog } = useCreateMovementDialogStore();
+	const { updateCurrentOpenMenu } = useSidebarStore();
+	const { activePiece } = usePiecesEditorStore();
 
 	if (!movementRulesDraft) return null;
 
@@ -25,11 +36,49 @@ export function MovementSelectionScreen() {
 		updateActiveMovementName(movementName);
 	}
 
+	function handlePiecesEditorButtonClick() {
+		updateCurrentOpenMenu("pieces");
+	}
+
 	return (
 		<>
 			<>
 				<SheetHeader>
-					<SheetTitle>Movements editor</SheetTitle>
+					<div className="flex flex-row items-center justify-between">
+						<SheetTitle>Movements editor</SheetTitle>
+
+						<div className="flex flex-row gap-2">
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Button
+										onClick={handlePiecesEditorButtonClick}
+										variant="ghost"
+										className="p-0 hover:bg-(--sidebar-primary-hover)"
+									>
+										<ChessKnightIcon
+											className="size-5"
+											strokeWidth={1.5}
+										/>
+									</Button>
+								</TooltipTrigger>
+
+								<TooltipContent side="left" sideOffset={8}>
+									{activePiece ?? "No piece selected"}
+								</TooltipContent>
+							</Tooltip>
+
+							<Button
+								disabled
+								variant="ghost"
+								className="p-0 hover:bg-(--sidebar-primary-hover)"
+							>
+								<IconArrowsMove
+									className="size-5"
+									strokeWidth={1.5}
+								/>
+							</Button>
+						</div>
+					</div>
 					<SheetDescription>
 						Edit piece movement rules here
 					</SheetDescription>

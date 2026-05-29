@@ -7,7 +7,7 @@ import {
 	SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { IconChevronLeft } from "@tabler/icons-react";
+import { IconArrowsMove, IconChevronLeft } from "@tabler/icons-react";
 import {
 	Field,
 	FieldLabel,
@@ -21,6 +21,10 @@ import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import MovementDeletionAlert from "@/features/variants/variantEditor/movementsEditor/components/MovementsEditorSheet/components/MovementDeletionAlert";
 import useDeleteMovementAlertStore from "@/features/variants/variantEditor/movementsEditor/stores/deleteMovementAlert";
+import { ChessKnightIcon } from "lucide-react";
+import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
 
 export function MovementEditorScreen() {
 	const {
@@ -44,12 +48,14 @@ export function MovementEditorScreen() {
 		addMovementsEditorChanges,
 		commitToDraft,
 	} = useMovementsEditorStore();
+	const { updateCurrentOpenMenu } = useSidebarStore();
 	const { updateCurrentMode } = useMovementsEditorSheetStore();
 	const {
 		movementRulesDraft,
 		syncMovementRulesDraftToDB,
 		syncPieceRulesetDraftToDB,
 	} = useVariantDraftStore();
+	const { activePiece } = usePiecesEditorStore();
 
 	const { openDeleteMovementAlert, updateMovementToDelete } =
 		useDeleteMovementAlertStore();
@@ -128,7 +134,7 @@ export function MovementEditorScreen() {
 	function handleRangeInputChange(e: ChangeEvent<HTMLInputElement>) {
 		const newRange = e.target.valueAsNumber;
 		updateRange(newRange);
-		
+
 		previousRangeInputRef.current = newRange;
 		addMovementsEditorChanges({ range: newRange });
 	}
@@ -180,20 +186,59 @@ export function MovementEditorScreen() {
 		commitToDraft(["range"]);
 	}
 
+	function handlePiecesEditorButtonClick() {
+		updateCurrentOpenMenu("pieces");
+	}
+
 	return (
 		<>
 			<>
 				<SheetHeader>
-					<div className="flex flex-row gap-2 items-center">
-						<Button
-							className="p-0 hover:bg-(--sidebar-primary-hover)"
-							variant="ghost"
-							onClick={handleBackClick}
-						>
-							<IconChevronLeft className="size-5" />
-						</Button>
+					<div className="flex flex-row gap-2 items-center justify-between">
+						<div className="flex flex-row items-center">
+							<div className="flex flex-row items-center gap-2">
+								<Button
+									className="p-0 hover:bg-(--sidebar-primary-hover)"
+									variant="ghost"
+									onClick={handleBackClick}
+								>
+									<IconChevronLeft className="size-5" />
+								</Button>
 
-						<SheetTitle>Movement editor</SheetTitle>
+								<SheetTitle>Movement editor</SheetTitle>
+							</div>
+						</div>
+
+						<div className="flex flex-row items-center gap-2">
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Button
+										onClick={handlePiecesEditorButtonClick}
+										variant="ghost"
+										className="p-0 hover:bg-(--sidebar-primary-hover)"
+									>
+										<ChessKnightIcon
+											className="size-5"
+											strokeWidth={1.5}
+										/>
+									</Button>
+								</TooltipTrigger>
+
+								<TooltipContent side="left" sideOffset={8}>
+									{activePiece ?? "No piece selected"}
+								</TooltipContent>
+							</Tooltip>
+							<Button
+								disabled
+								variant="ghost"
+								className="p-0 hover:bg-(--sidebar-primary-hover)"
+							>
+								<IconArrowsMove
+									className="size-5"
+									strokeWidth={1.5}
+								/>
+							</Button>
+						</div>
 					</div>
 
 					<SheetDescription>
@@ -262,7 +307,9 @@ export function MovementEditorScreen() {
 
 					<FieldSet>
 						<div className="grid grid-cols-[2fr_1fr_1fr] gap-2 items-center">
-							<FieldLegend className="mb-0">Move definition</FieldLegend>
+							<FieldLegend className="mb-0">
+								Move definition
+							</FieldLegend>
 							<span>X</span>
 							<span>Y</span>
 							<span>Vector</span>
