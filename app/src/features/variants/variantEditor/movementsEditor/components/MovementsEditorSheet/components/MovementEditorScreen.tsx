@@ -23,6 +23,8 @@ import MovementDeletionAlert from "@/features/variants/variantEditor/movementsEd
 import useDeleteMovementAlertStore from "@/features/variants/variantEditor/movementsEditor/stores/deleteMovementAlert";
 import { ChessKnightIcon } from "lucide-react";
 import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
 
 export function MovementEditorScreen() {
 	const {
@@ -53,6 +55,7 @@ export function MovementEditorScreen() {
 		syncMovementRulesDraftToDB,
 		syncPieceRulesetDraftToDB,
 	} = useVariantDraftStore();
+	const { activePiece } = usePiecesEditorStore();
 
 	const { openDeleteMovementAlert, updateMovementToDelete } =
 		useDeleteMovementAlertStore();
@@ -207,16 +210,24 @@ export function MovementEditorScreen() {
 						</div>
 
 						<div className="flex flex-row items-center gap-2">
-							<Button
-								onClick={handlePiecesEditorButtonClick}
-								variant="ghost"
-								className="p-0 hover:bg-(--sidebar-primary-hover)"
-							>
-								<ChessKnightIcon
-									className="size-5"
-									strokeWidth={1.5}
-								/>
-							</Button>
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Button
+										onClick={handlePiecesEditorButtonClick}
+										variant="ghost"
+										className="p-0 hover:bg-(--sidebar-primary-hover)"
+									>
+										<ChessKnightIcon
+											className="size-5"
+											strokeWidth={1.5}
+										/>
+									</Button>
+								</TooltipTrigger>
+
+								<TooltipContent side="left" sideOffset={8}>
+									{activePiece ?? "No piece selected"}
+								</TooltipContent>
+							</Tooltip>
 							<Button
 								disabled
 								variant="ghost"
