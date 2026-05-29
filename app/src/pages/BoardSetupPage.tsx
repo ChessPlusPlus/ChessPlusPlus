@@ -21,7 +21,6 @@ function BoardSetupPage() {
 		updateMovementRulesDraft,
 		updatePieceRulesetDraft,
 
-		syncSetupRulesDraftToDB
 	} = useVariantDraftStore();
 
 	const { images, hasHydrated } = usePieceImagesStore();
@@ -107,7 +106,6 @@ function BoardSetupPage() {
 	}
 
 	function handleBackToVariantEditor() {
-		syncSetupRulesDraftToDB();
 		navigate(`/variants/${variantId}`);
 	}
 
