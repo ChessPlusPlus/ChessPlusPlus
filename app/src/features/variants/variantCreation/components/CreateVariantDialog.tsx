@@ -29,6 +29,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import posthog from "posthog-js";
 
 function CreateVariantDialog() {
 	const {
@@ -107,6 +108,10 @@ function CreateVariantDialog() {
 		};
 
 		const variantId = createVariant(defaultVariant);
+
+		posthog.capture("variant_created", {
+			source: "manual",
+		})
 
 		clearVariantName();
 		closeDialog();
