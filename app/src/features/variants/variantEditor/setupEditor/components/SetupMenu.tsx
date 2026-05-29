@@ -89,6 +89,7 @@ function SetupMenu() {
 		updateSetupRulesDraft,
 		pieceRulesetDraft,
 		currentVariantId,
+		syncSetupRulesDraftToDB,
 	} = useVariantDraftStore();
 	const { originalSetupRulesDraft } = useSetupMenuStore();
 	const { images } = usePieceImagesStore();
@@ -344,8 +345,6 @@ function SetupMenu() {
 		if (!setupRulesDraft) return;
 
 		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
-		updatedSetupRulesDraft.boardXSize = boardXSize;
-		updatedSetupRulesDraft.boardYSize = boardYSize;
 
 		updatedSetupRulesDraft.startingPosition =
 			updatedSetupRulesDraft.startingPosition.filter(([[file, rank]]) => {
@@ -353,9 +352,8 @@ function SetupMenu() {
 			});
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
-
-		updateOriginalBoardXSize(updatedSetupRulesDraft.boardXSize);
-		updateOriginalBoardYSize(updatedSetupRulesDraft.boardYSize);
+		syncSetupRulesDraftToDB();
+		updateOriginalSetupRulesDraft(updatedSetupRulesDraft);
 	}
 
 	function handleRevertSetupRulesButtonClick() {
