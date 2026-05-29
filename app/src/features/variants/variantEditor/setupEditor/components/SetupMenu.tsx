@@ -256,85 +256,54 @@ function SetupMenu() {
 		}
 	}
 
-	function revertBoardXSize() {
-		const updatedOriginalBoardXSize =
-			useSetupMenuStore.getState().originalBoardXSize;
-		const currentSetupRulesDraft =
-			useVariantDraftStore.getState().setupRulesDraft;
-
-		if (!currentSetupRulesDraft) return;
-		if (isNullOrUndefined(updatedOriginalBoardXSize)) return;
-
-		const updatedSetupRulesDraft = structuredClone(currentSetupRulesDraft);
-		updatedSetupRulesDraft.boardXSize = updatedOriginalBoardXSize;
-
-		updateSetupRulesDraft(updatedSetupRulesDraft);
-		updateOriginalBoardXSize(updatedOriginalBoardXSize);
-	}
-
-	function revertBoardYSize() {
-		const updatedOriginalBoardYSize =
-			useSetupMenuStore.getState().originalBoardYSize;
-		const currentSetupRulesDraft =
-			useVariantDraftStore.getState().setupRulesDraft;
-
-		if (!currentSetupRulesDraft) return;
-		if (isNullOrUndefined(updatedOriginalBoardYSize)) return;
-
-		const updatedSetupRulesDraft = structuredClone(currentSetupRulesDraft);
-		updatedSetupRulesDraft.boardYSize = updatedOriginalBoardYSize;
-
-		updateSetupRulesDraft(updatedSetupRulesDraft);
-
-		updateOriginalBoardYSize(updatedOriginalBoardYSize);
-	}
-
 	function handleBoardWidthInputBlur() {
 		if (!setupRulesDraft) return;
 
+		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		if (!originalBoardXSize) return;
+
 		if (Number.isNaN(boardXSize)) {
-			revertBoardXSize();
-			return;
+			updatedSetupRulesDraft.boardXSize = 1;
 		}
 
 		if (!Number.isFinite(boardXSize)) {
-			revertBoardXSize();
-			return;
+			updatedSetupRulesDraft.boardXSize = 1;
 		}
 
 		if (boardXSize < 1) {
-			revertBoardXSize();
-			return;
+			updatedSetupRulesDraft.boardXSize = 1;
 		}
 
 		if (boardXSize > 32) {
-			revertBoardXSize();
-			return;
+			updatedSetupRulesDraft.boardXSize = 32;
 		}
+
+		updateSetupRulesDraft(updatedSetupRulesDraft);
 	}
 
 	function handleBoardHeightInputBlur() {
 		if (!setupRulesDraft) return;
 
+		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		if (!originalBoardYSize) return;
+
 		if (Number.isNaN(boardYSize)) {
-			revertBoardYSize();
-			return;
+			updatedSetupRulesDraft.boardYSize = 1;
 		}
 
 		if (!Number.isFinite(boardYSize)) {
-			revertBoardYSize();
-			return;
+			updatedSetupRulesDraft.boardYSize = 1;
 		}
 
 		if (boardYSize < 1) {
-			revertBoardYSize();
-			return;
+			updatedSetupRulesDraft.boardYSize = 1;
 		}
 
 		if (boardYSize > 32) {
-			revertBoardYSize();
-			return;
+			updatedSetupRulesDraft.boardYSize = 32;
 		}
+
+		updateSetupRulesDraft(updatedSetupRulesDraft);
 	}
 
 	function handleAddPlayerButtonClick() {
