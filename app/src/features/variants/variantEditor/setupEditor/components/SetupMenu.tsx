@@ -13,7 +13,11 @@ import {
 import { Field, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipTrigger,
+	TooltipContent,
+} from "@/components/ui/tooltip";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import SelectionDialog from "@/features/variants/variantEditor/common/components/SelectionDialog";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
@@ -68,9 +72,7 @@ function PieceImage({ player, piece, imageId }: PieceImageProps) {
 					alt={piece}
 				/>
 			</TooltipTrigger>
-			<TooltipContent>
-				{piece}
-			</TooltipContent>
+			<TooltipContent>{piece}</TooltipContent>
 		</Tooltip>
 	);
 }
@@ -348,6 +350,34 @@ function SetupMenu() {
 		openAddPlayerDialog();
 	}
 
+	function handleSaveBoardSizeButtonClick() {
+		if (!setupRulesDraft) return;
+
+		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		updatedSetupRulesDraft.boardXSize = boardXSize;
+		updatedSetupRulesDraft.boardYSize = boardYSize;
+
+		updatedSetupRulesDraft.startingPosition =
+			updatedSetupRulesDraft.startingPosition.filter(([[file, rank]]) => {
+				return file < boardXSize && rank < boardYSize;
+			});
+
+		updateSetupRulesDraft(updatedSetupRulesDraft);
+		syncSetupRulesDraftToDB([
+			"boardXSize",
+			"boardYSize",
+			"startingPosition",
+		]);
+
+		updateOriginalBoardXSize(updatedSetupRulesDraft.boardXSize);
+		updateOriginalBoardYSize(updatedSetupRulesDraft.boardYSize);
+	}
+
+	function handleRevertBoardSizeButtonClick() {
+		revertBoardXSize();
+		revertBoardYSize();
+	}
+
 	return (
 		<>
 			<div className="bg-muted p-2 rounded-lg">
@@ -585,10 +615,30 @@ function SetupMenu() {
 					</CollapsibleContent>
 				</Collapsible>
 
-				{(originalBoardXSize !== boardXSize || originalBoardYSize !== boardYSize) && (
+				{(originalBoardXSize !== boardXSize ||
+					originalBoardYSize !== boardYSize) && (
 					<div className="flex flex-row gap-2 p-2">
-						<Button>Save</Button>
-						<Button variant="destructive">Revert</Button>
+						<Button
+							disabled={
+								Number.isNaN(boardXSize) ||
+								!Number.isFinite(boardXSize) ||
+								boardXSize < 1 ||
+								boardXSize > 32 ||
+								Number.isNaN(boardYSize) ||
+								!Number.isFinite(boardYSize) ||
+								boardYSize < 1 ||
+								boardYSize > 32
+							}
+							onClick={handleSaveBoardSizeButtonClick}
+						>
+							Save
+						</Button>
+						<Button
+							onClick={handleRevertBoardSizeButtonClick}
+							variant="destructive"
+						>
+							Revert
+						</Button>
 					</div>
 				)}
 			</div>
