@@ -196,6 +196,7 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 								return true;
 							}
 
+							if (key === "range" && value === "inf") return true;
 							if (Number.isNaN(value)) return false;
 							if (!Number.isFinite(value)) return false;
 
@@ -215,6 +216,7 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 								return false;
 							}
 
+							if (key === "range" && value === "inf") return false;
 							if (Number.isNaN(value)) return true;
 							if (!Number.isFinite(value)) return true;
 
@@ -308,12 +310,10 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 								return true;
 							}
 
-							
+							if (key === "range" && value === "inf") return true;
 							if (value === "") return false;
 							if (Number.isNaN(Number(value))) return false;
 							if (!Number.isFinite(Number(value))) return false;
-
-							console.log(value);
 
 							return true;
 						})
@@ -335,6 +335,7 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 								return false;
 							}
 
+							if (key === "range" && value === "inf") return true;
 							if (value === "") return true;
 							if (Number.isNaN(Number(value))) return true;
 							if (!Number.isFinite(Number(value))) return true;
@@ -358,10 +359,10 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 
 							return false;
 						})
-						.map(([key]) => {
+						.map(([key, value]) => {
 							return [
 								key,
-								Number(
+								(key === "range" && value === "inf") ? "inf" : Number(
 									movementRulesDraft[originalMovementName]
 										.moveDefinition[
 										key as keyof MoveDefinition
