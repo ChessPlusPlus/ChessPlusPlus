@@ -104,9 +104,7 @@ function SetupMenu() {
 		originalBoardXSize,
 		originalBoardYSize,
 		updateOriginalBoardYSize,
-		resetOriginalBoardYSize,
 		updateOriginalBoardXSize,
-		resetOriginalBoardXSize,
 		expandBoardSize,
 		collapseBoardSize,
 		expandPlayers,
@@ -268,34 +266,37 @@ function SetupMenu() {
 		}
 	}
 
-	function revertBoardXSize() {
+	function revertBoardXSize(sync: boolean = true) {
 		const updatedOriginalBoardXSize =
 			useSetupMenuStore.getState().originalBoardXSize;
+		const currentSetupRulesDraft = useVariantDraftStore.getState().setupRulesDraft;
 
-		if (!setupRulesDraft) return;
+		if (!currentSetupRulesDraft) return;
 		if (isNullOrUndefined(updatedOriginalBoardXSize)) return;
 
-		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		const updatedSetupRulesDraft = structuredClone(currentSetupRulesDraft);
 		updatedSetupRulesDraft.boardXSize = updatedOriginalBoardXSize;
 		updateSetupRulesDraft(updatedSetupRulesDraft);
-		syncSetupRulesDraftToDB();
+		if (sync) syncSetupRulesDraftToDB();
 
-		resetOriginalBoardXSize();
+		updateOriginalBoardXSize(updatedOriginalBoardXSize);
 	}
 
-	function revertBoardYSize() {
+	function revertBoardYSize(sync: boolean = true) {
 		const updatedOriginalBoardYSize =
 			useSetupMenuStore.getState().originalBoardYSize;
+		const currentSetupRulesDraft = useVariantDraftStore.getState().setupRulesDraft;
 
-		if (!setupRulesDraft) return;
+		if (!currentSetupRulesDraft) return;
 		if (isNullOrUndefined(updatedOriginalBoardYSize)) return;
 
-		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		const updatedSetupRulesDraft = structuredClone(currentSetupRulesDraft);
 		updatedSetupRulesDraft.boardYSize = updatedOriginalBoardYSize;
-		updateSetupRulesDraft(updatedSetupRulesDraft);
-		syncSetupRulesDraftToDB();
 
-		resetOriginalBoardYSize();
+		updateSetupRulesDraft(updatedSetupRulesDraft);
+		if (sync) syncSetupRulesDraftToDB();
+
+		updateOriginalBoardYSize(updatedOriginalBoardYSize);
 	}
 
 	function handleBoardWidthInputBlur() {
@@ -374,7 +375,7 @@ function SetupMenu() {
 	}
 
 	function handleRevertBoardSizeButtonClick() {
-		revertBoardXSize();
+		revertBoardXSize(false);
 		revertBoardYSize();
 	}
 
