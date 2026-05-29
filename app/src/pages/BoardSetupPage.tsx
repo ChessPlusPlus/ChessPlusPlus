@@ -9,7 +9,6 @@ import { DragDropProvider } from "@dnd-kit/react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { IconChevronLeft } from "@tabler/icons-react";
-import useSetupMenuStore from "@/features/variants/variantEditor/setupEditor/stores/setupMenu";
 
 type OnDragEnd = React.ComponentProps<typeof DragDropProvider>["onDragEnd"];
 
@@ -26,7 +25,6 @@ function BoardSetupPage() {
 	const { images, hasHydrated } = usePieceImagesStore();
 	const { variants } = useVariantsStore();
 	const { variantId } = useParams();
-	const { originalBoardXSize, originalBoardYSize, updateOriginalBoardXSize, updateOriginalBoardYSize } = useSetupMenuStore();
 
 	const navigate = useNavigate();
 
@@ -96,13 +94,6 @@ function BoardSetupPage() {
 		];
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
-
-		if (originalBoardXSize !== updatedSetupRulesDraft.boardXSize) {
-			updateOriginalBoardXSize(updatedSetupRulesDraft.boardXSize);
-		}
-		if (originalBoardYSize !== updatedSetupRulesDraft.boardYSize) {
-			updateOriginalBoardYSize(updatedSetupRulesDraft.boardYSize);
-		}
 	}
 
 	function handleBackToVariantEditor() {
