@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { newMovementDefaults } from "@/features/variants/variantEditor/movementsEditor/constants/newMovementDefaults";
 import useCreateMovementDialogStore from "@/features/variants/variantEditor/movementsEditor/stores/createMovementDialog";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
+import posthog from "posthog-js";
 
 function MovementCreationDialog() {
 	const {
@@ -59,6 +60,8 @@ function MovementCreationDialog() {
 
 		updateMovementRulesDraft(updatedMovementRulesDraft);
 		syncMovementRulesDraftToDB();
+
+		posthog.capture("movement_created");
 
 		closeCreateMovementDialog();
 	}
