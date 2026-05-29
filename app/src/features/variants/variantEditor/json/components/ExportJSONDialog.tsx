@@ -14,6 +14,7 @@ import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import { serialiseJSONForExport } from "@/features/variants/variantEditor/json/utils/exportSerialiser";
 import isValidFileName from "valid-filename";
+import posthog from "posthog-js";
 
 function ExportJSONDialog() {
 	const {
@@ -64,6 +65,8 @@ function ExportJSONDialog() {
 		a.click();
 		a.remove();
 		URL.revokeObjectURL(objectUrl);
+
+		posthog.capture("variant_exported");
 
 		closeExportJSONDialog();
 		clearFileNameErrors();
