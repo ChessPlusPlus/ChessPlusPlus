@@ -113,6 +113,7 @@ function SetupMenu() {
 		collapsePlayers,
 		expandPieces,
 		collapsePieces,
+		updateOriginalSetupRulesDraft,
 	} = useSetupMenuStore();
 
 	const {
@@ -130,26 +131,9 @@ function SetupMenu() {
 	} = useRenamePlayerDialogStore();
 
 	useEffect(() => {
-		if (isNullOrUndefined(setupRulesDraft?.boardXSize)) return;
-
-		if (Number.isNaN(setupRulesDraft.boardXSize)) return;
-		if (!Number.isFinite(setupRulesDraft.boardXSize)) return;
-		if (setupRulesDraft.boardXSize < 1) return;
-		if (setupRulesDraft.boardXSize > 32) return;
-
-		updateOriginalBoardXSize(setupRulesDraft.boardXSize);
-	}, [updateOriginalBoardXSize]);
-
-	useEffect(() => {
-		if (isNullOrUndefined(setupRulesDraft?.boardYSize)) return;
-
-		if (Number.isNaN(setupRulesDraft.boardYSize)) return;
-		if (!Number.isFinite(setupRulesDraft.boardYSize)) return;
-		if (setupRulesDraft.boardYSize < 1) return;
-		if (setupRulesDraft.boardYSize > 32) return;
-
-		updateOriginalBoardYSize(setupRulesDraft.boardYSize);
-	}, [updateOriginalBoardYSize]);
+		if (!setupRulesDraft) return;
+		updateOriginalSetupRulesDraft(setupRulesDraft);
+	}, []);
 
 	useEffect(() => {
 		return () => {
