@@ -25,6 +25,7 @@ import { ChessKnightIcon } from "lucide-react";
 import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
+import posthog from "posthog-js";
 
 export function MovementEditorScreen() {
 	const {
@@ -188,6 +189,9 @@ export function MovementEditorScreen() {
 
 	function handlePiecesEditorButtonClick() {
 		updateCurrentOpenMenu("pieces");
+		posthog.capture("quicknav_used", {
+			from: "movements_editor",
+		})
 	}
 
 	return (
