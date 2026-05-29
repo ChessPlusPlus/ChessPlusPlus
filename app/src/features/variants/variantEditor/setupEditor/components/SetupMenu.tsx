@@ -128,49 +128,6 @@ function SetupMenu() {
 	} = useRenamePlayerDialogStore();
 
 	useEffect(() => {
-		const saveTimeout = setTimeout(() => {
-			const boardXSize = setupRulesDraft?.boardXSize;
-
-			if (isNullOrUndefined(boardXSize)) return;
-			if (Number.isNaN(boardXSize)) return;
-			if (!Number.isFinite(boardXSize)) return;
-			if (boardXSize < 1) return;
-			if (boardXSize > 32) return;
-
-			syncSetupRulesDraftToDB(["boardXSize"]);
-			console.log("Board x size saved");
-		}, 400);
-
-		return () => clearTimeout(saveTimeout);
-	}, [
-		setupRulesDraft?.boardXSize,
-		resetOriginalBoardXSize,
-		syncSetupRulesDraftToDB,
-		updateSetupRulesDraft,
-	]);
-
-	useEffect(() => {
-		const saveTimeout = setTimeout(() => {
-			const boardYSize = setupRulesDraft?.boardYSize;
-
-			if (isNullOrUndefined(boardYSize)) return;
-			if (Number.isNaN(boardYSize)) return;
-			if (!Number.isFinite(boardYSize)) return;
-			if (boardYSize < 1) return;
-			if (boardYSize > 32) return;
-
-			syncSetupRulesDraftToDB(["boardYSize"]);
-		}, 400);
-
-		return () => clearTimeout(saveTimeout);
-	}, [
-		setupRulesDraft?.boardYSize,
-		resetOriginalBoardYSize,
-		syncSetupRulesDraftToDB,
-		updateSetupRulesDraft,
-	]);
-
-	useEffect(() => {
 		if (isNullOrUndefined(setupRulesDraft?.boardXSize)) return;
 
 		if (Number.isNaN(setupRulesDraft.boardXSize)) return;
@@ -178,12 +135,8 @@ function SetupMenu() {
 		if (setupRulesDraft.boardXSize < 1) return;
 		if (setupRulesDraft.boardXSize > 32) return;
 
-		const timeout = setTimeout(() => {
-			updateOriginalBoardXSize(setupRulesDraft.boardXSize);
-		}, 400);
-
-		return () => clearTimeout(timeout);
-	}, [setupRulesDraft?.boardXSize, updateOriginalBoardXSize]);
+		updateOriginalBoardXSize(setupRulesDraft.boardXSize);
+	}, [updateOriginalBoardXSize]);
 
 	useEffect(() => {
 		if (isNullOrUndefined(setupRulesDraft?.boardYSize)) return;
@@ -193,12 +146,8 @@ function SetupMenu() {
 		if (setupRulesDraft.boardYSize < 1) return;
 		if (setupRulesDraft.boardYSize > 32) return;
 
-		const timeout = setTimeout(() => {
-			updateOriginalBoardYSize(setupRulesDraft.boardYSize);
-		}, 400);
-
-		return () => clearTimeout(timeout);
-	}, [setupRulesDraft?.boardYSize, updateOriginalBoardYSize]);
+		updateOriginalBoardYSize(setupRulesDraft.boardYSize);
+	}, [updateOriginalBoardYSize]);
 
 	useEffect(() => {
 		return () => {
