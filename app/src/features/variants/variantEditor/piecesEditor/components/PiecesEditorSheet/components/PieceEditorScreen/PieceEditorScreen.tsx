@@ -24,6 +24,8 @@ import useMovementSelectionDialogStore from "@/features/variants/variantEditor/p
 import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 import { ChessKnightIcon } from "lucide-react";
 import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import useMovementsEditorStore from "@/features/variants/variantEditor/movementsEditor/stores/movementsEditor";
 
 function PieceEditorScreen() {
 	const { updateCurrentMode } = usePiecesEditorSheetStore();
@@ -51,6 +53,7 @@ function PieceEditorScreen() {
 		openMovementSelectionDialog,
 		updatePieceName: updateMovementSelectionDialogPieceName,
 	} = useMovementSelectionDialogStore();
+	const { activeMovementName } = useMovementsEditorStore();
 
 	useEffect(() => {
 		if (!hasHydrated) return;
@@ -111,7 +114,6 @@ function PieceEditorScreen() {
 		updateMovementSelectionDialogPieceName(activePiece);
 	}
 
-
 	function handleMovementsEditorButtonClick() {
 		updateCurrentOpenMenu("movements");
 	}
@@ -143,16 +145,27 @@ function PieceEditorScreen() {
 									strokeWidth={1.5}
 								/>
 							</Button>
-							<Button
-								onClick={handleMovementsEditorButtonClick}
-								variant="ghost"
-								className="p-0 hover:bg-(--sidebar-primary-hover)"
-							>
-								<IconArrowsMove
-									className="size-5"
-									strokeWidth={1.5}
-								/>
-							</Button>
+
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Button
+										onClick={
+											handleMovementsEditorButtonClick
+										}
+										variant="ghost"
+										className="p-0 hover:bg-(--sidebar-primary-hover)"
+									>
+										<IconArrowsMove
+											className="size-5"
+											strokeWidth={1.5}
+										/>
+									</Button>
+								</TooltipTrigger>
+
+								<TooltipContent side="left" sideOffset={8}>
+									{activeMovementName ?? "No movement selected"}
+								</TooltipContent>
+							</Tooltip>
 						</div>
 					</div>
 

@@ -14,6 +14,8 @@ import usePieceCreationDialogStore from "@/features/variants/variantEditor/piece
 import { IconArrowsMove } from "@tabler/icons-react";
 import { ChessKnightIcon } from "lucide-react";
 import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import useMovementsEditorStore from "@/features/variants/variantEditor/movementsEditor/stores/movementsEditor";
 
 export function PieceSelectionScreen() {
 	const { pieceRulesetDraft } = useVariantDraftStore();
@@ -21,6 +23,7 @@ export function PieceSelectionScreen() {
 	const { updateActivePiece } = usePiecesEditorStore();
 	const { openPieceCreationDialog } = usePieceCreationDialogStore();
 	const { updateCurrentOpenMenu } = useSidebarStore();
+	const { activeMovementName } = useMovementsEditorStore();
 
 	if (!pieceRulesetDraft) return null;
 
@@ -51,16 +54,28 @@ export function PieceSelectionScreen() {
 									strokeWidth={1.5}
 								/>
 							</Button>
-							<Button
-								onClick={handleMovementsEditorButtonClick}
-								variant="ghost"
-								className="p-0 hover:bg-(--sidebar-primary-hover)"
-							>
-								<IconArrowsMove
-									className="size-5"
-									strokeWidth={1.5}
-								/>
-							</Button>
+							
+							<Tooltip>
+								<TooltipTrigger asChild>
+									<Button
+										onClick={
+											handleMovementsEditorButtonClick
+										}
+										variant="ghost"
+										className="p-0 hover:bg-(--sidebar-primary-hover)"
+									>
+										<IconArrowsMove
+											className="size-5"
+											strokeWidth={1.5}
+										/>
+									</Button>
+								</TooltipTrigger>
+
+								<TooltipContent side="left" sideOffset={8}>
+									{activeMovementName ??
+										"No movement selected"}
+								</TooltipContent>
+							</Tooltip>
 						</div>
 					</div>
 
