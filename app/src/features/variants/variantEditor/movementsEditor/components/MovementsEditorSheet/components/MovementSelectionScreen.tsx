@@ -13,18 +13,24 @@ import useCreateMovementDialogStore from "@/features/variants/variantEditor/move
 import MovementCreationDialog from "@/features/variants/variantEditor/movementsEditor/components/MovementsEditorSheet/components/MovementCreationDialog";
 import { ChessKnightIcon } from "lucide-react";
 import { IconArrowsMove } from "@tabler/icons-react";
+import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
 
 export function MovementSelectionScreen() {
 	const { movementRulesDraft } = useVariantDraftStore();
 	const { updateCurrentMode } = useMovementsEditorSheetStore();
 	const { updateActiveMovementName } = useMovementsEditorStore();
 	const { openCreateMovementDialog } = useCreateMovementDialogStore();
+	const { updateCurrentOpenMenu } = useSidebarStore();
 
 	if (!movementRulesDraft) return null;
 
 	function handlePieceMovementClick(movementName: string) {
 		updateCurrentMode("movementEditing");
 		updateActiveMovementName(movementName);
+	}
+
+	function handlePiecesEditorButtonClick() {
+		updateCurrentOpenMenu("pieces");
 	}
 
 	return (
@@ -36,6 +42,7 @@ export function MovementSelectionScreen() {
 
 						<div className="flex flex-row gap-2">
 							<Button
+								onClick={handlePiecesEditorButtonClick}
 								variant="ghost"
 								className="p-0 hover:bg-(--sidebar-primary-hover)"
 							>

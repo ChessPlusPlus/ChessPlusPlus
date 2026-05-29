@@ -22,6 +22,7 @@ import useVariantDraftStore from "@/features/variants/variantEditor/common/store
 import MovementDeletionAlert from "@/features/variants/variantEditor/movementsEditor/components/MovementsEditorSheet/components/MovementDeletionAlert";
 import useDeleteMovementAlertStore from "@/features/variants/variantEditor/movementsEditor/stores/deleteMovementAlert";
 import { ChessKnightIcon } from "lucide-react";
+import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
 
 export function MovementEditorScreen() {
 	const {
@@ -45,6 +46,7 @@ export function MovementEditorScreen() {
 		addMovementsEditorChanges,
 		commitToDraft,
 	} = useMovementsEditorStore();
+	const { updateCurrentOpenMenu } = useSidebarStore();
 	const { updateCurrentMode } = useMovementsEditorSheetStore();
 	const {
 		movementRulesDraft,
@@ -181,6 +183,10 @@ export function MovementEditorScreen() {
 		commitToDraft(["range"]);
 	}
 
+	function handlePiecesEditorButtonClick() {
+		updateCurrentOpenMenu("pieces");
+	}
+
 	return (
 		<>
 			<>
@@ -202,6 +208,7 @@ export function MovementEditorScreen() {
 
 						<div className="flex flex-row items-center gap-2">
 							<Button
+								onClick={handlePiecesEditorButtonClick}
 								variant="ghost"
 								className="p-0 hover:bg-(--sidebar-primary-hover)"
 							>
