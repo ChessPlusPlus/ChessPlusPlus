@@ -104,12 +104,6 @@ function BoardSetupPage() {
 		if (originalBoardYSize !== updatedSetupRulesDraft.boardYSize) {
 			updateOriginalBoardYSize(updatedSetupRulesDraft.boardYSize);
 		}
-		
-		syncSetupRulesDraftToDB([
-			"startingPosition",
-			"boardXSize",
-			"boardYSize",
-		]);
 	}
 
 	function handleBackToVariantEditor() {
