@@ -318,8 +318,6 @@ function SetupMenu() {
 			revertBoardXSize();
 			return;
 		}
-
-		syncSetupRulesDraftToDB(["boardXSize"]);
 	}
 
 	function handleBoardHeightInputBlur() {
@@ -344,8 +342,6 @@ function SetupMenu() {
 			revertBoardYSize();
 			return;
 		}
-
-		syncSetupRulesDraftToDB(["boardYSize"]);
 	}
 
 	function handleAddPlayerButtonClick() {
