@@ -110,8 +110,11 @@ function CreateVariantDialog() {
 		const variantId = createVariant(defaultVariant);
 
 		posthog.capture("variant_created", {
-			source: "manual",
-		})
+			creation_method:
+				templateType === "start-from-scratch"
+					? "from_scratch"
+					: "from_chess_preset",
+		});
 
 		clearVariantName();
 		closeDialog();
@@ -122,6 +125,10 @@ function CreateVariantDialog() {
 		}
 
 		if (submitAction === "create-and-open") {
+			posthog.capture("variant_opened", {
+				source: "post_create"
+			});
+			
 			navigate(`/variants/${variantId}`);
 		}
 	}
