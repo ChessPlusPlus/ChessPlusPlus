@@ -40,7 +40,9 @@ Tip: Set your board width and height first, as changing it at the end may mess u
 
 <figure><img src="../../../.gitbook/assets/image_2026-05-28_172129839.png" alt=""><figcaption></figcaption></figure>
 
-> Players are the people that will be playing the game. In the future, it will control the turn order and the pieces each player can control.
+{% hint style="info" %}
+Players are the people that will be playing the game. In the future, it will control the turn order and the pieces each player can control.
+{% endhint %}
 
 Click the "+" button to add a new player _(currently limited to 2 players)_. You can click the 3 dot button to either rename a player or edit the pieces it can control _(no current purpose **yet**)._
 

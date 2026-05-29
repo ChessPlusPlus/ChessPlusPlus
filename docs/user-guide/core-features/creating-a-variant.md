@@ -6,7 +6,9 @@ You can create a variant by clicking on the "Create Variant" button.
 
 All you need to do is to input the **variant name** and **template type**.
 
-> Templates are pre-designed variants which you can based your own variants off from.
+{% hint style="info" %}
+Templates are pre-designed variants which you can based your own variants off from.
+{% endhint %}
 
 #### Types of templates:
 
