@@ -358,9 +358,9 @@ function SetupMenu() {
 		updateOriginalBoardYSize(updatedSetupRulesDraft.boardYSize);
 	}
 
-	function handleRevertBoardSizeButtonClick() {
-		revertBoardXSize();
-		revertBoardYSize();
+	function handleRevertSetupRulesButtonClick() {
+		if (!originalSetupRulesDraft) return;
+		updateSetupRulesDraft(originalSetupRulesDraft);
 	}
 
 	return (
@@ -671,7 +671,7 @@ function SetupMenu() {
 								Save
 							</Button>
 							<Button
-								onClick={handleRevertBoardSizeButtonClick}
+								onClick={handleRevertSetupRulesButtonClick}
 								variant="destructive"
 							>
 								Revert
