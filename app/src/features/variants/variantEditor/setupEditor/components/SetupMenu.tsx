@@ -40,6 +40,8 @@ import {
 import { ChessKnight } from "lucide-react";
 import { useEffect, type ChangeEvent } from "react";
 
+import _ from "lodash";
+
 type PieceImageProps = {
 	player: string;
 	piece: string;
@@ -84,6 +86,7 @@ function SetupMenu() {
 		pieceRulesetDraft,
 		currentVariantId,
 	} = useVariantDraftStore();
+	const { originalSetupRulesDraft } = useSetupMenuStore();
 	const { images } = usePieceImagesStore();
 	const {
 		isPieceOwnershipSelectionDialogOpen,
@@ -607,8 +610,7 @@ function SetupMenu() {
 					</CollapsibleContent>
 				</Collapsible>
 
-				{(originalBoardXSize !== boardXSize ||
-					originalBoardYSize !== boardYSize) && (
+				{(!_.isEqual(originalSetupRulesDraft, setupRulesDraft)) && (
 					<div className="flex flex-row gap-2 p-2">
 						<Button
 							disabled={
