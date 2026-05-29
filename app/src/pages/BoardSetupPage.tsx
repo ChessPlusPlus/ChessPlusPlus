@@ -20,12 +20,12 @@ function BoardSetupPage() {
 		updateMovementRulesDraft,
 		updatePieceRulesetDraft,
 
-		syncSetupRulesDraftToDB
 	} = useVariantDraftStore();
 
 	const { images, hasHydrated } = usePieceImagesStore();
 	const { variants } = useVariantsStore();
 	const { variantId } = useParams();
+
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -71,7 +71,11 @@ function BoardSetupPage() {
 		if (!identifier) return;
 		if (!piece) return;
 
-		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		const currentSetupRulesDraft = useVariantDraftStore.getState().setupRulesDraft;
+		if (!currentSetupRulesDraft) return;
+
+		const updatedSetupRulesDraft = structuredClone(currentSetupRulesDraft);
+		console.log(updatedSetupRulesDraft);
 
 		const startLocation = event.operation.source?.data.startLocation;
 
@@ -89,16 +93,10 @@ function BoardSetupPage() {
 			[[Number(file), Number(rank)], piece],
 		];
 
-		updateSetupRulesDraft({
-			...setupRulesDraft,
-			startingPosition: updatedSetupRulesDraft.startingPosition,
-		});
-		
-		syncSetupRulesDraftToDB(["startingPosition"]);
+		updateSetupRulesDraft(updatedSetupRulesDraft);
 	}
 
 	function handleBackToVariantEditor() {
-		syncSetupRulesDraftToDB();
 		navigate(`/variants/${variantId}`);
 	}
 

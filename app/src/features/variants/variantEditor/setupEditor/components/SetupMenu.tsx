@@ -13,7 +13,11 @@ import {
 import { Field, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipTrigger,
+	TooltipContent,
+} from "@/components/ui/tooltip";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import SelectionDialog from "@/features/variants/variantEditor/common/components/SelectionDialog";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
@@ -35,6 +39,12 @@ import {
 } from "@tabler/icons-react";
 import { ChessKnight } from "lucide-react";
 import { useEffect, type ChangeEvent } from "react";
+
+import _ from "lodash";
+import type {
+	GameState2DArray,
+	PieceOwnershipRules,
+} from "@/features/variants/common/types/setupRules";
 
 type PieceImageProps = {
 	player: string;
@@ -68,9 +78,7 @@ function PieceImage({ player, piece, imageId }: PieceImageProps) {
 					alt={piece}
 				/>
 			</TooltipTrigger>
-			<TooltipContent>
-				{piece}
-			</TooltipContent>
+			<TooltipContent>{piece}</TooltipContent>
 		</Tooltip>
 	);
 }
@@ -79,10 +87,11 @@ function SetupMenu() {
 	const {
 		setupRulesDraft,
 		updateSetupRulesDraft,
-		syncSetupRulesDraftToDB,
 		pieceRulesetDraft,
 		currentVariantId,
+		syncSetupRulesDraftToDB,
 	} = useVariantDraftStore();
+	const { originalSetupRulesDraft } = useSetupMenuStore();
 	const { images } = usePieceImagesStore();
 	const {
 		isPieceOwnershipSelectionDialogOpen,
@@ -102,15 +111,14 @@ function SetupMenu() {
 		originalBoardXSize,
 		originalBoardYSize,
 		updateOriginalBoardYSize,
-		resetOriginalBoardYSize,
 		updateOriginalBoardXSize,
-		resetOriginalBoardXSize,
 		expandBoardSize,
 		collapseBoardSize,
 		expandPlayers,
 		collapsePlayers,
 		expandPieces,
 		collapsePieces,
+		updateOriginalSetupRulesDraft,
 	} = useSetupMenuStore();
 
 	const {
@@ -128,77 +136,9 @@ function SetupMenu() {
 	} = useRenamePlayerDialogStore();
 
 	useEffect(() => {
-		const saveTimeout = setTimeout(() => {
-			const boardXSize = setupRulesDraft?.boardXSize;
-
-			if (isNullOrUndefined(boardXSize)) return;
-			if (Number.isNaN(boardXSize)) return;
-			if (!Number.isFinite(boardXSize)) return;
-			if (boardXSize < 1) return;
-			if (boardXSize > 32) return;
-
-			syncSetupRulesDraftToDB(["boardXSize"]);
-			console.log("Board x size saved");
-		}, 400);
-
-		return () => clearTimeout(saveTimeout);
-	}, [
-		setupRulesDraft?.boardXSize,
-		resetOriginalBoardXSize,
-		syncSetupRulesDraftToDB,
-		updateSetupRulesDraft,
-	]);
-
-	useEffect(() => {
-		const saveTimeout = setTimeout(() => {
-			const boardYSize = setupRulesDraft?.boardYSize;
-
-			if (isNullOrUndefined(boardYSize)) return;
-			if (Number.isNaN(boardYSize)) return;
-			if (!Number.isFinite(boardYSize)) return;
-			if (boardYSize < 1) return;
-			if (boardYSize > 32) return;
-
-			syncSetupRulesDraftToDB(["boardYSize"]);
-		}, 400);
-
-		return () => clearTimeout(saveTimeout);
-	}, [
-		setupRulesDraft?.boardYSize,
-		resetOriginalBoardYSize,
-		syncSetupRulesDraftToDB,
-		updateSetupRulesDraft,
-	]);
-
-	useEffect(() => {
-		if (isNullOrUndefined(setupRulesDraft?.boardXSize)) return;
-
-		if (Number.isNaN(setupRulesDraft.boardXSize)) return;
-		if (!Number.isFinite(setupRulesDraft.boardXSize)) return;
-		if (setupRulesDraft.boardXSize < 1) return;
-		if (setupRulesDraft.boardXSize > 32) return;
-
-		const timeout = setTimeout(() => {
-			updateOriginalBoardXSize(setupRulesDraft.boardXSize);
-		}, 400);
-
-		return () => clearTimeout(timeout);
-	}, [setupRulesDraft?.boardXSize, updateOriginalBoardXSize]);
-
-	useEffect(() => {
-		if (isNullOrUndefined(setupRulesDraft?.boardYSize)) return;
-
-		if (Number.isNaN(setupRulesDraft.boardYSize)) return;
-		if (!Number.isFinite(setupRulesDraft.boardYSize)) return;
-		if (setupRulesDraft.boardYSize < 1) return;
-		if (setupRulesDraft.boardYSize > 32) return;
-
-		const timeout = setTimeout(() => {
-			updateOriginalBoardYSize(setupRulesDraft.boardYSize);
-		}, 400);
-
-		return () => clearTimeout(timeout);
-	}, [setupRulesDraft?.boardYSize, updateOriginalBoardYSize]);
+		if (!setupRulesDraft) return;
+		updateOriginalSetupRulesDraft(setupRulesDraft);
+	}, []);
 
 	useEffect(() => {
 		return () => {
@@ -267,7 +207,6 @@ function SetupMenu() {
 		}
 
 		updateSetupRulesDraft(updatedSetupRulesDraft);
-		syncSetupRulesDraftToDB(["pieceOwnership"]);
 	}
 
 	function handleEditPiecesButtonClick(playerName: string) {
@@ -317,90 +256,78 @@ function SetupMenu() {
 		}
 	}
 
-	function revertBoardXSize() {
-		const updatedOriginalBoardXSize =
-			useSetupMenuStore.getState().originalBoardXSize;
-
-		if (!setupRulesDraft) return;
-		if (isNullOrUndefined(updatedOriginalBoardXSize)) return;
-
-		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
-		updatedSetupRulesDraft.boardXSize = updatedOriginalBoardXSize;
-		updateSetupRulesDraft(updatedSetupRulesDraft);
-		syncSetupRulesDraftToDB();
-
-		resetOriginalBoardXSize();
-	}
-
-	function revertBoardYSize() {
-		const updatedOriginalBoardYSize =
-			useSetupMenuStore.getState().originalBoardYSize;
-
-		if (!setupRulesDraft) return;
-		if (isNullOrUndefined(updatedOriginalBoardYSize)) return;
-
-		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
-		updatedSetupRulesDraft.boardYSize = updatedOriginalBoardYSize;
-		updateSetupRulesDraft(updatedSetupRulesDraft);
-		syncSetupRulesDraftToDB();
-
-		resetOriginalBoardYSize();
-	}
-
 	function handleBoardWidthInputBlur() {
 		if (!setupRulesDraft) return;
 
+		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		if (!originalBoardXSize) return;
+
 		if (Number.isNaN(boardXSize)) {
-			revertBoardXSize();
-			return;
+			updatedSetupRulesDraft.boardXSize = 1;
 		}
 
 		if (!Number.isFinite(boardXSize)) {
-			revertBoardXSize();
-			return;
+			updatedSetupRulesDraft.boardXSize = 1;
 		}
 
 		if (boardXSize < 1) {
-			revertBoardXSize();
-			return;
+			updatedSetupRulesDraft.boardXSize = 1;
 		}
 
 		if (boardXSize > 32) {
-			revertBoardXSize();
-			return;
+			updatedSetupRulesDraft.boardXSize = 32;
 		}
 
-		syncSetupRulesDraftToDB(["boardXSize"]);
+		updateSetupRulesDraft(updatedSetupRulesDraft);
 	}
 
 	function handleBoardHeightInputBlur() {
 		if (!setupRulesDraft) return;
 
+		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+		if (!originalBoardYSize) return;
+
 		if (Number.isNaN(boardYSize)) {
-			revertBoardYSize();
-			return;
+			updatedSetupRulesDraft.boardYSize = 1;
 		}
 
 		if (!Number.isFinite(boardYSize)) {
-			revertBoardYSize();
-			return;
+			updatedSetupRulesDraft.boardYSize = 1;
 		}
 
 		if (boardYSize < 1) {
-			revertBoardYSize();
-			return;
+			updatedSetupRulesDraft.boardYSize = 1;
 		}
 
 		if (boardYSize > 32) {
-			revertBoardYSize();
-			return;
+			updatedSetupRulesDraft.boardYSize = 32;
 		}
 
-		syncSetupRulesDraftToDB(["boardYSize"]);
+		updateSetupRulesDraft(updatedSetupRulesDraft);
 	}
 
 	function handleAddPlayerButtonClick() {
 		openAddPlayerDialog();
+	}
+
+	function handleSaveBoardSizeButtonClick() {
+		if (!setupRulesDraft) return;
+
+		const updatedSetupRulesDraft = structuredClone(setupRulesDraft);
+
+		updatedSetupRulesDraft.startingPosition =
+			updatedSetupRulesDraft.startingPosition.filter(([[file, rank]]) => {
+				return file < boardXSize && rank < boardYSize;
+			});
+
+		updateSetupRulesDraft(updatedSetupRulesDraft);
+		syncSetupRulesDraftToDB();
+		updateOriginalSetupRulesDraft(updatedSetupRulesDraft);
+	}
+
+	function handleRevertSetupRulesButtonClick() {
+		if (!originalSetupRulesDraft) return;
+		updateSetupRulesDraft(originalSetupRulesDraft);
 	}
 
 	return (
@@ -639,6 +566,85 @@ function SetupMenu() {
 						</Tabs>
 					</CollapsibleContent>
 				</Collapsible>
+
+				{setupRulesDraft &&
+					originalSetupRulesDraft &&
+					!_.isEqual(
+						Object.fromEntries(
+							Object.entries(originalSetupRulesDraft).filter(
+								([key, value]) => {
+									if (key === "startingPosition") {
+										return [
+											key,
+											(value as GameState2DArray).sort(),
+										];
+									} else if (key === "pieceOwnership") {
+										return [
+											key,
+											Object.fromEntries(
+												Object.entries(
+													value as PieceOwnershipRules,
+												).map(([key, value]) => {
+													return [key, value.sort()];
+												}),
+											),
+										];
+									} else {
+										return [key, value];
+									}
+								},
+							),
+						),
+						Object.fromEntries(
+							Object.entries(setupRulesDraft).filter(
+								([key, value]) => {
+									if (key === "startingPosition") {
+										return [
+											key,
+											(value as GameState2DArray).sort(),
+										];
+									} else if (key === "pieceOwnership") {
+										return [
+											key,
+											Object.fromEntries(
+												Object.entries(
+													value as PieceOwnershipRules,
+												).map(([key, value]) => {
+													return [key, value.sort()];
+												}),
+											),
+										];
+									} else {
+										return [key, value];
+									}
+								},
+							),
+						),
+					) && (
+						<div className="flex flex-row gap-2 p-2">
+							<Button
+								disabled={
+									Number.isNaN(boardXSize) ||
+									!Number.isFinite(boardXSize) ||
+									boardXSize < 1 ||
+									boardXSize > 32 ||
+									Number.isNaN(boardYSize) ||
+									!Number.isFinite(boardYSize) ||
+									boardYSize < 1 ||
+									boardYSize > 32
+								}
+								onClick={handleSaveBoardSizeButtonClick}
+							>
+								Save
+							</Button>
+							<Button
+								onClick={handleRevertSetupRulesButtonClick}
+								variant="destructive"
+							>
+								Revert
+							</Button>
+						</div>
+					)}
 			</div>
 
 			<SelectionDialog

@@ -1,3 +1,4 @@
+import type { SetupRules } from "@/features/variants/common/types/setupRules";
 import { create } from "zustand";
 
 type SetupMenuStore = {
@@ -12,6 +13,10 @@ type SetupMenuStore = {
 	isPiecesExpanded: boolean;
 	expandPieces: () => void;
 	collapsePieces: () => void;
+
+	originalSetupRulesDraft: SetupRules | null,
+	updateOriginalSetupRulesDraft: (setupRulesDraft: SetupRules) => void;
+	resetOriginalSetupRulesDraft: () => void;
 
 	originalBoardXSize: number | null,
 	updateOriginalBoardXSize: (boardXSize: number) => void;
@@ -34,6 +39,10 @@ const useSetupMenuStore = create<SetupMenuStore>((set) => ({
 	isPiecesExpanded: false,
 	expandPieces: () => set({ isPiecesExpanded: true }),
 	collapsePieces: () => set({ isPiecesExpanded: false }),
+
+	originalSetupRulesDraft: null,
+	updateOriginalSetupRulesDraft: (setupRulesDraft: SetupRules) => set({ originalSetupRulesDraft: setupRulesDraft }),
+	resetOriginalSetupRulesDraft: () => set({ originalSetupRulesDraft: null }),
 
 	originalBoardXSize: null,
 	updateOriginalBoardXSize: (boardXSize: number) => set({ originalBoardXSize: boardXSize }),
