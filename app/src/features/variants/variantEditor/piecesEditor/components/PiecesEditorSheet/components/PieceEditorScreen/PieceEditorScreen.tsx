@@ -136,7 +136,7 @@ function PieceEditorScreen() {
 				>
 					<TabsList variant="line">
 						<TabsTrigger value="appearance">Appearance</TabsTrigger>
-						<TabsTrigger value="movements">Movements</TabsTrigger>
+						<TabsTrigger value="movements">Moveset</TabsTrigger>
 					</TabsList>
 
 					<AppearanceTab />
@@ -146,7 +146,7 @@ function PieceEditorScreen() {
 				<SheetFooter>
 					{currentTab === "movements" && (
 						<Button onClick={handleAddMovementButtonClick}>
-							Add movement
+							Edit moveset
 						</Button>
 					)}
 					<Button
