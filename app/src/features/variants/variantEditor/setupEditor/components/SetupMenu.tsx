@@ -41,6 +41,10 @@ import { ChessKnight } from "lucide-react";
 import { useEffect, type ChangeEvent } from "react";
 
 import _ from "lodash";
+import type {
+	GameState2DArray,
+	PieceOwnershipRules,
+} from "@/features/variants/common/types/setupRules";
 
 type PieceImageProps = {
 	player: string;
@@ -254,7 +258,8 @@ function SetupMenu() {
 	function revertBoardXSize() {
 		const updatedOriginalBoardXSize =
 			useSetupMenuStore.getState().originalBoardXSize;
-		const currentSetupRulesDraft = useVariantDraftStore.getState().setupRulesDraft;
+		const currentSetupRulesDraft =
+			useVariantDraftStore.getState().setupRulesDraft;
 
 		if (!currentSetupRulesDraft) return;
 		if (isNullOrUndefined(updatedOriginalBoardXSize)) return;
@@ -269,7 +274,8 @@ function SetupMenu() {
 	function revertBoardYSize() {
 		const updatedOriginalBoardYSize =
 			useSetupMenuStore.getState().originalBoardYSize;
-		const currentSetupRulesDraft = useVariantDraftStore.getState().setupRulesDraft;
+		const currentSetupRulesDraft =
+			useVariantDraftStore.getState().setupRulesDraft;
 
 		if (!currentSetupRulesDraft) return;
 		if (isNullOrUndefined(updatedOriginalBoardYSize)) return;
@@ -594,31 +600,84 @@ function SetupMenu() {
 					</CollapsibleContent>
 				</Collapsible>
 
-				{(!_.isEqual(originalSetupRulesDraft, setupRulesDraft)) && (
-					<div className="flex flex-row gap-2 p-2">
-						<Button
-							disabled={
-								Number.isNaN(boardXSize) ||
-								!Number.isFinite(boardXSize) ||
-								boardXSize < 1 ||
-								boardXSize > 32 ||
-								Number.isNaN(boardYSize) ||
-								!Number.isFinite(boardYSize) ||
-								boardYSize < 1 ||
-								boardYSize > 32
-							}
-							onClick={handleSaveBoardSizeButtonClick}
-						>
-							Save
-						</Button>
-						<Button
-							onClick={handleRevertBoardSizeButtonClick}
-							variant="destructive"
-						>
-							Revert
-						</Button>
-					</div>
-				)}
+				{setupRulesDraft &&
+					originalSetupRulesDraft &&
+					!_.isEqual(
+						Object.fromEntries(
+							Object.entries(originalSetupRulesDraft).filter(
+								([key, value]) => {
+									if (key === "startingPosition") {
+										return [
+											key,
+											(value as GameState2DArray).sort(),
+										];
+									} else if (key === "pieceOwnership") {
+										return [
+											key,
+											Object.fromEntries(
+												Object.entries(
+													value as PieceOwnershipRules,
+												).map(([key, value]) => {
+													return [key, value.sort()];
+												}),
+											),
+										];
+									} else {
+										return [key, value];
+									}
+								},
+							),
+						),
+						Object.fromEntries(
+							Object.entries(setupRulesDraft).filter(
+								([key, value]) => {
+									if (key === "startingPosition") {
+										return [
+											key,
+											(value as GameState2DArray).sort(),
+										];
+									} else if (key === "pieceOwnership") {
+										return [
+											key,
+											Object.fromEntries(
+												Object.entries(
+													value as PieceOwnershipRules,
+												).map(([key, value]) => {
+													return [key, value.sort()];
+												}),
+											),
+										];
+									} else {
+										return [key, value];
+									}
+								},
+							),
+						),
+					) && (
+						<div className="flex flex-row gap-2 p-2">
+							<Button
+								disabled={
+									Number.isNaN(boardXSize) ||
+									!Number.isFinite(boardXSize) ||
+									boardXSize < 1 ||
+									boardXSize > 32 ||
+									Number.isNaN(boardYSize) ||
+									!Number.isFinite(boardYSize) ||
+									boardYSize < 1 ||
+									boardYSize > 32
+								}
+								onClick={handleSaveBoardSizeButtonClick}
+							>
+								Save
+							</Button>
+							<Button
+								onClick={handleRevertBoardSizeButtonClick}
+								variant="destructive"
+							>
+								Revert
+							</Button>
+						</div>
+					)}
 			</div>
 
 			<SelectionDialog
