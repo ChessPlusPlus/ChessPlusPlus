@@ -14,6 +14,8 @@ import { useQuery } from "@tanstack/react-query";
 import { displayLegalMoves } from "@/features/variants/variantEditor/common/services/legalMoveDisplay";
 import { serialiseGameState } from "@/features/variants/variantEditor/common/utils/gameStateSerialisation";
 import useMovementsEditorStore from "@/features/variants/variantEditor/movementsEditor/stores/movementsEditor";
+import useMovementsEditorSheetStore from "@/features/variants/variantEditor/movementsEditor/stores/movementsEditorSheet";
+import usePiecesEditorSheetStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditorSheet";
 
 function VariantEditorPage() {
 	const { variantId } = useParams();
@@ -31,6 +33,8 @@ function VariantEditorPage() {
 	const { activePiece } = usePiecesEditorStore();
 	const { activeMovementName, forMovement, forCapture, offsetX, offsetY, range, resetMovementsEditorState } = useMovementsEditorStore();
 	const { resetPiecesEditorState } = usePiecesEditorStore();
+	const { resetMovementsEditorSheetState } = useMovementsEditorSheetStore();
+	const { resetPiecesEditorSheetState } = usePiecesEditorSheetStore();
 	
 	const navigate = useNavigate();
 
@@ -139,7 +143,9 @@ function VariantEditorPage() {
 	function handleNavigationToHomePage() {
 		resetMovementsEditorState();
 		resetPiecesEditorState();
-		
+		resetMovementsEditorSheetState();
+		resetPiecesEditorSheetState();
+
 		navigate("/");
 	}
 
