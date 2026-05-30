@@ -43,3 +43,17 @@ After this, you can continue to add more moves and also reorder, edit, and delet
 <figure><img src="../../../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
 
 ### How does it work?
+
+For each move in a sequence, the next move is only executed once the move before is terminated.
+
+{% hint style="info" %}
+#### The definition of **terminated**
+
+A move can considered terminated in some ways:
+
+* When the move cannot continue because it is at the edge of the board.
+* When the move has reached its maximum range (not applicable when the range is unlimited).
+* When the move is stopped by another piece.
+{% endhint %}
+
+The next chained move is then executed at the position of where the former move was.
