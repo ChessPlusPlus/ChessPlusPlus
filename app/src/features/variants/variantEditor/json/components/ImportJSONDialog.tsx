@@ -84,7 +84,7 @@ function ImportJSONDialog() {
 		const json = await readJSONFromBlob(jsonFile);
 		if (!json) return;
 
-		const normalisedJSON = await normaliseJSON(json);
+		const normalisedJSON =( await normaliseJSON(json))?.normalisedJSON;
 		if (!normalisedJSON) return;
 
 		const validationResponse = await validateJSON(normalisedJSON);
