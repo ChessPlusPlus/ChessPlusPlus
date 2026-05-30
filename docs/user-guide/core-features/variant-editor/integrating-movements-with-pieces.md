@@ -52,7 +52,6 @@ For each move in a sequence, the next move is only executed once the move before
 A move can considered terminated in some ways:
 
 * When the move cannot continue because it is at the edge of the board.
-* When the move has reached its maximum range (not applicable when the range is unlimited).
 * When the move is stopped by another piece.
 {% endhint %}
 
