@@ -29,6 +29,7 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import posthog from "posthog-js";
 
 function CreateVariantDialog() {
 	const {
@@ -108,6 +109,13 @@ function CreateVariantDialog() {
 
 		const variantId = createVariant(defaultVariant);
 
+		posthog.capture("variant_created", {
+			creation_method:
+				templateType === "start-from-scratch"
+					? "from_scratch"
+					: "from_chess_preset",
+		});
+
 		clearVariantName();
 		closeDialog();
 
@@ -117,6 +125,10 @@ function CreateVariantDialog() {
 		}
 
 		if (submitAction === "create-and-open") {
+			posthog.capture("variant_opened", {
+				source: "post_create"
+			});
+			
 			navigate(`/variants/${variantId}`);
 		}
 	}

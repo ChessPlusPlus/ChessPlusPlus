@@ -26,6 +26,7 @@ import { serialiseJSONForImport } from "@/features/variants/variantEditor/json/u
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
 import { useNavigate } from "react-router-dom";
+import posthog from "posthog-js";
 
 function ImportJSONDialog() {
 	const {
@@ -112,7 +113,14 @@ function ImportJSONDialog() {
 		clearVariantName();
 		clearVariantNameErrors();
 
+		posthog.capture("variant_created", {
+			creation_method: "json_import",
+		});
+
 		if (shouldOpen) {
+			posthog.capture("variant_opened", {
+				source: "post_json_import",
+			});
 			navigate(`/variants/${variantId}`);
 		}
 	}

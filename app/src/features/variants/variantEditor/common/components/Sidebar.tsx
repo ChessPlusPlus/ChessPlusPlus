@@ -17,6 +17,7 @@ import {
 	DropdownMenu,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import posthog from "posthog-js";
 
 function Sidebar() {
 	const { updateCurrentOpenMenu, clearCurrentOpenMenu, currentOpenMenu } =
@@ -28,6 +29,11 @@ function Sidebar() {
 
 	function handleBoardSettingsButtonClick() {
 		if (!currentVariantId) return;
+
+		posthog.capture("sidebar_button_clicked", {
+			button: "board_settings",
+		});
+
 		navigate(`/variants/${currentVariantId}/setup`);
 	}
 
@@ -57,7 +63,12 @@ function Sidebar() {
 							variant="ghost"
 							className="p-1 hover:bg-(--sidebar-primary-hover)"
 							aria-label="Pieces"
-							onClick={() => updateCurrentOpenMenu("pieces")}
+							onClick={() => {
+								updateCurrentOpenMenu("pieces");
+								posthog.capture("sidebar_button_clicked", {
+									button: "pieces",
+								});
+							}}
 						>
 							<ChessKnightIcon
 								strokeWidth={1.5}
@@ -76,7 +87,12 @@ function Sidebar() {
 							variant="ghost"
 							className="p-1 hover:bg-(--sidebar-primary-hover)"
 							aria-label="Movements"
-							onClick={() => updateCurrentOpenMenu("movements")}
+							onClick={() => {
+								updateCurrentOpenMenu("movements");
+								posthog.capture("sidebar_button_clicked", {
+									button: "movements",
+								});
+							}}
 						>
 							<IconArrowsMove
 								strokeWidth={1.5}
@@ -106,9 +122,12 @@ function Sidebar() {
 									variant="ghost"
 									className="p-1 hover:bg-(--sidebar-primary-hover) aria-expanded:bg-sidebar-primary-muted"
 									aria-label="JSON options"
-									onClick={() =>
-										updateCurrentOpenMenu("jsonOptions")
-									}
+									onClick={() => {
+										updateCurrentOpenMenu("jsonOptions");
+										posthog.capture("sidebar_button_clicked", {
+											button: "json_options",
+										});
+									}}
 								>
 									<IconBraces
 										strokeWidth={1.5}

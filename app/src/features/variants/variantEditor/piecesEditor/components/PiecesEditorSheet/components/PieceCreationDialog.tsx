@@ -12,6 +12,7 @@ import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import usePieceCreationDialogStore from "@/features/variants/variantEditor/piecesEditor/stores/pieceCreationDialog";
 import { IconPencil, IconTrash, IconUpload } from "@tabler/icons-react";
+import posthog from "posthog-js";
 import { useRef, type ChangeEvent } from "react";
 
 function PieceCreationDialog() {
@@ -69,6 +70,8 @@ function PieceCreationDialog() {
 
 		updatePieceRulesetDraft(updatedPieceRulesetDraft);
 		syncPieceRulesetDraftToDB();
+
+		posthog.capture("piece_created");
 
 		closePieceCreationDialog();
 		clearPieceImage();

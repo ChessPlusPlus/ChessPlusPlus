@@ -8,6 +8,7 @@ import VariantSelectionDialog, {
 	type VariantActions,
 } from "@/features/variants/common/components/VariantSelectionDialog";
 import useMyVariantsDialogStore from "@/features/variants/variantListing/stores/myVariantsDialog";
+import posthog from "posthog-js";
 
 function MyVariantsDialog() {
 	const { hasHydrated } = useVariantsStore();
@@ -43,6 +44,9 @@ function MyVariantsDialog() {
 			variant: "default",
 			execute: (variantId) => {
 				closeMyVariantsDialog();
+				posthog.capture("variant_opened", {
+					source: "my_variants_dialog",
+				});
 				navigate(`/variants/${variantId}`);
 			},
 		},

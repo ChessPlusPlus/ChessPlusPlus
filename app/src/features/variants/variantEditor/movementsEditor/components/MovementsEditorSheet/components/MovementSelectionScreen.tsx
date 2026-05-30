@@ -20,6 +20,7 @@ import {
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
 import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
+import posthog from "posthog-js";
 
 export function MovementSelectionScreen() {
 	const { movementRulesDraft } = useVariantDraftStore();
@@ -38,6 +39,9 @@ export function MovementSelectionScreen() {
 
 	function handlePiecesEditorButtonClick() {
 		updateCurrentOpenMenu("pieces");
+		posthog.capture("quicknav_used", {
+			from: "movements_editor",
+		})
 	}
 
 	return (
