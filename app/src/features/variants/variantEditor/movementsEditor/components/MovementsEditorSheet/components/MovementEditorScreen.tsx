@@ -23,7 +23,11 @@ import MovementDeletionAlert from "@/features/variants/variantEditor/movementsEd
 import useDeleteMovementAlertStore from "@/features/variants/variantEditor/movementsEditor/stores/deleteMovementAlert";
 import { ChessKnightIcon } from "lucide-react";
 import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
 import posthog from "posthog-js";
 
@@ -45,6 +49,8 @@ export function MovementEditorScreen() {
 		updateOffsetX,
 		offsetY,
 		updateOffsetY,
+		allowOnlyOnFirstMove,
+		toggleAllowOnlyOnFirstMove,
 
 		addMovementsEditorChanges,
 		commitToDraft,
@@ -187,11 +193,15 @@ export function MovementEditorScreen() {
 		commitToDraft(["range"]);
 	}
 
+	function handleAllowOnlyOnFirstMoveInputBlur() {
+		commitToDraft(["allowOnlyOnFirstMove"]);
+	}
+
 	function handlePiecesEditorButtonClick() {
 		updateCurrentOpenMenu("pieces");
 		posthog.capture("quicknav_used", {
 			from: "movements_editor",
-		})
+		});
 	}
 
 	return (
@@ -375,6 +385,25 @@ export function MovementEditorScreen() {
 								</FieldLabel>
 							</Field>
 						</FieldSet>
+					</FieldSet>
+
+					<FieldSet>
+						<FieldLegend className="data-[variant=legend]:text-sm">
+							Conditions
+						</FieldLegend>
+
+						<Field orientation="horizontal">
+							<Checkbox
+								className="bg-background"
+								id="allowOnlyOnFirstMove"
+								checked={allowOnlyOnFirstMove ?? false}
+								onCheckedChange={toggleAllowOnlyOnFirstMove}
+								onBlur={handleAllowOnlyOnFirstMoveInputBlur}
+							/>
+							<FieldLabel htmlFor="allowOnlyOnFirstMove">
+								Allow only on first move
+							</FieldLabel>
+						</Field>
 					</FieldSet>
 				</div>
 
