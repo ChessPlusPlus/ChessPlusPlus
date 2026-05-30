@@ -174,7 +174,13 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 							!moveDefinitionChangeKeys.includes(
 								key as keyof MoveDefinitionChanges,
 							),
-					),
+					).map(([key, value]) => {
+						if (key === "allowOnlyOnFirstMove") {
+							return ["conditions", value ? ["has_not_moved"] : []];
+						}
+
+						return [key, value];
+					}),
 				);
 
 				const moveDefinitionChanges = Object.fromEntries(
