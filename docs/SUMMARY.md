@@ -15,4 +15,5 @@
     * [Integrating Movements With Pieces](user-guide/core-features/variant-editor/integrating-movements-with-pieces.md)
     * [Exporting As JSON](user-guide/core-features/variant-editor/exporting-as-json.md)
   * [Importing A Variant](user-guide/core-features/importing-a-variant.md)
+  * [Playing A Variant](user-guide/core-features/playing-a-variant.md)
 * [Notes](user-guide/notes.md)

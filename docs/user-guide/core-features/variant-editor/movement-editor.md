@@ -75,7 +75,7 @@ You can either set it as a **non-negative integer or unlimited** (meaning it goe
 
 ***
 
-And that is all! Now, let us learning how to give a piece some movements.
+And that is all! Now, let us learn how to give a piece some movements.
 
 
 

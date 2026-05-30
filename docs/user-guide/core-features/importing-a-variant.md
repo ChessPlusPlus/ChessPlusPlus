@@ -14,8 +14,8 @@ Warning: If the JSON file you import is not in the correct format, an error will
 
 Now, you can go on and edit or play that variant you just imported.
 
-{% hint style="warning" %}
-Warning: Due to the fact that the JSON file does not have the function to hold images, all piece images in a newly imported variant will be set to the [default image](#user-content-fn-1)[^1]. This would be changed for this better very soon in the next update.
-{% endhint %}
+Warning: Due to the fact that the JSON file does not have the function to hold images, all piece images in a newly imported variant will be set to the [default image](#user-content-fn-1)[^1]. This would be changed very soon in the next update.
 
 [^1]: ![](<../../.gitbook/assets/Screenshot 2026-05-28 135728.png>)
+
+    Very striking indeed.
