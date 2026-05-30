@@ -8,7 +8,9 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
 import useSetupSaveConfirmationDialogStore from "@/features/variants/variantEditor/setupEditor/stores/setupSaveConfirmationDialog";
+import { useNavigate, useParams } from "react-router-dom";
 
 function SaveSetupConfirmationDialog() {
 	const {
@@ -16,6 +18,21 @@ function SaveSetupConfirmationDialog() {
 		openSetupSaveConfirmationDialog,
 		closeSetupSaveConfirmationDialog,
 	} = useSetupSaveConfirmationDialogStore();
+	const { syncSetupRulesDraftToDB, currentVariantId } = useVariantDraftStore();
+	const { variantId } = useParams();
+
+	const navigate = useNavigate();
+
+	function handleSaveAndLeaveButtonClick() {
+		syncSetupRulesDraftToDB();
+		closeSetupSaveConfirmationDialog();
+		navigate(`/variants/${currentVariantId ?? variantId}`);
+	}
+
+	function handleLeaveWithoutSavingButtonClick() {
+		closeSetupSaveConfirmationDialog();
+		navigate(`/variants/${currentVariantId ?? variantId}`);
+	}
 
 	return (
 		<AlertDialog
@@ -38,10 +55,10 @@ function SaveSetupConfirmationDialog() {
 				</AlertDialogHeader>
 
 				<AlertDialogFooter>
-					<AlertDialogAction variant="default" className="px-4">
+					<AlertDialogAction variant="default" className="px-4" onClick={handleSaveAndLeaveButtonClick}>
 						Save and leave
 					</AlertDialogAction>
-					<AlertDialogAction variant="destructive" className="px-4">
+					<AlertDialogAction variant="destructive" className="px-4" onClick={handleLeaveWithoutSavingButtonClick}>
 						Leave without saving
 					</AlertDialogAction>
 					<AlertDialogCancel className="px-4">
