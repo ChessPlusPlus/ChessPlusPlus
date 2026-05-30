@@ -1,6 +1,6 @@
 # Creating a variant
 
-You can create a variant by clicking on the "Create Variant" button.
+You can create a variant by clicking "**Create Variant**".
 
 <figure><img src="../../.gitbook/assets/image_2026-05-28_091647160.png" alt=""><figcaption></figcaption></figure>
 

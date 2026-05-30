@@ -4,7 +4,7 @@ Now that you have created your first piece and movement, you can now let your **
 
 <figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
 
-Over at the piece editor, click on the "Edit moveset" button.
+Over at the piece editor, click "**Edit moveset**".
 
 <figure><img src="../../../.gitbook/assets/image (1).png" alt=""><figcaption><p>Please do not name your movements like this</p></figcaption></figure>
 
@@ -26,15 +26,15 @@ Chained moves are where multiple moves are **done together and in sequence**, al
 
 <figure><img src="../../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
-To add a chained move sequence, click on the "**View**" button beside "Chained moves" and then click on the "**Add sequence**" button.
+To add a chained move sequence, click "**View**" beside "Chained moves" and then click "**Add sequence**".
 
 <figure><img src="../../../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
 
-Currently, your sequence is empty. Click on the "**+**" button to add moves to the sequence.
+Currently, your sequence is empty. Click "**+**" to add moves to the sequence.
 
 <figure><img src="../../../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
 
-Select a move to add and then click the button to add chained move.
+Select a move to add and then click on "**Add chained move**" to add chained move.
 
 <figure><img src="../../../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
 

@@ -13,4 +13,5 @@
     * [Piece Editor](user-guide/core-features/variant-editor/piece-editor.md)
     * [Movement Editor](user-guide/core-features/variant-editor/movement-editor.md)
     * [Integrating Movements With Pieces](user-guide/core-features/variant-editor/integrating-movements-with-pieces.md)
+    * [Exporting As JSON](user-guide/core-features/variant-editor/exporting-as-json.md)
 * [Notes](user-guide/notes.md)

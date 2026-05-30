@@ -44,7 +44,7 @@ Tip: Set your board width and height first, as changing it at the end may mess u
 Players are the people that will be playing the game. In the future, it will control the turn order and the pieces each player can control.
 {% endhint %}
 
-Click the "+" button to add a new player _(currently limited to 2 players)_. You can click the 3 dot button to either rename a player or edit the pieces it can control _(no current purpose **yet**)._
+Click "**+**" to add a new player _(currently limited to 2 players)_. You can click "**⋮**" to either rename a player or edit the pieces it can contro&#x6C;_._
 
 <figure><img src="../../../.gitbook/assets/image_2026-05-28_175610973.png" alt=""><figcaption><p>Choose which pieces belong to this player</p></figcaption></figure>
 
@@ -54,7 +54,7 @@ Each piece doesn't have to be strictly controlled by a single player! You can al
 
 ### DON'T FORGET TO SAVE!
 
-Whenever you feel that you are happy with your board settings, click on the "**Save**" button to save you changes. However if you feel that you can do better, you can click on the "**Revert**" button to revert your board settings to their last saved state.
+Whenever you feel that you are happy with your board settings, click "**Save**" to save your changes. However if you feel that you can do better, you can click "**Revert**" to revert your board settings to their last saved state.
 
 {% hint style="warning" %}
 Warning: If you leave the page without saving, your board settings will be automatically reverted. So **DON'T FORGET TO SAVE!**

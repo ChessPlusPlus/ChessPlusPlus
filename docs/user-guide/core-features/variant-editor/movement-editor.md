@@ -2,7 +2,7 @@
 
 ## How to create a movement
 
-On the right of the screen, you should see this. Click the **"Create movement"** button to create your very first movement.
+On the right of the screen, you should see this. Click **"Create movement"** to create your very first movement.
 
 <figure><img src="../../../.gitbook/assets/Screenshot 2026-05-30 143847.png" alt=""><figcaption><p>Legs</p></figcaption></figure>
 

@@ -4,7 +4,7 @@
 
 <figure><img src="../../../.gitbook/assets/Screenshot 2026-05-30 131955.png" alt=""><figcaption><p>Looks a bit empty</p></figcaption></figure>
 
-On the right of the screen, you should see this. Click the **"Create piece"** button to create your very first piece.
+On the right of the screen, you should see this. Click **"Create piece"** to create your very first piece.
 
 <figure><img src="../../../.gitbook/assets/image_2026-05-29_114618603.png" alt=""><figcaption><p>It looks happy</p></figcaption></figure>
 
