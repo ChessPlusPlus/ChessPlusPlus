@@ -44,7 +44,7 @@ After this, you can continue to add more moves and also reorder, edit, and delet
 
 ### How does it work?
 
-For each move in a sequence, the next move is only executed once the move before is terminated.
+For each move in a sequence, the next move is only executed once the move before is finished and has not been terminated.
 
 {% hint style="info" %}
 #### The definition of **terminated**
