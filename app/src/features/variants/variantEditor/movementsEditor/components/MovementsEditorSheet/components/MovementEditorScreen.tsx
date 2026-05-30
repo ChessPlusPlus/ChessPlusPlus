@@ -283,6 +283,7 @@ export function MovementEditorScreen() {
 									className="bg-background"
 									id="isMovementAllowed"
 									checked={forMovement ?? false}
+									disabled={forMovement && !forCapture}
 									onCheckedChange={
 										handleForMovementInputChange
 									}
@@ -297,6 +298,7 @@ export function MovementEditorScreen() {
 									className="bg-background"
 									id="isCaptureAllowed"
 									checked={forCapture ?? false}
+									disabled={forCapture && !forMovement}
 									onCheckedChange={
 										handleForCaptureInputChange
 									}
