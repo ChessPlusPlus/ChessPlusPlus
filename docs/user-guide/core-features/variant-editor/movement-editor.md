@@ -6,7 +6,7 @@ On the right of the screen, you should see this. Click the **"Create movement"**
 
 <figure><img src="../../../.gitbook/assets/Screenshot 2026-05-30 143847.png" alt=""><figcaption><p>Legs</p></figcaption></figure>
 
-<figure><img src="../../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
 
 Just **choose a name** for your new movement, and that is all.
 
@@ -57,11 +57,11 @@ This is equivalent to a vector in physics, which is a quantity that has both a m
 
 This has **2** parameters: **X and Y**. Each parameter defines movement in the X and Y axis respectively.
 
-<figure><img src="../../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 On the board, the X axis goes from **left to right**, while the Y axis goes from **bottom to top**.
 
-<figure><img src="../../../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (6) (1).png" alt=""><figcaption></figcaption></figure>
 
 The value for each axis defines how much the piece moves in that axis.
 

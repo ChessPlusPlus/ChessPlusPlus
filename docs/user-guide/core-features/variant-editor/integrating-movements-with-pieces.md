@@ -1,0 +1,45 @@
+# Integrating Movements With Pieces
+
+Now that you have created your first piece and movement, you can now let your **piece use those movements**.
+
+<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+
+Over at the piece editor, click on the "Edit moveset" button.
+
+<figure><img src="../../../.gitbook/assets/image (1).png" alt=""><figcaption><p>Please do not name your movements like this</p></figcaption></figure>
+
+Here, you can select or remove any movement you have created for this piece.
+
+<figure><img src="../../../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+
+You can view which movements your piece have, and they are all numbered.
+
+<figure><img src="../../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+
+Over on the board, each number corresponds with each move. They give you an example of where **each move allows the piece to travel to**.
+
+***
+
+## Chained moves
+
+Chained moves are where multiple moves are **done together and in sequence**, allowing a piece to possess much more **complex** movements.
+
+<figure><img src="../../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+
+To add a chained move sequence, click on the "**View**" button beside "Chained moves" and then click on the "**Add sequence**" button.
+
+<figure><img src="../../../.gitbook/assets/image (6).png" alt=""><figcaption></figcaption></figure>
+
+Currently, your sequence is empty. Click on the "**+**" button to add moves to the sequence.
+
+<figure><img src="../../../.gitbook/assets/image (7).png" alt=""><figcaption></figcaption></figure>
+
+Select a move to add and then click the button to add chained move.
+
+<figure><img src="../../../.gitbook/assets/image (8).png" alt=""><figcaption></figcaption></figure>
+
+After this, you can continue to add more moves and also reorder, edit, and delete moves.
+
+<figure><img src="../../../.gitbook/assets/image (10).png" alt=""><figcaption></figcaption></figure>
+
+### How does it work?
