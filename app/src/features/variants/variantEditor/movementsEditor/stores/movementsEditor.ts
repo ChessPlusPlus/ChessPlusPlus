@@ -56,6 +56,11 @@ type MovementsEditorStore = {
 	updateRange: (newRange: number | "inf") => void;
 	clearRange: () => void;
 
+	allowOnlyOnFirstMove: boolean | null;
+	toggleAllowOnlyOnFirstMove: () => void;
+	updateAllowOnlyOnFirstMove: (newAllowOnlyOnFirstMove: boolean) => void;
+	clearAllowOnlyOnFirstMove: () => void;
+
 	commitToDraft: (keys?: (keyof MovementsEditorChanges)[]) => void;
 	resetMovementsEditorState: () => void;
 };
@@ -121,6 +126,13 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 		range: null,
 		updateRange: (newRange) => set({ range: newRange }),
 		clearRange: () => set({ range: null }),
+
+		allowOnlyOnFirstMove: null,
+		toggleAllowOnlyOnFirstMove: () =>
+			set((state) => ({ allowOnlyOnFirstMove: !state.allowOnlyOnFirstMove })),
+		updateAllowOnlyOnFirstMove: (newAllowOnlyOnFirstMove) =>
+			set({ allowOnlyOnFirstMove: newAllowOnlyOnFirstMove }),
+		clearAllowOnlyOnFirstMove: () => set({ allowOnlyOnFirstMove: null }),
 
 		commitToDraft: (keys) => {
 			const movementEditorChanges = get().movementsEditorChanges;
