@@ -7,9 +7,10 @@ import SetupToolbar from "@/features/variants/variantEditor/setupEditor/componen
 import { Button } from "@/components/ui/button";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { IconChevronLeft } from "@tabler/icons-react";
 import SaveSetupConfirmationDialog from "@/features/variants/variantEditor/setupEditor/components/SaveSetupConfirmationDialog";
+import useSetupSaveConfirmationDialogStore from "@/features/variants/variantEditor/setupEditor/stores/setupSaveConfirmationDialog";
 
 type OnDragEnd = React.ComponentProps<typeof DragDropProvider>["onDragEnd"];
 
@@ -22,11 +23,11 @@ function BoardSetupPage() {
 		updatePieceRulesetDraft,
 	} = useVariantDraftStore();
 
+	const { openSetupSaveConfirmationDialog } = useSetupSaveConfirmationDialogStore();
+
 	const { images, hasHydrated } = usePieceImagesStore();
 	const { variants } = useVariantsStore();
 	const { variantId } = useParams();
-
-	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!hasHydrated) return;
@@ -98,7 +99,7 @@ function BoardSetupPage() {
 	}
 
 	function handleBackToVariantEditor() {
-		navigate(`/variants/${variantId}`);
+		openSetupSaveConfirmationDialog();
 	}
 
 	return (
