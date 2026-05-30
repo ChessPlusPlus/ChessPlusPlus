@@ -217,6 +217,7 @@ export function MovementEditorScreen() {
 							<Tooltip>
 								<TooltipTrigger asChild>
 									<Button
+										tabIndex={-1}
 										onClick={handlePiecesEditorButtonClick}
 										variant="ghost"
 										className="p-0 hover:bg-(--sidebar-primary-hover)"

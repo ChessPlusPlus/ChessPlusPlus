@@ -62,6 +62,7 @@ export function PieceSelectionScreen() {
 							<Tooltip>
 								<TooltipTrigger asChild>
 									<Button
+										tabIndex={-1}
 										onClick={
 											handleMovementsEditorButtonClick
 										}
