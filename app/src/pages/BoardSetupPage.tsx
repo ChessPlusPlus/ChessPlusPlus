@@ -7,16 +7,20 @@ import SetupToolbar from "@/features/variants/variantEditor/setupEditor/componen
 import { Button } from "@/components/ui/button";
 import { DragDropProvider } from "@dnd-kit/react";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IconChevronLeft } from "@tabler/icons-react";
 import SaveSetupConfirmationDialog from "@/features/variants/variantEditor/setupEditor/components/SaveSetupConfirmationDialog";
 import useSetupSaveConfirmationDialogStore from "@/features/variants/variantEditor/setupEditor/stores/setupSaveConfirmationDialog";
+import _ from "lodash";
+import useSetupMenuStore from "@/features/variants/variantEditor/setupEditor/stores/setupMenu";
+import type { GameState2DArray, PieceOwnershipRules } from "@/features/variants/common/types/setupRules";
 
 type OnDragEnd = React.ComponentProps<typeof DragDropProvider>["onDragEnd"];
 
 function BoardSetupPage() {
 	const {
 		setupRulesDraft,
+		currentVariantId,
 		updateSetupRulesDraft,
 		updateCurrentVariantId,
 		updateMovementRulesDraft,
@@ -24,10 +28,13 @@ function BoardSetupPage() {
 	} = useVariantDraftStore();
 
 	const { openSetupSaveConfirmationDialog } = useSetupSaveConfirmationDialogStore();
+	const { originalSetupRulesDraft } = useSetupMenuStore();
 
 	const { images, hasHydrated } = usePieceImagesStore();
 	const { variants } = useVariantsStore();
 	const { variantId } = useParams();
+
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		if (!hasHydrated) return;
@@ -52,6 +59,43 @@ function BoardSetupPage() {
 	]);
 
 	if (!setupRulesDraft) return null;
+
+	const hasUnsavedChanges = originalSetupRulesDraft && !_.isEqual(
+		Object.fromEntries(
+			Object.entries(originalSetupRulesDraft).filter(
+				([key, value]) => {
+					if (key === "startingPosition") {
+						return [key, (value as GameState2DArray).sort()];
+					} else if (key === "pieceOwnership") {
+						return [key, Object.fromEntries(
+							Object.entries(value as PieceOwnershipRules).map(([key, value]) => {
+								return [key, value.sort()];
+							})
+						)];
+					} else {
+						return [key, value];
+					}
+				}
+			)
+		),
+		Object.fromEntries(
+			Object.entries(setupRulesDraft).filter(
+				([key, value]) => {
+					if (key === "startingPosition") {
+						return [key, (value as GameState2DArray).sort()];
+					} else if (key === "pieceOwnership") {
+						return [key, Object.fromEntries(
+							Object.entries(value as PieceOwnershipRules).map(([key, value]) => {
+								return [key, value.sort()];
+							})
+						)];
+					} else {
+						return [key, value];
+					}
+				}
+			)
+		)
+	);
 
 	function handleDragEnd(...args: Parameters<NonNullable<OnDragEnd>>) {
 		if (!setupRulesDraft) return;
@@ -99,7 +143,11 @@ function BoardSetupPage() {
 	}
 
 	function handleBackToVariantEditor() {
-		openSetupSaveConfirmationDialog();
+		if (hasUnsavedChanges) {
+			openSetupSaveConfirmationDialog();
+		} else {
+			navigate(`/variants/${currentVariantId ?? variantId}`);
+		}
 	}
 
 	return (
