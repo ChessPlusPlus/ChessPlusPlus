@@ -8,7 +8,7 @@ const newMovementDefaults: MovementRule = {
 		moveX: 0,
 		moveY: 0,
 		range: 1,
-		moveStopConditions: [],
+		moveStopConditions: ["inside_piece"],
 	},
 };
 
