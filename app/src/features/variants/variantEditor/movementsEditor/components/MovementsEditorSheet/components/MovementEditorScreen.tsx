@@ -101,6 +101,7 @@ export function MovementEditorScreen() {
 		updateForMovement,
 		updateForCapture,
 		updateMovementName,
+		updateAllowOnlyOnFirstMove,
 	]);
 
 	if (!activeMovementName) return null;
