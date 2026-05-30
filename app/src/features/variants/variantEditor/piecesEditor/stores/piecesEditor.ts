@@ -91,9 +91,10 @@ type PiecesEditorStore = {
 	clearPieceImageId: () => void;
 
 	commitToDraft: (keys?: (keyof PieceEditorChanges)[]) => void;
+	resetPiecesEditorState: () => void;
 };
 
-const usePiecesEditorStore = create<PiecesEditorStore>((set, get) => ({
+const usePiecesEditorStore = create<PiecesEditorStore>((set, get, store) => ({
 	activePiece: null,
 	updateActivePiece: (newPiece) => set({ activePiece: newPiece }),
 	clearActivePiece: () => set({ activePiece: null }),
@@ -412,6 +413,8 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get) => ({
 		updateSetupRulesDraft(updatedSetupRulesDraft);
 		updatePieceRulesetDraft(updatedPieceRulesetDraft);
 	},
+
+	resetPiecesEditorState: () => set(store.getInitialState()),
 }));
 
 export default usePiecesEditorStore;
