@@ -71,7 +71,7 @@ The value for each axis defines how much the piece moves in that axis.
 
 The range defines how many times the move vector is **repeated**, which lets a piece travel in many tiny steps. For example, with a move vector of (1, 1) and a range of 5, a piece starting at (0, 0) will be allowed to move northeast until (5, 5).
 
-You can either set it as a **non-negative integer or unlimited** (meaning it goes on forever).
+You can either set it as a **positive non-zero integer or unlimited** (meaning it goes on forever).
 
 ***
 
