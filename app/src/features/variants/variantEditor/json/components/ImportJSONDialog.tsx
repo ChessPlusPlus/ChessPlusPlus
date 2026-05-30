@@ -27,6 +27,7 @@ import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
 import { useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
+import { normaliseJSON } from "@/features/variants/variantEditor/json/services/jsonNormalisation";
 
 function ImportJSONDialog() {
 	const {
@@ -83,7 +84,10 @@ function ImportJSONDialog() {
 		const json = await readJSONFromBlob(jsonFile);
 		if (!json) return;
 
-		const validationResponse = await validateJSON(json);
+		const normalisedJSON =( await normaliseJSON(json))?.normalisedJSON;
+		if (!normalisedJSON) return;
+
+		const validationResponse = await validateJSON(normalisedJSON);
 		if (!validationResponse) return;
 
 		const isJsonValid = validationResponse.validationStatus;
