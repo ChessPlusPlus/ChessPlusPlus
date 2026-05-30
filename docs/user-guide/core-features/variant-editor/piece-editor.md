@@ -2,7 +2,7 @@
 
 ## How to create a piece
 
-<figure><img src="../../../.gitbook/assets/image_2026-05-29_114254307.png" alt=""><figcaption><p>Looking a bit empty</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Screenshot 2026-05-30 131955.png" alt=""><figcaption></figcaption></figure>
 
 On the right of the screen, you should see this. Click the **"Create piece"** button to create your very first piece.
 
@@ -18,7 +18,7 @@ Name your piece to **whatever you want**, and then add **any image**!
 
 </details>
 
-<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption><p>Still very happy</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/Screenshot 2026-05-30 132113.png" alt=""><figcaption></figcaption></figure>
 
 Upon creation, you should be seeing this. On the appearance page, you can change your piece name and also upload a new image for it.
 
@@ -30,6 +30,6 @@ Note: No two pieces can share the same name.
 
 This is probably the **most important aspect** of every piece. Here, you control how the piece **moves and behaves**.
 
-<figure><img src="../../../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
 
 Currently, your piece has no movements! Let's move on to the next page to learn how to create movements for your pieces.
