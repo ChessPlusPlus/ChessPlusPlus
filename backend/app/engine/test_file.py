@@ -107,3 +107,4 @@ def debug_movement():
     print(legal_moves)
 
 debug_movement()
+
