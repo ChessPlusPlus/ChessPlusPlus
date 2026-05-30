@@ -158,6 +158,11 @@ export function MovementEditorScreen() {
 		});
 	}
 
+	function handleAllowOnlyOnFirstMoveInputChange(checked: boolean) {
+		toggleAllowOnlyOnFirstMove();
+		addMovementsEditorChanges({ allowOnlyOnFirstMove: checked });
+	}
+
 	function handleOffsetXInputChange(e: ChangeEvent<HTMLInputElement>) {
 		const newOffsetX = e.target.value;
 		updateOffsetX(newOffsetX);
@@ -402,7 +407,7 @@ export function MovementEditorScreen() {
 								className="bg-background"
 								id="allowOnlyOnFirstMove"
 								checked={allowOnlyOnFirstMove ?? false}
-								onCheckedChange={toggleAllowOnlyOnFirstMove}
+								onCheckedChange={handleAllowOnlyOnFirstMoveInputChange}
 								onBlur={handleAllowOnlyOnFirstMoveInputBlur}
 							/>
 							<FieldLabel htmlFor="allowOnlyOnFirstMove">
