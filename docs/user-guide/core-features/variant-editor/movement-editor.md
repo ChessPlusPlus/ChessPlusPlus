@@ -2,9 +2,9 @@
 
 ## How to create a movement
 
-<figure><img src="../../../.gitbook/assets/Screenshot 2026-05-29 144248.png" alt=""><figcaption></figcaption></figure>
-
 On the right of the screen, you should see this. Click the **"Create movement"** button to create your very first movement.
+
+<figure><img src="../../../.gitbook/assets/Screenshot 2026-05-29 144248.png" alt=""><figcaption></figcaption></figure>
 
 <figure><img src="../../../.gitbook/assets/image (2).png" alt=""><figcaption></figcaption></figure>
 
