@@ -54,7 +54,7 @@ function SaveSetupConfirmationDialog() {
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 
-				<AlertDialogFooter>
+				<AlertDialogFooter className="grid grid-cols-[1.5fr_1.5fr_1fr] gap-2">
 					<AlertDialogAction variant="default" className="px-4" onClick={handleSaveAndLeaveButtonClick}>
 						Save and leave
 					</AlertDialogAction>
