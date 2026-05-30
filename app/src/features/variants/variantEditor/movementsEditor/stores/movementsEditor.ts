@@ -14,6 +14,7 @@ type MovementsEditorChanges = {
 	offsetX: string | number;
 	offsetY: string | number;
 	range: number | "inf";
+	allowOnlyOnFirstMove: boolean;
 };
 
 type MovementsEditorStore = {
@@ -55,6 +56,11 @@ type MovementsEditorStore = {
 	range: number | "inf" | null;
 	updateRange: (newRange: number | "inf") => void;
 	clearRange: () => void;
+
+	allowOnlyOnFirstMove: boolean | null;
+	toggleAllowOnlyOnFirstMove: () => void;
+	updateAllowOnlyOnFirstMove: (newAllowOnlyOnFirstMove: boolean) => void;
+	clearAllowOnlyOnFirstMove: () => void;
 
 	commitToDraft: (keys?: (keyof MovementsEditorChanges)[]) => void;
 	resetMovementsEditorState: () => void;
@@ -122,6 +128,13 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 		updateRange: (newRange) => set({ range: newRange }),
 		clearRange: () => set({ range: null }),
 
+		allowOnlyOnFirstMove: null,
+		toggleAllowOnlyOnFirstMove: () =>
+			set((state) => ({ allowOnlyOnFirstMove: !state.allowOnlyOnFirstMove })),
+		updateAllowOnlyOnFirstMove: (newAllowOnlyOnFirstMove) =>
+			set({ allowOnlyOnFirstMove: newAllowOnlyOnFirstMove }),
+		clearAllowOnlyOnFirstMove: () => set({ allowOnlyOnFirstMove: null }),
+
 		commitToDraft: (keys) => {
 			const movementEditorChanges = get().movementsEditorChanges;
 			const movementRulesDraft =
@@ -174,7 +187,13 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 							!moveDefinitionChangeKeys.includes(
 								key as keyof MoveDefinitionChanges,
 							),
-					),
+					).map(([key, value]) => {
+						if (key === "allowOnlyOnFirstMove") {
+							return ["conditions", value ? ["has_not_moved"] : []];
+						}
+
+						return [key, value];
+					}),
 				);
 
 				const moveDefinitionChanges = Object.fromEntries(
@@ -288,7 +307,13 @@ const useMovementsEditorStore = create<MovementsEditorStore>(
 							!moveDefinitionChangeKeys.includes(
 								key as keyof MoveDefinitionChanges,
 							),
-					),
+					).map(([key, value]) => {
+						if (key === "allowOnlyOnFirstMove") {
+							return ["conditions", value ? ["has_not_moved"] : []];
+						} else {
+							return [key, value];
+						}
+					}),
 				);
 
 				const moveDefinitionChanges = Object.fromEntries(

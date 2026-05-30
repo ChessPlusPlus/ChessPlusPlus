@@ -23,7 +23,11 @@ import MovementDeletionAlert from "@/features/variants/variantEditor/movementsEd
 import useDeleteMovementAlertStore from "@/features/variants/variantEditor/movementsEditor/stores/deleteMovementAlert";
 import { ChessKnightIcon } from "lucide-react";
 import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
 import posthog from "posthog-js";
 
@@ -45,6 +49,9 @@ export function MovementEditorScreen() {
 		updateOffsetX,
 		offsetY,
 		updateOffsetY,
+		allowOnlyOnFirstMove,
+		toggleAllowOnlyOnFirstMove,
+		updateAllowOnlyOnFirstMove,
 
 		addMovementsEditorChanges,
 		commitToDraft,
@@ -76,6 +83,7 @@ export function MovementEditorScreen() {
 		const initialOffsetY = initialMovement.moveDefinition.moveY;
 		const initialForMovement = initialMovement.forMovement;
 		const initialForCapture = initialMovement.forCapture;
+		const initialAllowOnlyOnFirstMove = initialMovement.conditions.includes("has_not_moved");
 
 		updateMovementName(activeMovementName);
 		updateRange(initialRange);
@@ -83,6 +91,7 @@ export function MovementEditorScreen() {
 		updateOffsetY(initialOffsetY);
 		updateForMovement(initialForMovement);
 		updateForCapture(initialForCapture);
+		updateAllowOnlyOnFirstMove(initialAllowOnlyOnFirstMove);
 	}, [
 		activeMovementName,
 		movementRulesDraft,
@@ -92,6 +101,7 @@ export function MovementEditorScreen() {
 		updateForMovement,
 		updateForCapture,
 		updateMovementName,
+		updateAllowOnlyOnFirstMove,
 	]);
 
 	if (!activeMovementName) return null;
@@ -101,6 +111,7 @@ export function MovementEditorScreen() {
 	if (isNullOrUndefined(range)) return null;
 	if (isNullOrUndefined(offsetX)) return null;
 	if (isNullOrUndefined(offsetY)) return null;
+	if (isNullOrUndefined(allowOnlyOnFirstMove)) return null;
 
 	function handleDeleteMovementButtonClick() {
 		if (!activeMovementName) return;
@@ -147,6 +158,11 @@ export function MovementEditorScreen() {
 		});
 	}
 
+	function handleAllowOnlyOnFirstMoveInputChange(checked: boolean) {
+		toggleAllowOnlyOnFirstMove();
+		addMovementsEditorChanges({ allowOnlyOnFirstMove: checked });
+	}
+
 	function handleOffsetXInputChange(e: ChangeEvent<HTMLInputElement>) {
 		const newOffsetX = e.target.value;
 		updateOffsetX(newOffsetX);
@@ -187,11 +203,15 @@ export function MovementEditorScreen() {
 		commitToDraft(["range"]);
 	}
 
+	function handleAllowOnlyOnFirstMoveInputBlur() {
+		commitToDraft(["allowOnlyOnFirstMove"]);
+	}
+
 	function handlePiecesEditorButtonClick() {
 		updateCurrentOpenMenu("pieces");
 		posthog.capture("quicknav_used", {
 			from: "movements_editor",
-		})
+		});
 	}
 
 	return (
@@ -375,6 +395,25 @@ export function MovementEditorScreen() {
 								</FieldLabel>
 							</Field>
 						</FieldSet>
+					</FieldSet>
+
+					<FieldSet>
+						<FieldLegend className="data-[variant=legend]:text-sm">
+							Conditions
+						</FieldLegend>
+
+						<Field orientation="horizontal">
+							<Checkbox
+								className="bg-background"
+								id="allowOnlyOnFirstMove"
+								checked={allowOnlyOnFirstMove ?? false}
+								onCheckedChange={handleAllowOnlyOnFirstMoveInputChange}
+								onBlur={handleAllowOnlyOnFirstMoveInputBlur}
+							/>
+							<FieldLabel htmlFor="allowOnlyOnFirstMove">
+								Allow only on first move
+							</FieldLabel>
+						</Field>
 					</FieldSet>
 				</div>
 
