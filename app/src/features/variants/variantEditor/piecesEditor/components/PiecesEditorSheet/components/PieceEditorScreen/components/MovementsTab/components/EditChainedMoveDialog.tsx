@@ -79,6 +79,7 @@ function EditChainedMoveDialog() {
 		replaceChainedMoveInSequence(sequenceIndex, nodeIndex, {
 			moveName: trimmedNewMovementName,
 			validMove: true,
+			terminateOnStop: true,
 		});
 
 		closeEditChainedMoveDialog();
