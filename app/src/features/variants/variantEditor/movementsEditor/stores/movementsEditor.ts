@@ -14,6 +14,7 @@ type MovementsEditorChanges = {
 	offsetX: string | number;
 	offsetY: string | number;
 	range: number | "inf";
+	allowOnlyOnFirstMove: boolean;
 };
 
 type MovementsEditorStore = {
