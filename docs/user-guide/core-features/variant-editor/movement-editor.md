@@ -14,7 +14,7 @@ Just **choose a name** for your new movement, and that is all.
 Note: No two movements can share the same name.
 {% endhint %}
 
-<figure><img src="../../../.gitbook/assets/image_2026-05-30_144256300.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (16).png" alt=""><figcaption></figcaption></figure>
 
 Upon creation, you should be seeing this on the right. Here, you can **edit the movement's name** and **configure its behaviour**.
 
@@ -22,11 +22,12 @@ Upon creation, you should be seeing this on the right. Here, you can **edit the 
 
 ## How to configure a movement
 
-A movement has **3** important fields:
+A movement has **4 important fields**:
 
 * Allowed move types
 * Move definition (vector)
 * Range
+* Conditions
 
 ***
 
@@ -72,6 +73,16 @@ The value for each axis defines how much the piece moves in that axis.
 The range defines how many times the move vector is **repeated**, which lets a piece travel in many tiny steps. For example, with a move vector of (1, 1) and a range of 5, a piece starting at (0, 0) will be allowed to move northeast until (5, 5).
 
 You can either set it as a **positive non-zero integer or unlimited** (meaning it goes on forever).
+
+***
+
+### Conditions
+
+Currently, there is only one condition: **Allow only on first move**. When it is checked, it makes it so that the move can only be executed when the piece has not yet moved.
+
+{% hint style="info" %}
+Note: There is already internal functionally to allow other conditions, however it is still in development and will be expanded upon very soon in the next update.
+{% endhint %}
 
 ***
 
