@@ -51,6 +51,7 @@ export function MovementEditorScreen() {
 		updateOffsetY,
 		allowOnlyOnFirstMove,
 		toggleAllowOnlyOnFirstMove,
+		updateAllowOnlyOnFirstMove,
 
 		addMovementsEditorChanges,
 		commitToDraft,
@@ -82,6 +83,7 @@ export function MovementEditorScreen() {
 		const initialOffsetY = initialMovement.moveDefinition.moveY;
 		const initialForMovement = initialMovement.forMovement;
 		const initialForCapture = initialMovement.forCapture;
+		const initialAllowOnlyOnFirstMove = initialMovement.conditions.includes("has_not_moved");
 
 		updateMovementName(activeMovementName);
 		updateRange(initialRange);
@@ -89,6 +91,7 @@ export function MovementEditorScreen() {
 		updateOffsetY(initialOffsetY);
 		updateForMovement(initialForMovement);
 		updateForCapture(initialForCapture);
+		updateAllowOnlyOnFirstMove(initialAllowOnlyOnFirstMove);
 	}, [
 		activeMovementName,
 		movementRulesDraft,
@@ -107,6 +110,7 @@ export function MovementEditorScreen() {
 	if (isNullOrUndefined(range)) return null;
 	if (isNullOrUndefined(offsetX)) return null;
 	if (isNullOrUndefined(offsetY)) return null;
+	if (isNullOrUndefined(allowOnlyOnFirstMove)) return null;
 
 	function handleDeleteMovementButtonClick() {
 		if (!activeMovementName) return;
