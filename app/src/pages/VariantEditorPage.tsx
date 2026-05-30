@@ -29,8 +29,9 @@ function VariantEditorPage() {
 	} = useVariantDraftStore();
 
 	const { activePiece } = usePiecesEditorStore();
-	const { activeMovementName, forMovement, forCapture, offsetX, offsetY, range } = useMovementsEditorStore();
-
+	const { activeMovementName, forMovement, forCapture, offsetX, offsetY, range, resetMovementsEditorState } = useMovementsEditorStore();
+	const { resetPiecesEditorState } = usePiecesEditorStore();
+	
 	const navigate = useNavigate();
 
 	const { data: legalMovesPreview } = useQuery({
@@ -136,6 +137,9 @@ function VariantEditorPage() {
 	if (!setupRulesDraft) return null;
 
 	function handleNavigationToHomePage() {
+		resetMovementsEditorState();
+		resetPiecesEditorState();
+		
 		navigate("/");
 	}
 
