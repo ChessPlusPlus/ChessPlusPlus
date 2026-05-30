@@ -11,3 +11,4 @@
   * [Variant Editor](user-guide/core-features/variant-editor/README.md)
     * [Board Settings](user-guide/core-features/variant-editor/board-settings.md)
     * [Piece Editor](user-guide/core-features/variant-editor/piece-editor.md)
+    * [Movement Editor](user-guide/core-features/variant-editor/movement-editor.md)

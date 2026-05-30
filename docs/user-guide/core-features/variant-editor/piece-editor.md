@@ -23,7 +23,7 @@ Name your piece to **whatever you want**, and then add **any image**!
 Upon creation, you should be seeing this. On the appearance page, you can change your piece name and also upload a new image for it.
 
 {% hint style="info" %}
-Note: No 2 pieces can share the same name.
+Note: No two pieces can share the same name.
 {% endhint %}
 
 ### Piece Movements
