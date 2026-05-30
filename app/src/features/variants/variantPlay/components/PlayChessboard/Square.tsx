@@ -209,12 +209,14 @@ function Square({
 			key={`${file}-${rank}`}
 			className={`${isDark ? "bg-chessboard-square-dark" : "bg-chessboard-square-light"} aspect-square relative`}
 		>
-			<PieceImage
-				imageUrl={imageUrl ?? null}
-				piece={piece}
-				file={file}
-				rank={rank}
-			/>
+			{imageUrl && piece && (
+				<PieceImage
+					imageUrl={imageUrl}
+					piece={piece}
+					file={file}
+					rank={rank}
+				/>
+			)}
 
 			{isOnLeftEdge && (
 				<span
