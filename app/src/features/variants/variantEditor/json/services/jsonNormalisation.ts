@@ -8,7 +8,7 @@ type JSONNormalisationResponse = {
 async function normaliseJSON(json: Record<string, unknown>): Promise<JSONNormalisationResponse | null> {
 	try {
 		const response = await api.post("/json/normalise-json", {
-			simpleJSON: json,
+			simpleJson: json,
 		});
 
 		return {
