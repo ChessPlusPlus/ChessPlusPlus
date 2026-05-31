@@ -11,10 +11,22 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import BoardSetupPage from "@/pages/BoardSetupPage";
 import VariantPlayPage from "@/pages/VariantPlayPage";
 import { PostHogProvider, PostHogPageviewTracker } from "./PostHogProvider";
+import { useEffect } from "react";
+import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
+import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
 
 const queryClient = new QueryClient();
 
 function App() {
+	const { analyticsEnabled } = useAnalyticsPreferencesStore();
+	const { openAnalyticsDisclaimerDialog } = useAnalyticsDisclaimerDialogStore();
+	
+	useEffect(() => {
+		if (analyticsEnabled === null) {
+			openAnalyticsDisclaimerDialog();
+		}
+	}, [analyticsEnabled, openAnalyticsDisclaimerDialog]);
+	
 	return (
 		<PostHogProvider>
 			<QueryClientProvider client={queryClient}>
