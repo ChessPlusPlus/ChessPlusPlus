@@ -37,6 +37,8 @@ function ResetAllDataAlert() {
 	} = useResetAllDataAlertStore();
 
 	function handleResetAllData() {
+		closeResetAllDataAlert();
+
 		resetVariantsData();
 		resetPieceImagesData();
 		resetAnalyticsData();
