@@ -6,7 +6,7 @@ On the right of the screen, you should see this. Click **"Create movement"** to 
 
 <figure><img src="../../../.gitbook/assets/Screenshot 2026-05-30 143847.png" alt=""><figcaption><p>Legs</p></figcaption></figure>
 
-<figure><img src="../../../.gitbook/assets/image (2) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (2) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 Just **choose a name** for your new movement, and that is all.
 
@@ -58,7 +58,7 @@ This is equivalent to a vector in physics, which is a quantity that has both a m
 
 This has **2** parameters: **X and Y**. Each parameter defines movement in the X and Y axis respectively.
 
-<figure><img src="../../../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (5) (1) (1).png" alt=""><figcaption></figcaption></figure>
 
 On the board, the X axis goes from **left to right**, while the Y axis goes from **bottom to top**.
 
@@ -81,7 +81,7 @@ You can either set it as a **positive non-zero integer or unlimited** (meaning i
 Currently, there is only one condition: **Allow only on first move**. When it is checked, it makes it so that the move can only be executed when the piece has not yet moved.
 
 {% hint style="info" %}
-Note: There is already internal functionally to allow other conditions, however it is still in development and will be expanded upon very soon in the next update.
+Note: There is already internal functionally to allow other conditions, however it is still in development and will be expanded upon very soon in a future update.
 {% endhint %}
 
 ***

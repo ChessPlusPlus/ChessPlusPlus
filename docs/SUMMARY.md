@@ -13,6 +13,7 @@
     * [Piece Editor](user-guide/core-features/variant-editor/piece-editor.md)
     * [Movement Editor](user-guide/core-features/variant-editor/movement-editor.md)
     * [Integrating Movements With Pieces](user-guide/core-features/variant-editor/integrating-movements-with-pieces.md)
+    * [Examples And Explanations](user-guide/core-features/variant-editor/examples-and-explanations.md)
     * [Exporting As JSON](user-guide/core-features/variant-editor/exporting-as-json.md)
   * [Importing A Variant](user-guide/core-features/importing-a-variant.md)
   * [Playing A Variant](user-guide/core-features/playing-a-variant.md)

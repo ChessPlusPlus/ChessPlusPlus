@@ -9,7 +9,7 @@ Over on the right, you can click "**Export JSON**" and then input a file name to
 <figure><img src="../../../.gitbook/assets/image (13).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="warning" %}
-Warning: The JSON file of a variant does not contain the piece images. This is a feature planned to be added very soon.
+Warning: The JSON file of a variant does not contain the piece images. This is a feature planned to be added very soon in a future update.
 {% endhint %}
 
 You can edit the JSON to your liking, however that is not recommended as you might accidently cause some unexpected behaviour.

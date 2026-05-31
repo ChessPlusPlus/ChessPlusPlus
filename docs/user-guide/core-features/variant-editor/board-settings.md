@@ -32,7 +32,7 @@ Tip: Set your board width and height first, as changing it at the end may mess u
 
 ***
 
-**Note: The features mentioned below have no real purpose yet, but they will be given one in the near future!**
+**Note: The features mentioned below have no real purpose yet, but they will be given one very soon in a future update!**
 
 ***
 

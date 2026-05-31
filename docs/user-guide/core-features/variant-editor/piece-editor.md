@@ -30,6 +30,6 @@ Note: No two pieces can share the same name.
 
 This is probably the **most important aspect** of every piece. Here, you control how the piece **moves and behaves**.
 
-<figure><img src="../../../.gitbook/assets/image (4) (1).png" alt=""><figcaption><p>Go give this piece some legs</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (4) (1) (1).png" alt=""><figcaption><p>Go give this piece some legs</p></figcaption></figure>
 
 Currently, your piece has no movements! Let's move on to the next page to learn how to create movements for your pieces.

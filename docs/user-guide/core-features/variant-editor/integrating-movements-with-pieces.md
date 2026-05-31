@@ -2,19 +2,19 @@
 
 Now that you have created your first piece and movement, you can now let your **piece use those movements**.
 
-<figure><img src="../../../.gitbook/assets/image.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
 
 Over at the piece editor, click "**Edit moveset**".
 
-<figure><img src="../../../.gitbook/assets/image (1).png" alt=""><figcaption><p>Please do not name your movements like this</p></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (1) (1).png" alt=""><figcaption><p>Please do not name your movements like this</p></figcaption></figure>
 
 Here, you can select or remove any movement you have created for this piece.
 
-<figure><img src="../../../.gitbook/assets/image (3).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (3) (1).png" alt=""><figcaption></figcaption></figure>
 
 You can view which movements your piece have, and they are all numbered.
 
-<figure><img src="../../../.gitbook/assets/image (4).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (4) (1).png" alt=""><figcaption></figcaption></figure>
 
 Over on the board, each number corresponds with each move. They give you an example of where **each move allows the piece to travel to**.
 
@@ -24,7 +24,7 @@ Over on the board, each number corresponds with each move. They give you an exam
 
 Chained moves are where multiple moves are **done together and in sequence**, allowing a piece to possess much more **complex** movements.
 
-<figure><img src="../../../.gitbook/assets/image (5).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../../../.gitbook/assets/image (5) (1).png" alt=""><figcaption></figcaption></figure>
 
 To add a chained move sequence, click "**View**" beside "Chained moves" and then click "**Add sequence**".
 
