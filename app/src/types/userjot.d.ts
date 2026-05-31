@@ -8,6 +8,7 @@ declare global {
 				widget: boolean;
 				theme: string;
 				trigger: string;
+				position: "left" | "right";
 			}) => void;
 		};
 	}

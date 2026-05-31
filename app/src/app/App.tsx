@@ -44,7 +44,8 @@ function App() {
 			window.uj.init(import.meta.env.VITE_USERJOT_PROJECT_ID, {
 				widget: true,
 				theme: "auto",
-				trigger: "custom"
+				trigger: "custom",
+				position: "left"
 			})
 		}
 	}, []);
