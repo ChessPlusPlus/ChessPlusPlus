@@ -14,10 +14,13 @@ function FeedbackCollectionCredentialsForm() {
 	const { nameDraft, updateNameDraft, emailDraft, updateEmailDraft, emailDraftErrors, updateEmailDraftErrors } =
 		useFeedbackCollectionCredentialsFormStore();
 
-	const { updateEmail, updateName } = useFeedbackCollectionCredentialsStore();
+	const { updateEmail, updateName, updateUserId } = useFeedbackCollectionCredentialsStore();
 
 	function handleStartGivingFeedbackButtonClick() {
 		if (emailDraft === "") {
+			const generatedUserId = crypto.randomUUID();
+
+			updateUserId(generatedUserId);
 			updateEmail(emailDraft);
 			updateName(nameDraft);
 
@@ -31,6 +34,9 @@ function FeedbackCollectionCredentialsForm() {
 			return;
 		}
 
+		const generatedUserId = crypto.randomUUID();
+
+		updateUserId(generatedUserId);
 		updateEmail(emailDraft);
 		updateName(nameDraft);
 
