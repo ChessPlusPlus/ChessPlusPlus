@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
+import posthog from "posthog-js";
 
 function AnalyticsDisclaimerDialog() {
 	const {
@@ -16,6 +17,16 @@ function AnalyticsDisclaimerDialog() {
 		openAnalyticsDisclaimerDialog,
 		closeAnalyticsDisclaimerDialog,
 	} = useAnalyticsDisclaimerDialogStore();
+
+	function handleOptIn() {
+		posthog.opt_in_capturing();
+		closeAnalyticsDisclaimerDialog();
+	}
+
+	function handleOptOut() {
+		posthog.opt_out_capturing();
+		closeAnalyticsDisclaimerDialog();
+	}
 
 	return (
 		<AlertDialog
@@ -86,10 +97,10 @@ function AnalyticsDisclaimerDialog() {
 				</Tabs>
 
 				<AlertDialogFooter className="grid grid-cols-2 gap-2">
-					<AlertDialogAction variant="outline">
+					<AlertDialogAction variant="outline" onClick={handleOptOut}>
 						Stay opted out
 					</AlertDialogAction>
-					<AlertDialogAction variant="default">
+					<AlertDialogAction variant="default" onClick={handleOptIn}>
 						Opt in
 					</AlertDialogAction>
 				</AlertDialogFooter>
