@@ -35,7 +35,7 @@ function FeedbackCollectionCredentialsForm() {
 			</Field>
 
 			<Field>
-				<FieldLabel htmlFor="emailInput">Email</FieldLabel>
+				<FieldLabel htmlFor="emailInput">Email (optional)</FieldLabel>
 				<Input
 					id="emailInput"
 					placeholder="Enter your email"
