@@ -38,6 +38,7 @@ const useFeedbackCollectionCredentialsStore = create<FeedbackCollectionCredentia
 		partialize: (state) => ({
 			email: state.email,
 			name: state.name,
+			userId: state.userId,
 		}),
 	})
 )
