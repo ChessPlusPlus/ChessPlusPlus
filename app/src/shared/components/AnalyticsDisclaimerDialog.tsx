@@ -19,7 +19,8 @@ function AnalyticsDisclaimerDialog() {
 		closeAnalyticsDisclaimerDialog,
 	} = useAnalyticsDisclaimerDialogStore();
 
-	const { enableAnalytics, disableAnalytics } = useAnalyticsPreferencesStore();
+	const { enableAnalytics, disableAnalytics } =
+		useAnalyticsPreferencesStore();
 
 	function handleOptIn() {
 		posthog.opt_in_capturing();
@@ -47,27 +48,32 @@ function AnalyticsDisclaimerDialog() {
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Hi there!</AlertDialogTitle>
-					<AlertDialogDescription>
-						<span>
-							Would you like to help us improve Chess++ by
-							allowing us to collect anonymous usage data?
-							You may change your decision at any time
-						</span>
+					<AlertDialogDescription asChild>
+						<div className="text-sm text-muted-foreground">
+							<span>
+								Would you like to help us improve Chess++ by
+								allowing us to collect anonymous usage data? You
+								may change your decision at any time
+							</span>
 
-						<br />
-						<br />
+							<br />
+							<br />
 
-						<span>The data will be used for:</span>
-						<ul className="list-disc list-outside pl-5">
-							<li>
-								Understanding feature usage patterns to guide
-								product improvements
-							</li>
-							<li>
-								Improving discoverability of underused features
-							</li>
-							<li>Identifying potential performance issues</li>
-						</ul>
+							<span>The data will be used for:</span>
+							<ul className="list-disc list-outside pl-5">
+								<li>
+									Understanding feature usage patterns to
+									guide product improvements
+								</li>
+								<li>
+									Improving discoverability of underused
+									features
+								</li>
+								<li>
+									Identifying potential performance issues
+								</li>
+							</ul>
+						</div>
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 
