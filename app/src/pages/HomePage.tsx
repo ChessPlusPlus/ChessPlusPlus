@@ -30,6 +30,7 @@ import useFeedbackCollectionCredentialsStore from "@/features/feedbackCollection
 import useFeedbackCollectionCredentialsFormStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentialsForm";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import FeedbackCollectionCredentialsForm from "@/features/feedbackCollection/components/FeedbackCollectionCredentialsForm";
+import { useEffect } from "react";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
@@ -43,7 +44,7 @@ function HomePage() {
 	const { openImportJSONDialog } = useImportJSONDialogStore();
 	const { openSettingsDialog } = useSettingsDialogStore();
 
-	const { name, email } = useFeedbackCollectionCredentialsStore();
+	const { name, email, userId } = useFeedbackCollectionCredentialsStore();
 	const {
 		isFeedbackCollectionCredentialsFormOpen,
 		openFeedbackCollectionCredentialsForm,
@@ -52,6 +53,18 @@ function HomePage() {
 		updateEmailDraft,
 		clearEmailDraftErrors,
 	} = useFeedbackCollectionCredentialsFormStore();
+
+	useEffect(() => {
+		if (userId === null) {
+			return;
+		}
+
+		window.uj?.identify({
+			id: userId,
+			email: email ?? undefined,
+			name: name ?? undefined,
+		})
+	}, [name, email, userId]);
 
 	function handleGiveFeedbackButtonClick() {
 		if (name === null || email === null) {
