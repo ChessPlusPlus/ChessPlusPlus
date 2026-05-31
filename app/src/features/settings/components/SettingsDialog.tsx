@@ -41,11 +41,6 @@ function SettingsDialog() {
 		disableAnalytics();
 	}
 
-	function handleResetAllDataClick() {
-		closeSettingsDialog();
-		openResetAllDataAlert();
-	}
-
 	return (
 		<Dialog
 			open={isSettingsDialogOpen}
@@ -111,7 +106,7 @@ function SettingsDialog() {
 
 						<Button
 							variant="destructive"
-							onClick={handleResetAllDataClick}
+							onClick={openResetAllDataAlert}
 						>
 							Reset all data
 						</Button>
