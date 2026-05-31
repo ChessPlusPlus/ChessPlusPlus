@@ -7,7 +7,6 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
 
 function AnalyticsDisclaimerDialog() {
 	return (
@@ -21,11 +20,11 @@ function AnalyticsDisclaimerDialog() {
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogAction>
-						<Button>Stay opted out</Button>
+					<AlertDialogAction variant="outline">
+						Stay opted out
 					</AlertDialogAction>
-					<AlertDialogAction>
-						<Button>Opt in</Button>
+					<AlertDialogAction variant="default">
+						Opt in
 					</AlertDialogAction>
 				</AlertDialogFooter>
 			</AlertDialogContent>
