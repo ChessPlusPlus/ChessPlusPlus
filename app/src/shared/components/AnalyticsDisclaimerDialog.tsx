@@ -37,7 +37,7 @@ function AnalyticsDisclaimerDialog() {
 						to collect anonymous usage data?
 					</AlertDialogDescription>
 				</AlertDialogHeader>
-				<AlertDialogFooter>
+				<AlertDialogFooter className="grid grid-cols-2 gap-2">
 					<AlertDialogAction variant="outline">
 						Stay opted out
 					</AlertDialogAction>
