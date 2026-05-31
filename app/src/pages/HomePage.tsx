@@ -62,7 +62,7 @@ function HomePage() {
 		window.uj?.identify({
 			id: userId,
 			email: email ?? undefined,
-			name: name ?? undefined,
+			firstName: name ?? undefined,
 		})
 	}, [name, email, userId]);
 
