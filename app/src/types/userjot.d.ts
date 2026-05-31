@@ -3,7 +3,7 @@ export {};
 type UserJotIdentifyOptions = {
 	id: string;
 	email?: string;
-	name?: string;	
+	firstName?: string;	
 }
 
 declare global {
