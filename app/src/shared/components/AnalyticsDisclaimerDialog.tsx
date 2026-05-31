@@ -7,10 +7,28 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
 
 function AnalyticsDisclaimerDialog() {
+	const {
+		isAnalyticsDisclaimerDialogOpen,
+		openAnalyticsDisclaimerDialog,
+		closeAnalyticsDisclaimerDialog,
+	} = useAnalyticsDisclaimerDialogStore();
+
 	return (
-		<AlertDialog>
+		<AlertDialog
+			open={isAnalyticsDisclaimerDialogOpen}
+			onOpenChange={
+				(open) => {
+					if (open) {
+						openAnalyticsDisclaimerDialog();
+					} else {
+						closeAnalyticsDisclaimerDialog();
+					}
+				}
+			}
+		>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Hi there!</AlertDialogTitle>
