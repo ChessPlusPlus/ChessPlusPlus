@@ -2,6 +2,10 @@ import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 type FeedbackCollectionCredentialsStore = {
+	userId: string | null;
+	updateUserId: (userId: string) => void;
+	clearUserId: () => void;
+
 	email: string | null;
 	updateEmail: (email: string) => void;
 	clearEmail: () => void;
@@ -15,6 +19,10 @@ type FeedbackCollectionCredentialsStore = {
 
 const useFeedbackCollectionCredentialsStore = create<FeedbackCollectionCredentialsStore>()(
 	persist((set, _get, store) => ({
+		userId: null,
+		updateUserId: (userId) => set({ userId }),
+		clearUserId: () => set({ userId: null }),
+
 		email: null,
 		updateEmail: (email) => set({ email }),
 		clearEmail: () => set({ email: null }),
