@@ -50,6 +50,7 @@ function HomePage() {
 		closeFeedbackCollectionCredentialsForm,
 		updateNameDraft,
 		updateEmailDraft,
+		clearEmailDraftErrors,
 	} = useFeedbackCollectionCredentialsFormStore();
 
 	function handleGiveFeedbackButtonClick() {
@@ -153,6 +154,7 @@ function HomePage() {
 							closeFeedbackCollectionCredentialsForm();
 							updateNameDraft("");
 							updateEmailDraft("");
+							clearEmailDraftErrors();
 						}
 					}}
 				>
