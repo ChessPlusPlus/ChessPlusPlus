@@ -118,7 +118,7 @@ function HomePage() {
 			</div>
 
 			<div className="fixed left-2 bottom-2">
-				<Button variant="outline">
+				<Button variant="ghost" size="icon">
 					<MessagePencilIcon className="size-6" />
 				</Button>
 			</div>
