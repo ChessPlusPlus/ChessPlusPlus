@@ -43,8 +43,8 @@ function AnalyticsDisclaimerDialog() {
 						<span>The data will be used for:</span>
 						<ul className="list-disc list-outside pl-5">
 							<li>
-								Understanding which features are used most to
-								guide product improvements
+								Understanding feature usage patterns to guide
+								product improvements
 							</li>
 							<li>
 								Improving discoverability of underused features
