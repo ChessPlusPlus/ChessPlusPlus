@@ -38,6 +38,11 @@ function HomePage() {
 		useVariantPlaySelectionDialogStore();
 	const { openImportJSONDialog } = useImportJSONDialogStore();
 	const { openSettingsDialog } = useSettingsDialogStore();
+
+	function handleGiveFeedbackButtonClick() {
+		window.uj?.showWidget();
+	}
+
 	return (
 		<>
 			<div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-linear-to-b from-white to-purple-400">
@@ -118,7 +123,7 @@ function HomePage() {
 			</div>
 
 			<div className="fixed left-2 bottom-2">
-				<Button variant="ghost" size="icon">
+				<Button onClick={handleGiveFeedbackButtonClick} variant="ghost" size="icon">
 					<MessagePencilIcon className="size-6" />
 				</Button>
 			</div>
