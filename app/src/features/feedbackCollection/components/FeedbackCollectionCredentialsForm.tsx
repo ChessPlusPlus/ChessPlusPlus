@@ -6,13 +6,33 @@ import {
 	PopoverDescription,
 	PopoverTitle,
 } from "@/components/ui/popover";
+import useFeedbackCollectionCredentialsStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentials";
 import useFeedbackCollectionCredentialsFormStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentialsForm";
+import validator from "validator";
 
 function FeedbackCollectionCredentialsForm() {
 	const { nameDraft, updateNameDraft, emailDraft, updateEmailDraft } =
 		useFeedbackCollectionCredentialsFormStore();
 
+	const { updateEmail, updateName } = useFeedbackCollectionCredentialsStore();
+
 	function handleStartGivingFeedbackButtonClick() {
+		if (emailDraft === "") {
+			updateEmail(emailDraft);
+			updateName(nameDraft);
+
+			window.uj?.showWidget();
+			return;
+		}
+
+		const isValidEmail = validator.isEmail(emailDraft);
+		if (!isValidEmail) {
+			return;
+		}
+
+		updateEmail(emailDraft);
+		updateName(nameDraft);
+
 		window.uj?.showWidget();
 	}
 
