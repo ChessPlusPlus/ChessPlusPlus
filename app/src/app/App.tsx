@@ -11,10 +11,34 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import BoardSetupPage from "@/pages/BoardSetupPage";
 import VariantPlayPage from "@/pages/VariantPlayPage";
 import { PostHogProvider, PostHogPageviewTracker } from "./PostHogProvider";
+import { useEffect } from "react";
+import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
+import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
+import AnalyticsDisclaimerDialog from "@/shared/components/AnalyticsDisclaimerDialog";
+import posthog from "posthog-js";
 
 const queryClient = new QueryClient();
 
 function App() {
+	const { analyticsEnabled } = useAnalyticsPreferencesStore();
+	const { openAnalyticsDisclaimerDialog } = useAnalyticsDisclaimerDialogStore();
+	
+	useEffect(() => {
+		if (analyticsEnabled === null) {
+			openAnalyticsDisclaimerDialog();
+			return;
+		}
+
+		if (analyticsEnabled === false) {
+			posthog.opt_out_capturing();
+			return;
+		}
+
+		if (analyticsEnabled === true) {
+			posthog.opt_in_capturing();
+		}
+	}, [analyticsEnabled, openAnalyticsDisclaimerDialog]);
+	
 	return (
 		<PostHogProvider>
 			<QueryClientProvider client={queryClient}>
@@ -35,6 +59,7 @@ function App() {
 								element={<JSONValidatorTestPage />}
 							/>
 						</Routes>
+						<AnalyticsDisclaimerDialog />
 					</BrowserRouter>
 				</TooltipProvider>
 			</QueryClientProvider>

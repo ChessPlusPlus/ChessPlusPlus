@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
 	api_host: import.meta.env.VITE_POSTHOG_HOST,
 	person_profiles: "identified_only",
+	opt_out_capturing_by_default: true,
 });
 
 function PostHogPageviewTracker() {
