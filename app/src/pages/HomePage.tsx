@@ -48,6 +48,8 @@ function HomePage() {
 		isFeedbackCollectionCredentialsFormOpen,
 		openFeedbackCollectionCredentialsForm,
 		closeFeedbackCollectionCredentialsForm,
+		updateNameDraft,
+		updateEmailDraft,
 	} = useFeedbackCollectionCredentialsFormStore();
 
 	function handleGiveFeedbackButtonClick() {
@@ -149,6 +151,8 @@ function HomePage() {
 							openFeedbackCollectionCredentialsForm();
 						} else {
 							closeFeedbackCollectionCredentialsForm();
+							updateNameDraft("");
+							updateEmailDraft("");
 						}
 					}}
 				>
