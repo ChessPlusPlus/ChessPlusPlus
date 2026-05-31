@@ -14,6 +14,7 @@ import { PostHogProvider, PostHogPageviewTracker } from "./PostHogProvider";
 import { useEffect } from "react";
 import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
 import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
+import AnalyticsDisclaimerDialog from "@/shared/components/AnalyticsDisclaimerDialog";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ function App() {
 								element={<JSONValidatorTestPage />}
 							/>
 						</Routes>
+						<AnalyticsDisclaimerDialog />
 					</BrowserRouter>
 				</TooltipProvider>
 			</QueryClientProvider>
