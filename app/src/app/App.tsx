@@ -38,6 +38,17 @@ function App() {
 			posthog.opt_in_capturing();
 		}
 	}, [analyticsEnabled, openAnalyticsDisclaimerDialog]);
+
+	useEffect(() => {
+		if (window.uj) {
+			window.uj.init(import.meta.env.VITE_USERJOT_PROJECT_ID, {
+				widget: true,
+				theme: "auto",
+				trigger: "custom",
+				position: "left"
+			})
+		}
+	}, []);
 	
 	return (
 		<PostHogProvider>

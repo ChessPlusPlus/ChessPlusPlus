@@ -8,6 +8,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import useFeedbackCollectionCredentialsStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentials";
 import useResetAllDataAlertStore from "@/features/settings/stores/resetAllDataAlert";
 import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
@@ -31,6 +32,7 @@ function ResetAllDataAlert() {
 	const { resetVariantDraftState } = useVariantDraftStore();
 	const { resetSidebarState } = useSidebarStore();
 	const { closeSettingsDialog } = useSettingsDialogStore();
+	const { resetFeedbackCollectionCredentials } = useFeedbackCollectionCredentialsStore();
 
 	const {
 		isResetAllDataAlertOpen,
@@ -52,6 +54,9 @@ function ResetAllDataAlert() {
 		resetPiecesEditorSheetState();
 		resetVariantDraftState();
 		resetSidebarState();
+		resetFeedbackCollectionCredentials();
+
+		window.uj?.identify(null);
 	}
 
 	return (

@@ -25,6 +25,12 @@ import {
 import SettingsDialog from "@/features/settings/components/SettingsDialog";
 import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
 import ResetAllDataAlert from "@/features/settings/components/ResetAllDataAlert";
+import MessagePencilIcon from "@/shared/icons/MessagePencilIcon";
+import useFeedbackCollectionCredentialsStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentials";
+import useFeedbackCollectionCredentialsFormStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentialsForm";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import FeedbackCollectionCredentialsForm from "@/features/feedbackCollection/components/FeedbackCollectionCredentialsForm";
+import { useEffect } from "react";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
@@ -37,6 +43,38 @@ function HomePage() {
 		useVariantPlaySelectionDialogStore();
 	const { openImportJSONDialog } = useImportJSONDialogStore();
 	const { openSettingsDialog } = useSettingsDialogStore();
+
+	const { name, email, userId } = useFeedbackCollectionCredentialsStore();
+	const {
+		isFeedbackCollectionCredentialsFormOpen,
+		openFeedbackCollectionCredentialsForm,
+		closeFeedbackCollectionCredentialsForm,
+		updateNameDraft,
+		updateEmailDraft,
+		clearEmailDraftErrors,
+	} = useFeedbackCollectionCredentialsFormStore();
+
+	useEffect(() => {
+		if (userId === null) {
+			return;
+		}
+
+		window.uj?.identify({
+			id: userId,
+			email: email || undefined,
+			firstName: name || undefined,
+		})
+	}, [name, email, userId]);
+
+	function handleGiveFeedbackButtonClick() {
+		if (name === null || email === null || userId === null) {
+			openFeedbackCollectionCredentialsForm();
+			return;
+		}
+
+		window.uj?.showWidget();
+	}
+
 	return (
 		<>
 			<div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-linear-to-b from-white to-purple-400">
@@ -74,7 +112,10 @@ function HomePage() {
 							onClick={openSettingsDialog}
 							className="p-1 hover:bg-gray-100 rounded-md"
 						>
-							<IconSettings className="size-6" strokeWidth={1.5} />
+							<IconSettings
+								className="size-6"
+								strokeWidth={1.5}
+							/>
 						</Button>
 					</TooltipTrigger>
 
@@ -114,6 +155,36 @@ function HomePage() {
 						Help (documentation)
 					</TooltipContent>
 				</Tooltip>
+			</div>
+
+			<div className="fixed left-2 bottom-2">
+				<Popover
+					open={isFeedbackCollectionCredentialsFormOpen}
+					onOpenChange={(open) => {
+						if (open) {
+							openFeedbackCollectionCredentialsForm();
+						} else {
+							closeFeedbackCollectionCredentialsForm();
+							updateNameDraft("");
+							updateEmailDraft("");
+							clearEmailDraftErrors();
+						}
+					}}
+				>
+					<PopoverTrigger onClick={(e) => {
+						e.preventDefault();
+						handleGiveFeedbackButtonClick();
+					}} asChild>
+						<Button
+							variant="ghost"
+							size="icon"
+						>
+							<MessagePencilIcon className="size-6" />
+						</Button>
+					</PopoverTrigger>
+
+					<FeedbackCollectionCredentialsForm />
+				</Popover>
 			</div>
 
 			<CreateVariantDialog />
