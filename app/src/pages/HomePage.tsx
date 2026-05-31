@@ -25,6 +25,7 @@ import {
 import SettingsDialog from "@/features/settings/components/SettingsDialog";
 import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
 import ResetAllDataAlert from "@/features/settings/components/ResetAllDataAlert";
+import MessagePencilIcon from "@/shared/icons/MessagePencilIcon";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
@@ -114,6 +115,12 @@ function HomePage() {
 						Help (documentation)
 					</TooltipContent>
 				</Tooltip>
+			</div>
+
+			<div className="fixed left-2 bottom-2">
+				<Button variant="outline">
+					<MessagePencilIcon className="size-6" />
+				</Button>
 			</div>
 
 			<CreateVariantDialog />
