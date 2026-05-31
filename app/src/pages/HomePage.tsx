@@ -26,6 +26,10 @@ import SettingsDialog from "@/features/settings/components/SettingsDialog";
 import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
 import ResetAllDataAlert from "@/features/settings/components/ResetAllDataAlert";
 import MessagePencilIcon from "@/shared/icons/MessagePencilIcon";
+import useFeedbackCollectionCredentialsStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentials";
+import useFeedbackCollectionCredentialsFormStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentialsForm";
+import { Popover, PopoverTrigger } from "@/components/ui/popover";
+import FeedbackCollectionCredentialsForm from "@/features/feedbackCollection/components/FeedbackCollectionCredentialsForm";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
@@ -39,7 +43,19 @@ function HomePage() {
 	const { openImportJSONDialog } = useImportJSONDialogStore();
 	const { openSettingsDialog } = useSettingsDialogStore();
 
+	const { name, email } = useFeedbackCollectionCredentialsStore();
+	const {
+		isFeedbackCollectionCredentialsFormOpen,
+		openFeedbackCollectionCredentialsForm,
+		closeFeedbackCollectionCredentialsForm,
+	} = useFeedbackCollectionCredentialsFormStore();
+
 	function handleGiveFeedbackButtonClick() {
+		if (name === null || email === null) {
+			openFeedbackCollectionCredentialsForm();
+			return;
+		}
+
 		window.uj?.showWidget();
 	}
 
@@ -80,7 +96,10 @@ function HomePage() {
 							onClick={openSettingsDialog}
 							className="p-1 hover:bg-gray-100 rounded-md"
 						>
-							<IconSettings className="size-6" strokeWidth={1.5} />
+							<IconSettings
+								className="size-6"
+								strokeWidth={1.5}
+							/>
 						</Button>
 					</TooltipTrigger>
 
@@ -123,9 +142,30 @@ function HomePage() {
 			</div>
 
 			<div className="fixed left-2 bottom-2">
-				<Button onClick={handleGiveFeedbackButtonClick} variant="ghost" size="icon">
-					<MessagePencilIcon className="size-6" />
-				</Button>
+				<Popover
+					open={isFeedbackCollectionCredentialsFormOpen}
+					onOpenChange={(open) => {
+						if (open) {
+							openFeedbackCollectionCredentialsForm();
+						} else {
+							closeFeedbackCollectionCredentialsForm();
+						}
+					}}
+				>
+					<PopoverTrigger onClick={(e) => {
+						e.preventDefault();
+						handleGiveFeedbackButtonClick();
+					}} asChild>
+						<Button
+							variant="ghost"
+							size="icon"
+						>
+							<MessagePencilIcon className="size-6" />
+						</Button>
+					</PopoverTrigger>
+
+					<FeedbackCollectionCredentialsForm />
+				</Popover>
 			</div>
 
 			<CreateVariantDialog />
