@@ -14,16 +14,9 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
-import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
-import useVariantsStore from "@/features/variants/common/stores/variantsStore";
-import useMovementsEditorStore from "@/features/variants/variantEditor/movementsEditor/stores/movementsEditor";
 import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
 import posthog from "posthog-js";
-import usePiecesEditorStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditor";
-import useMovementsEditorSheetStore from "@/features/variants/variantEditor/movementsEditor/stores/movementsEditorSheet";
-import usePiecesEditorSheetStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditorSheet";
-import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
-import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
+import useResetAllDataAlertStore from "@/features/settings/stores/resetAllDataAlert";
 
 function SettingsDialog() {
 	const { isSettingsDialogOpen, openSettingsDialog, closeSettingsDialog } =
@@ -33,18 +26,9 @@ function SettingsDialog() {
 		analyticsEnabled,
 		enableAnalytics,
 		disableAnalytics,
-		resetAnalyticsData,
 	} = useAnalyticsPreferencesStore();
 
-	const { resetMovementsEditorState } = useMovementsEditorStore();
-	const { resetMovementsEditorSheetState } = useMovementsEditorSheetStore();
-	const { resetPiecesEditorState } = usePiecesEditorStore();
-	const { resetPiecesEditorSheetState } = usePiecesEditorSheetStore();
-	const { resetVariantDraftState } = useVariantDraftStore();
-	const { resetSidebarState } = useSidebarStore();
-
-	const { resetVariantsData } = useVariantsStore();
-	const { resetPieceImagesData } = usePieceImagesStore();
+	const { openResetAllDataAlert } = useResetAllDataAlertStore();
 
 	function handleAnalyticsChange(checked: boolean) {
 		if (checked) {
@@ -57,17 +41,9 @@ function SettingsDialog() {
 		disableAnalytics();
 	}
 
-	function handleResetAllData() {
-		resetVariantsData();
-		resetPieceImagesData();
-		resetAnalyticsData();
-
-		resetMovementsEditorState();
-		resetMovementsEditorSheetState();
-		resetPiecesEditorState();
-		resetPiecesEditorSheetState();
-		resetVariantDraftState();
-		resetSidebarState();
+	function handleResetAllDataClick() {
+		closeSettingsDialog();
+		openResetAllDataAlert();
 	}
 
 	return (
@@ -135,7 +111,7 @@ function SettingsDialog() {
 
 						<Button
 							variant="destructive"
-							onClick={handleResetAllData}
+							onClick={handleResetAllDataClick}
 						>
 							Reset all data
 						</Button>
