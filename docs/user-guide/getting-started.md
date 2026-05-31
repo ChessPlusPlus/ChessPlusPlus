@@ -4,4 +4,4 @@ Click [here](https://chessplusplus.vercel.app/) to get to Chess++.
 
 You should be seeing this:
 
-<figure><img src="../.gitbook/assets/image (17).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (21).png" alt=""><figcaption></figcaption></figure>

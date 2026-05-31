@@ -21,6 +21,12 @@ Please note that there are some things that we are unable to help you with, whic
 
 ## How to help **us (yes us)**
 
-Go to our feedback page [here](https://chessplusplus.userjot.com/) to help us by providing useful feedback such as feature requests and bug reports! You can also give us queries on things that you feel are unclear, whether it's for the website itself or our other features such as this docs.
+Click on the feedback button on the bottom right and provide your name and email if you feel like it.
 
-You can also find our Github repository [here](https://github.com/ChessPlusPlus/ChessPlusPlus?tab=readme-ov-file).
+<figure><img src="../.gitbook/assets/image (22).png" alt=""><figcaption></figcaption></figure>
+
+This would to help us by providing useful feedback such as feature requests and bug reports! You can also give us queries on things that you feel are unclear, whether it's for the website itself or our other features such as this docs.
+
+<figure><img src="../.gitbook/assets/image (23).png" alt=""><figcaption></figcaption></figure>
+
+You can also find the main feedback page [here](https://chessplusplus.userjot.com/).
