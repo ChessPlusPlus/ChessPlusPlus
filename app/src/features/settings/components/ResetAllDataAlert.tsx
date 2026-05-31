@@ -9,6 +9,7 @@ import {
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import useResetAllDataAlertStore from "@/features/settings/stores/resetAllDataAlert";
+import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
@@ -29,6 +30,7 @@ function ResetAllDataAlert() {
 	const { resetPiecesEditorSheetState } = usePiecesEditorSheetStore();
 	const { resetVariantDraftState } = useVariantDraftStore();
 	const { resetSidebarState } = useSidebarStore();
+	const { closeSettingsDialog } = useSettingsDialogStore();
 
 	const {
 		isResetAllDataAlertOpen,
@@ -38,6 +40,7 @@ function ResetAllDataAlert() {
 
 	function handleResetAllData() {
 		closeResetAllDataAlert();
+		closeSettingsDialog();
 
 		resetVariantsData();
 		resetPieceImagesData();
