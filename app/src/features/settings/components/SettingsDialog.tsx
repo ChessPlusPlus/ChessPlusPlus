@@ -13,10 +13,26 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
+import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
+import posthog from "posthog-js";
 
 function SettingsDialog() {
 	const { isSettingsDialogOpen, openSettingsDialog, closeSettingsDialog } =
 		useSettingsDialogStore();
+
+	const { analyticsEnabled, enableAnalytics, disableAnalytics } =
+		useAnalyticsPreferencesStore();
+
+	function handleAnalyticsChange(checked: boolean) {
+		if (checked) {
+			enableAnalytics();
+			posthog.opt_in_capturing();
+			return;
+		}
+
+		posthog.opt_out_capturing();
+		disableAnalytics();
+	}
 
 	return (
 		<Dialog
@@ -42,18 +58,27 @@ function SettingsDialog() {
 						</TabsTrigger>
 					</TabsList>
 
-					<TabsContent value="analytics" className="flex flex-row gap-4">
+					<TabsContent
+						value="analytics"
+						className="flex flex-row gap-4"
+					>
 						<Field orientation="horizontal">
 							<FieldContent>
-								<FieldLabel htmlFor="allow-analytics">Allow analytics</FieldLabel>
+								<FieldLabel htmlFor="allow-analytics">
+									Allow analytics
+								</FieldLabel>
 								<FieldDescription>
-									Allow us to collect anonymous usage
-									data to help us improve Chess++.
+									Allow us to collect anonymous usage data to
+									help us improve Chess++.
 								</FieldDescription>
 							</FieldContent>
 						</Field>
 
-						<Switch id="allow-analytics" />
+						<Switch
+							id="allow-analytics"
+							checked={analyticsEnabled === true}
+							onCheckedChange={handleAnalyticsChange}
+						/>
 					</TabsContent>
 				</Tabs>
 			</DialogContent>
