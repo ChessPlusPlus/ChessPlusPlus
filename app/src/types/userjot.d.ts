@@ -16,7 +16,7 @@ declare global {
 				trigger: string;
 				position: "left" | "right";
 			}) => void;
-			identify: (options: UserJotIdentifyOptions) => void;
+			identify: (options: UserJotIdentifyOptions | null) => void;
 		};
 	}
 }
