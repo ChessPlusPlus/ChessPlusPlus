@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/tooltip";
 import SettingsDialog from "@/features/settings/components/SettingsDialog";
 import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
+import ResetAllDataAlert from "@/features/settings/stores/resetAllDataAlert";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
@@ -120,6 +121,7 @@ function HomePage() {
 			<VariantPlaySelectionDialog />
 			<ImportJSONDialog />
 			<SettingsDialog />
+			<ResetAllDataAlert />
 		</>
 	);
 }
