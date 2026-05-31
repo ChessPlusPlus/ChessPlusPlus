@@ -10,6 +10,10 @@ type FeedbackCollectionCredentialsFormStore = {
 
 	emailDraft: string;
 	updateEmailDraft: (emailDraft: string) => void;
+
+	emailDraftErrors: string[];
+	updateEmailDraftErrors: (emailDraftErrors: string[]) => void;
+	clearEmailDraftErrors: () => void;
 }
 
 const useFeedbackCollectionCredentialsFormStore = create<FeedbackCollectionCredentialsFormStore>((set) => ({
@@ -22,6 +26,10 @@ const useFeedbackCollectionCredentialsFormStore = create<FeedbackCollectionCrede
 
 	emailDraft: "",
 	updateEmailDraft: (emailDraft) => set({ emailDraft }),
+
+	emailDraftErrors: [],
+	updateEmailDraftErrors: (emailDraftErrors) => set({ emailDraftErrors }),
+	clearEmailDraftErrors: () => set({ emailDraftErrors: [] }),
 }))
 
 export default useFeedbackCollectionCredentialsFormStore;
