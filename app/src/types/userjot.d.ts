@@ -1,5 +1,11 @@
 export {};
 
+type UserJotIdentifyOptions = {
+	id: string;
+	email?: string;
+	name?: string;	
+}
+
 declare global {
 	interface Window {
 		uj?: {
@@ -10,6 +16,7 @@ declare global {
 				trigger: string;
 				position: "left" | "right";
 			}) => void;
+			identify: (options: UserJotIdentifyOptions) => void;
 		};
 	}
 }
