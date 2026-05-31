@@ -10,6 +10,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
 import posthog from "posthog-js";
+import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
 
 function AnalyticsDisclaimerDialog() {
 	const {
@@ -18,13 +19,17 @@ function AnalyticsDisclaimerDialog() {
 		closeAnalyticsDisclaimerDialog,
 	} = useAnalyticsDisclaimerDialogStore();
 
+	const { enableAnalytics, disableAnalytics } = useAnalyticsPreferencesStore();
+
 	function handleOptIn() {
 		posthog.opt_in_capturing();
+		enableAnalytics();
 		closeAnalyticsDisclaimerDialog();
 	}
 
 	function handleOptOut() {
 		posthog.opt_out_capturing();
+		disableAnalytics();
 		closeAnalyticsDisclaimerDialog();
 	}
 
