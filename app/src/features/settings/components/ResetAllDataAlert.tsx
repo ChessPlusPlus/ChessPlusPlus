@@ -55,6 +55,8 @@ function ResetAllDataAlert() {
 		resetVariantDraftState();
 		resetSidebarState();
 		resetFeedbackCollectionCredentials();
+
+		window.uj?.identify(null);
 	}
 
 	return (
