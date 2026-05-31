@@ -67,7 +67,7 @@ function HomePage() {
 	}, [name, email, userId]);
 
 	function handleGiveFeedbackButtonClick() {
-		if (name === null || email === null) {
+		if (name === null || email === null || userId === null) {
 			openFeedbackCollectionCredentialsForm();
 			return;
 		}
