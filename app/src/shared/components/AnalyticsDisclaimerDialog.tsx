@@ -51,6 +51,7 @@ function AnalyticsDisclaimerDialog() {
 						<span>
 							Would you like to help us improve Chess++ by
 							allowing us to collect anonymous usage data?
+							You may change your decision at any time
 						</span>
 
 						<br />
