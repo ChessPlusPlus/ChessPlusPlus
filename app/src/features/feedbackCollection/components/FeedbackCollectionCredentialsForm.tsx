@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
 	PopoverContent,
@@ -11,7 +11,7 @@ import useFeedbackCollectionCredentialsFormStore from "@/features/feedbackCollec
 import validator from "validator";
 
 function FeedbackCollectionCredentialsForm() {
-	const { nameDraft, updateNameDraft, emailDraft, updateEmailDraft } =
+	const { nameDraft, updateNameDraft, emailDraft, updateEmailDraft, emailDraftErrors, updateEmailDraftErrors } =
 		useFeedbackCollectionCredentialsFormStore();
 
 	const { updateEmail, updateName } = useFeedbackCollectionCredentialsStore();
@@ -27,6 +27,7 @@ function FeedbackCollectionCredentialsForm() {
 
 		const isValidEmail = validator.isEmail(emailDraft);
 		if (!isValidEmail) {
+			updateEmailDraftErrors(["Invalid email"]);
 			return;
 		}
 
@@ -62,6 +63,7 @@ function FeedbackCollectionCredentialsForm() {
 					value={emailDraft}
 					onChange={(e) => updateEmailDraft(e.target.value)}
 				/>
+				<FieldError errors={emailDraftErrors.map((error) => ({ message: error }))} />
 			</Field>
 
 			<Button
