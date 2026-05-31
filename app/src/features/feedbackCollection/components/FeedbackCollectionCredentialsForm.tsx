@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,6 +11,10 @@ import useFeedbackCollectionCredentialsStore from "@/features/feedbackCollection
 function FeedbackCollectionCredentialsForm() {
 	const { name, updateName, email, updateEmail } =
 		useFeedbackCollectionCredentialsStore();
+
+	function handleStartGivingFeedbackButtonClick() {
+		window.uj?.showWidget();
+	}
 
 	return (
 		<PopoverContent side="right" sideOffset={8} align="end">
@@ -38,6 +43,13 @@ function FeedbackCollectionCredentialsForm() {
 					onChange={(e) => updateEmail(e.target.value)}
 				/>
 			</Field>
+
+			<Button
+				className="w-full"
+				onClick={handleStartGivingFeedbackButtonClick}
+			>
+				Start giving feedback
+			</Button>
 		</PopoverContent>
 	);
 }
