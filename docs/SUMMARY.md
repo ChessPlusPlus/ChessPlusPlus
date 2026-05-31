@@ -19,3 +19,5 @@
   * [Playing A Variant](user-guide/core-features/playing-a-variant.md)
 * [Help](user-guide/help.md)
 * [Notes](user-guide/notes.md)
+* [Our AI Policy](user-guide/our-ai-policy.md)
+* [Thanks](user-guide/thanks.md)
