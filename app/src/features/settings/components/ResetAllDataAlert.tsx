@@ -8,6 +8,7 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import useResetAllDataAlertStore from "@/features/settings/stores/resetAllDataAlert";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import useSidebarStore from "@/features/variants/variantEditor/common/stores/sidebar";
@@ -29,6 +30,12 @@ function ResetAllDataAlert() {
 	const { resetVariantDraftState } = useVariantDraftStore();
 	const { resetSidebarState } = useSidebarStore();
 
+	const {
+		isResetAllDataAlertOpen,
+		openResetAllDataAlert,
+		closeResetAllDataAlert,
+	} = useResetAllDataAlertStore();
+
 	function handleResetAllData() {
 		resetVariantsData();
 		resetPieceImagesData();
@@ -43,7 +50,16 @@ function ResetAllDataAlert() {
 	}
 
 	return (
-		<AlertDialog>
+		<AlertDialog
+			open={isResetAllDataAlertOpen}
+			onOpenChange={(open) => {
+				if (open) {
+					openResetAllDataAlert();
+				} else {
+					closeResetAllDataAlert();
+				}
+			}}
+		>
 			<AlertDialogContent>
 				<AlertDialogHeader>
 					<AlertDialogTitle>Reset all data?</AlertDialogTitle>
@@ -58,7 +74,10 @@ function ResetAllDataAlert() {
 					<AlertDialogCancel className="px-4">
 						Cancel
 					</AlertDialogCancel>
-					<AlertDialogAction className="px-4" onClick={handleResetAllData}>
+					<AlertDialogAction
+						className="px-4"
+						onClick={handleResetAllData}
+					>
 						Reset all data
 					</AlertDialogAction>
 				</AlertDialogFooter>
