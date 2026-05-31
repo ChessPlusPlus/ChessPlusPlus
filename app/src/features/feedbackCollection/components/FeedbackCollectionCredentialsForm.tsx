@@ -12,7 +12,7 @@ function FeedbackCollectionCredentialsForm() {
 		useFeedbackCollectionCredentialsStore();
 
 	return (
-		<PopoverContent>
+		<PopoverContent side="right" sideOffset={8} align="end">
 			<PopoverTitle>Feedback Collection Credentials</PopoverTitle>
 			<PopoverDescription>
 				Before submitting feedback, if you would like, you may provide
