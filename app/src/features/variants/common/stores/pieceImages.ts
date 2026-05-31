@@ -29,7 +29,7 @@ type PieceImagesStore = {
 
 const usePieceImagesStore = create<PieceImagesStore>()(
 	persist(
-		(set, _get, store) => ({
+		(set, get, store) => ({
 			images: {},
 			addImage: (imageBlob) => {
 				const generatedImageId = generateId();
@@ -79,6 +79,7 @@ const usePieceImagesStore = create<PieceImagesStore>()(
 
 			resetPieceImagesData: () => {
 				set(store.getInitialState())
+				get().markAsHydrated();
 			},
 
 			defaultImagesCreated: false,

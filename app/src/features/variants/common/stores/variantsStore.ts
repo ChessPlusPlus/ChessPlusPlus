@@ -20,7 +20,7 @@ type VariantsStore = {
 
 const useVariantsStore = create<VariantsStore>()(
 	persist(
-		(set, _get, store) => ({
+		(set, get, store) => ({
 			variants: {},
 
 			createVariant: (variantInfo) => {
@@ -56,6 +56,7 @@ const useVariantsStore = create<VariantsStore>()(
 
 			resetVariantsData: () => {
 				set(store.getInitialState())
+				get().markAsHydrated();
 			},
 
 			hasHydrated: false,
