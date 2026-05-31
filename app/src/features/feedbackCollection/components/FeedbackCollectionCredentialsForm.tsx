@@ -62,6 +62,8 @@ function FeedbackCollectionCredentialsForm() {
 					placeholder="Enter your email"
 					value={emailDraft}
 					onChange={(e) => updateEmailDraft(e.target.value)}
+					data-invalid={emailDraftErrors.length > 0}
+					aria-invalid={emailDraftErrors.length > 0}
 				/>
 				<FieldError errors={emailDraftErrors.map((error) => ({ message: error }))} />
 			</Field>
