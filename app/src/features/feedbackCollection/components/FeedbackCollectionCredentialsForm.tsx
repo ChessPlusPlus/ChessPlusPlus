@@ -6,11 +6,11 @@ import {
 	PopoverDescription,
 	PopoverTitle,
 } from "@/components/ui/popover";
-import useFeedbackCollectionCredentialsStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentials";
+import useFeedbackCollectionCredentialsFormStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentialsForm";
 
 function FeedbackCollectionCredentialsForm() {
-	const { name, updateName, email, updateEmail } =
-		useFeedbackCollectionCredentialsStore();
+	const { nameDraft, updateNameDraft, emailDraft, updateEmailDraft } =
+		useFeedbackCollectionCredentialsFormStore();
 
 	function handleStartGivingFeedbackButtonClick() {
 		window.uj?.showWidget();
@@ -29,8 +29,8 @@ function FeedbackCollectionCredentialsForm() {
 				<Input
 					id="nameInput"
 					placeholder="Enter your name"
-					value={name ?? ""}
-					onChange={(e) => updateName(e.target.value)}
+					value={nameDraft}
+					onChange={(e) => updateNameDraft(e.target.value)}
 				/>
 			</Field>
 
@@ -39,8 +39,8 @@ function FeedbackCollectionCredentialsForm() {
 				<Input
 					id="emailInput"
 					placeholder="Enter your email"
-					value={email ?? ""}
-					onChange={(e) => updateEmail(e.target.value)}
+					value={emailDraft}
+					onChange={(e) => updateEmailDraft(e.target.value)}
 				/>
 			</Field>
 
