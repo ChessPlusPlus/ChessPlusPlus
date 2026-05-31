@@ -11,6 +11,8 @@ type VariantsStore = {
 	removeVariant: (variantId: string) => void;
 	updateVariant: (variantId: string, newVariantInfo: VariantInfo) => void;
 
+	resetVariantsData: () => void;
+
 	hasHydrated: boolean;
 	markAsHydrated: () => void;
 	resetHydrationState: () => void;
@@ -18,7 +20,7 @@ type VariantsStore = {
 
 const useVariantsStore = create<VariantsStore>()(
 	persist(
-		(set) => ({
+		(set, get, store) => ({
 			variants: {},
 
 			createVariant: (variantInfo) => {
@@ -50,6 +52,11 @@ const useVariantsStore = create<VariantsStore>()(
 						[variantId]: newVariantInfo,
 					},
 				}));
+			},
+
+			resetVariantsData: () => {
+				set(store.getInitialState())
+				get().markAsHydrated();
 			},
 
 			hasHydrated: false,

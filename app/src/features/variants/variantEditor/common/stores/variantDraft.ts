@@ -21,13 +21,15 @@ type VariantDraftStore = {
 	updateMovementRulesDraft: (newDraft: MovementRules) => void;
 	clearMovementRulesDraft: () => void;
 
+	resetVariantDraftState: () => void;
+
 	syncFullDraftToDB: () => void;
 	syncSetupRulesDraftToDB: (fields?: (keyof SetupRules)[]) => void;
 	syncPieceRulesetDraftToDB: () => void;
 	syncMovementRulesDraftToDB: () => void;
 };
 
-const useVariantDraftStore = create<VariantDraftStore>((set, get) => ({
+const useVariantDraftStore = create<VariantDraftStore>((set, get, store) => ({
 	currentVariantId: null,
 	updateCurrentVariantId: (newVariantId) =>
 		set({ currentVariantId: newVariantId }),
@@ -158,6 +160,10 @@ const useVariantDraftStore = create<VariantDraftStore>((set, get) => ({
 				movementRules: movementRulesDraft,
 			},
 		});
+	},
+
+	resetVariantDraftState: () => {
+		set(store.getInitialState())
 	},
 }));
 

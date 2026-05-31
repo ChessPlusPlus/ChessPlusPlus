@@ -6,6 +6,7 @@ import {
 	IconFolder,
 	IconHelpCircle,
 	IconPlus,
+	IconSettings,
 } from "@tabler/icons-react";
 import CreateVariantDialog from "@/features/variants/variantCreation/components/CreateVariantDialog";
 import useCreateVariantDialogStore from "@/features/variants/variantCreation/stores/createVariantDialog";
@@ -21,6 +22,9 @@ import {
 	TooltipContent,
 	TooltipTrigger,
 } from "@/components/ui/tooltip";
+import SettingsDialog from "@/features/settings/components/SettingsDialog";
+import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
+import ResetAllDataAlert from "@/features/settings/components/ResetAllDataAlert";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
@@ -32,7 +36,7 @@ function HomePage() {
 	const { openVariantPlaySelectionDialog } =
 		useVariantPlaySelectionDialogStore();
 	const { openImportJSONDialog } = useImportJSONDialogStore();
-
+	const { openSettingsDialog } = useSettingsDialogStore();
 	return (
 		<>
 			<div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-linear-to-b from-white to-purple-400">
@@ -62,7 +66,21 @@ function HomePage() {
 				</div>
 			</div>
 
-			<div className="fixed bottom-2 right-2 flex flex-row gap-2">
+			<div className="fixed bottom-2 right-2 flex flex-row gap-2 items-center">
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button
+							variant="ghost"
+							onClick={openSettingsDialog}
+							className="p-1 hover:bg-gray-100 rounded-md"
+						>
+							<IconSettings className="size-6" strokeWidth={1.5} />
+						</Button>
+					</TooltipTrigger>
+
+					<TooltipContent side="top">Settings</TooltipContent>
+				</Tooltip>
+
 				<Tooltip>
 					<TooltipTrigger asChild>
 						<Link
@@ -92,7 +110,9 @@ function HomePage() {
 							/>
 						</Link>
 					</TooltipTrigger>
-					<TooltipContent side="top">Help (documentation)</TooltipContent>
+					<TooltipContent side="top">
+						Help (documentation)
+					</TooltipContent>
 				</Tooltip>
 			</div>
 
@@ -100,6 +120,8 @@ function HomePage() {
 			<MyVariantsDialog />
 			<VariantPlaySelectionDialog />
 			<ImportJSONDialog />
+			<SettingsDialog />
+			<ResetAllDataAlert />
 		</>
 	);
 }

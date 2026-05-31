@@ -5,6 +5,7 @@ type AnalyticsPreferencesStore = {
 	analyticsEnabled: boolean | null;
 	enableAnalytics: () => void;
 	disableAnalytics: () => void;
+	resetAnalyticsData: () => void;
 };
 
 const useAnalyticsPreferencesStore = create<AnalyticsPreferencesStore>()(
@@ -13,6 +14,7 @@ const useAnalyticsPreferencesStore = create<AnalyticsPreferencesStore>()(
 			analyticsEnabled: null,
 			enableAnalytics: () => set({ analyticsEnabled: true }),
 			disableAnalytics: () => set({ analyticsEnabled: false }),
+			resetAnalyticsData: () => set({ analyticsEnabled: null }),
 		}),
 		{
 			name: "analyticsPreferences",

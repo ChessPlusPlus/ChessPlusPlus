@@ -16,6 +16,8 @@ type PieceImagesStore = {
 	updateImages: (images: Record<string, PieceImage>) => void;
 	removeImage: (imageId: string) => void;
 
+	resetPieceImagesData: () => void;
+
 	defaultImagesCreated: boolean;
 	markAsDefaultImagesCreated: () => void;
 	resetDefaultImagesCreationState: () => void;
@@ -27,7 +29,7 @@ type PieceImagesStore = {
 
 const usePieceImagesStore = create<PieceImagesStore>()(
 	persist(
-		(set) => ({
+		(set, get, store) => ({
 			images: {},
 			addImage: (imageBlob) => {
 				const generatedImageId = generateId();
@@ -73,6 +75,11 @@ const usePieceImagesStore = create<PieceImagesStore>()(
 					delete updatedImages[imageId];
 					return { images: updatedImages };
 				});
+			},
+
+			resetPieceImagesData: () => {
+				set(store.getInitialState())
+				get().markAsHydrated();
 			},
 
 			defaultImagesCreated: false,
