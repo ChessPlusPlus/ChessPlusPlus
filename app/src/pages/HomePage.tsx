@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/tooltip";
 import SettingsDialog from "@/features/settings/components/SettingsDialog";
 import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
-import ResetAllDataAlert from "@/features/settings/stores/resetAllDataAlert";
+import ResetAllDataAlert from "@/features/settings/components/ResetAllDataAlert";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
