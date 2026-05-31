@@ -2,6 +2,13 @@ export {};
 
 declare global {
 	interface Window {
-		uj?: (...args: unknown[]) => void;
+		uj?: {
+			showWidget: () => void;
+			init: (projectId: string, options: {
+				widget: boolean;
+				theme: string;
+				trigger: string;
+			}) => void;
+		};
 	}
 }
