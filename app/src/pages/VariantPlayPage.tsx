@@ -6,7 +6,7 @@ import type { GameState2DArray } from "@/features/variants/common/types/setupRul
 import PlayChessboard from "@/features/variants/variantPlay/components/PlayChessboard/PlayChessboard";
 import { createGame } from "@/features/variants/variantPlay/services/game";
 import {
-	generateLegalMoves,
+	// generateLegalMoves,
 	processMove,
 } from "@/features/variants/variantPlay/services/moveProcessing";
 import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
@@ -158,13 +158,14 @@ function VariantPlayPage() {
 			const startLocation = event.operation.source?.data.startLocation;
 			if (!startLocation) return;
 
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const [file, rank] = startLocation;
 
-			const legalMoves = (
-				await generateLegalMoves(activeGameId, [file, rank])
-			)?.legalMoves;
+			// const legalMoves = (
+			// 	await generateLegalMoves(activeGameId, [file, rank])
+			// )?.legalMoves;
 
-			if (!legalMoves) return;
+			const legalMoves: [number, number][] = [];
 
 			updateLegalMoves(legalMoves);
 		},
