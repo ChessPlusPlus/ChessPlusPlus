@@ -21,6 +21,8 @@ async function generateLegalMoves(
 			currentPos,
 		});
 
+		console.log(response.data);
+
 		return { legalMoves: response.data.legalMoves };
 	}
 	catch (error) {
