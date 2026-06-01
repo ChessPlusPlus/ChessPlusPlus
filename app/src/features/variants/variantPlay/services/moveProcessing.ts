@@ -24,6 +24,8 @@ async function generateLegalMoves(
 		return { legalMoves: response.data.legalMoves };
 	}
 	catch (error) {
+		console.log("error occured");
+
 		if (error instanceof AxiosError) {
 			console.log(error.response);
 		}
