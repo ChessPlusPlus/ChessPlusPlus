@@ -13,8 +13,7 @@ import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
 import { DragDropProvider } from "@dnd-kit/react";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { useEffect } from "react";
-// import { useNavigate, useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 type OnDragEnd = React.ComponentProps<typeof DragDropProvider>["onDragEnd"];
 type OnDragStart = React.ComponentProps<typeof DragDropProvider>["onDragStart"];
@@ -27,59 +26,60 @@ function VariantPlayPage() {
 		gameBoardState,
 		updateGameBoardState,
 		activeGameId,
-		// updateActiveGameId,
+		updateActiveGameId,
 		updateLegalMoves,
 		clearLegalMoves,
 	} = useGameplayStore();
 	const { variants, hasHydrated: hasVariantsHydrated } = useVariantsStore();
 	console.log(variants, hasVariantsHydrated);
-	// const { variantId } = useParams();
+	const { variantId } = useParams();
 
-	// useEffect(() => {
-	// 	if (!hasVariantsHydrated) return;
-	// 	if (!variantId) return;
+	useEffect(() => {
+		if (!hasVariantsHydrated) return;
+		if (!variantId) return;
 
-	// 	const selectedVariant = variants[variantId];
-	// 	if (!selectedVariant) return;
+		const selectedVariant = variants[variantId];
+		if (!selectedVariant) return;
 
-	// 	const startingPosition =
-	// 		selectedVariant.variantRules.setupRules.startingPosition;
-	// 	updateGameBoardState(startingPosition);
-	// }, [updateGameBoardState, variants, variantId, hasVariantsHydrated]);
+		const startingPosition =
+			selectedVariant.variantRules.setupRules.startingPosition;
+		updateGameBoardState(startingPosition);
+	}, [updateGameBoardState, variants, variantId, hasVariantsHydrated]);
 
-	// useEffect(() => {
-	// 	// if (!hasVariantsHydrated) return;
-	// 	if (!variantId) return;
+	useEffect(() => {
+		// if (!hasVariantsHydrated) return;
+		if (!variantId) return;
 
-	// 	const selectedVariant = variants[variantId];
-	// 	if (!selectedVariant) return;
+		const selectedVariant = variants[variantId];
+		if (!selectedVariant) return;
 
-	// 	const setupRules = selectedVariant.variantRules.setupRules;
-	// 	const pieceRuleset = selectedVariant.variantRules.pieceRuleset;
-	// 	const movementRules = selectedVariant.variantRules.movementRules;
+		const setupRules = selectedVariant.variantRules.setupRules;
+		const pieceRuleset = selectedVariant.variantRules.pieceRuleset;
+		const movementRules = selectedVariant.variantRules.movementRules;
 
-	// 	async function handleCreateGame() {
-	// 		const { gameId, gameState } = await createGame(
-	// 			setupRules,
-	// 			pieceRuleset,
-	// 			movementRules,
-	// 		);
+		console.log(setupRules, pieceRuleset, movementRules);
 
-	// 		if (!gameId) return;
-	// 		if (!gameState) return;
+		async function handleCreateGame() {
+			const { gameId, gameState } = {
+				gameId: "123",
+				gameState: [[[0, 0], "P"], [[1, 0], "P"]],
+			};
 
-	// 		updateGameBoardState(gameState);
-	// 		updateActiveGameId(gameId);
-	// 	}
+			if (!gameId) return;
+			if (!gameState) return;
 
-	// 	handleCreateGame();
-	// }, [
-	// 	hasVariantsHydrated,
-	// 	variantId,
-	// 	variants,
-	// 	updateGameBoardState,
-	// 	updateActiveGameId,
-	// ]);
+			updateGameBoardState(gameState as GameState2DArray);
+			updateActiveGameId(gameId);
+		}
+
+		handleCreateGame();
+	}, [
+		hasVariantsHydrated,
+		variantId,
+		variants,
+		updateGameBoardState,
+		updateActiveGameId,
+	]);
 
 	useEffect(() => {
 		return () => {
