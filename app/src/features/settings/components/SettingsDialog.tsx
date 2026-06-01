@@ -17,6 +17,7 @@ import useSettingsDialogStore from "@/features/settings/stores/settingsDialog";
 import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
 import posthog from "posthog-js";
 import useResetAllDataAlertStore from "@/features/settings/stores/resetAllDataAlert";
+import { Input } from "@/components/ui/input";
 
 function SettingsDialog() {
 	const { isSettingsDialogOpen, openSettingsDialog, closeSettingsDialog } =
@@ -60,6 +61,7 @@ function SettingsDialog() {
 				<Tabs orientation="vertical" className="flex flex-row gap-4">
 					<TabsList className="h-full">
 						<TabsTrigger value="analytics">Analytics</TabsTrigger>
+						<TabsTrigger value="feedback-collection">Feedback collection</TabsTrigger>
 						<TabsTrigger value="danger-zone">
 							Danger zone
 						</TabsTrigger>
@@ -86,6 +88,43 @@ function SettingsDialog() {
 							checked={analyticsEnabled === true}
 							onCheckedChange={handleAnalyticsChange}
 						/>
+					</TabsContent>
+
+					<TabsContent
+						value="feedback-collection"
+						className="flex flex-col gap-4"
+					>
+						<Field className="grid grid-cols-2 gap-4" orientation="horizontal">
+							<FieldContent>
+								<FieldLabel htmlFor="nameInput">
+									Name
+								</FieldLabel>
+								<FieldDescription>
+									Name to be displayed when submitting feedback (optional).
+								</FieldDescription>
+							</FieldContent>
+
+							<Input
+								id="nameInput"
+								placeholder="Enter your name"
+							/>
+						</Field>
+
+						<Field className="grid grid-cols-2 gap-4" orientation="horizontal">
+							<FieldContent>
+								<FieldLabel htmlFor="emailInput">
+									Email
+								</FieldLabel>
+								<FieldDescription>
+									Email to be used to contact you if needed (optional).
+								</FieldDescription>
+							</FieldContent>
+
+							<Input
+								id="emailInput"
+								placeholder="Enter your email"
+							/>
+						</Field>
 					</TabsContent>
 
 					<TabsContent
