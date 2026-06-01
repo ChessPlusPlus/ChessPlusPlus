@@ -1,7 +1,7 @@
 import _ from "lodash";
 
 import { Button } from "@/components/ui/button";
-// import useVariantsStore from "@/features/variants/common/stores/variantsStore";
+import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import PlayChessboard from "@/features/variants/variantPlay/components/PlayChessboard/PlayChessboard";
 // import { createGame } from "@/features/variants/variantPlay/services/game";
@@ -31,7 +31,8 @@ function VariantPlayPage() {
 		updateLegalMoves,
 		clearLegalMoves,
 	} = useGameplayStore();
-	// const { variants, hasHydrated: hasVariantsHydrated } = useVariantsStore();
+	const { variants, hasHydrated: hasVariantsHydrated } = useVariantsStore();
+	console.log(variants, hasVariantsHydrated);
 	// const { variantId } = useParams();
 
 	// useEffect(() => {
