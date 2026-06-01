@@ -42,7 +42,7 @@ function SettingsDialog() {
 		clearEmailDraftErrors,
 	} = useSettingsDialogStore();
 
-	const { updateEmail, updateName, email, name } = useFeedbackCollectionCredentialsStore();
+	const { updateEmail, updateName, updateUserId, email, name, userId } = useFeedbackCollectionCredentialsStore();
 
 	useEffect(() => {
 		updateEmailDraft(email ?? "");
@@ -62,6 +62,11 @@ function SettingsDialog() {
 
 	function handleEmailInputBlur() {
 		if (emailDraft === "") {
+			if (!userId) {
+				const generatedUserId = crypto.randomUUID();
+				updateUserId(generatedUserId);
+			}
+
 			clearEmailDraftErrors();
 			return;
 		}
@@ -72,11 +77,21 @@ function SettingsDialog() {
 			return;
 		}
 
+		if (!userId) {
+			const generatedUserId = crypto.randomUUID();
+			updateUserId(generatedUserId);
+		}
+
 		clearEmailDraftErrors();
 		updateEmail(emailDraft);
 	}
 
 	function handleNameInputBlur() {
+		if (!userId) {
+			const generatedUserId = crypto.randomUUID();
+			updateUserId(generatedUserId);
+		}
+
 		updateName(nameDraft);
 	}
 
