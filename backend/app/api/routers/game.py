@@ -61,6 +61,10 @@ async def create_game(request: CreateGameRequest):
 @router.post("/generate-legal-moves", response_model=GameLegalMoveGenerationResponse)
 async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 	game_instance = active_games.get(request.game_id)
+	print(f"Game instance: {game_instance}")
+	print(f"Requested game ID: {request.game_id}")
+	print(f"Active games: {active_games}")
+
 	if game_instance is None:
 		return GameLegalMoveGenerationResponse(legal_moves=None)
 
