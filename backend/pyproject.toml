@@ -1,0 +1,7 @@
+[project]
+dependencies = [
+	"fastapi[standard]==0.135.1",
+	starlette
+]
+
+requires-python="==3.14.0"
