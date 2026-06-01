@@ -10,7 +10,7 @@ posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
 });
 
 posthog.register({
-	environment: import.meta.env.VITE_CURRENT_ENV,
+	environment: import.meta.env.DEV ? "development" : "production",
 });
 
 function PostHogPageviewTracker() {
