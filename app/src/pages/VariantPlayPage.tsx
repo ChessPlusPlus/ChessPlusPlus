@@ -147,6 +147,9 @@ function VariantPlayPage() {
 
 	const handleDragStart = _.debounce(
 		async (...args: Parameters<NonNullable<OnDragStart>>) => {
+			console.log("drag start");
+			console.log(activeGameId);
+
 			if (!activeGameId) return;
 
 			const [event] = args;
@@ -158,9 +161,13 @@ function VariantPlayPage() {
 
 			const [file, rank] = startLocation;
 
+			console.log("generating legal moves");
+
 			const legalMoves = (
 				await generateLegalMoves(activeGameId, [file, rank])
 			)?.legalMoves;
+
+			console.log("legal moves", legalMoves);
 
 			if (!legalMoves) return;
 
