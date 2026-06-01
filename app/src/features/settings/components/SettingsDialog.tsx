@@ -45,9 +45,9 @@ function SettingsDialog() {
 	const { updateEmail, updateName, email, name } = useFeedbackCollectionCredentialsStore();
 
 	useEffect(() => {
-		updateEmail(email ?? "");
-		updateName(name ?? "");
-	}, [name, email, updateEmail, updateName]);
+		updateEmailDraft(email ?? "");
+		updateNameDraft(name ?? "");
+	}, [name, email, updateEmailDraft, updateNameDraft]);
 
 	function handleAnalyticsChange(checked: boolean) {
 		if (checked) {
