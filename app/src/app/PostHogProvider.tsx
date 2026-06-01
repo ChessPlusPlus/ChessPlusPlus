@@ -10,7 +10,7 @@ posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
 });
 
 posthog.register({
-	is_production: import.meta.env.VITE_ENV === "production",
+	is_production: import.meta.env.PROD,
 });
 
 function PostHogPageviewTracker() {
