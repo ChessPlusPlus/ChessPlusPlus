@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import PlayChessboard from "@/features/variants/variantPlay/components/PlayChessboard/PlayChessboard";
-// import { createGame } from "@/features/variants/variantPlay/services/game";
+import { createGame } from "@/features/variants/variantPlay/services/game";
 import {
 	generateLegalMoves,
 	processMove,
@@ -31,7 +31,6 @@ function VariantPlayPage() {
 		clearLegalMoves,
 	} = useGameplayStore();
 	const { variants, hasHydrated: hasVariantsHydrated } = useVariantsStore();
-	console.log(variants, hasVariantsHydrated);
 	const { variantId } = useParams();
 
 	useEffect(() => {
@@ -47,7 +46,7 @@ function VariantPlayPage() {
 	}, [updateGameBoardState, variants, variantId, hasVariantsHydrated]);
 
 	useEffect(() => {
-		// if (!hasVariantsHydrated) return;
+		if (!hasVariantsHydrated) return;
 		if (!variantId) return;
 
 		const selectedVariant = variants[variantId];
@@ -60,10 +59,7 @@ function VariantPlayPage() {
 		console.log(setupRules, pieceRuleset, movementRules);
 
 		async function handleCreateGame() {
-			const { gameId, gameState } = {
-				gameId: "123",
-				gameState: [[[0, 0], "P"], [[1, 0], "P"]],
-			};
+			const { gameId, gameState } = await createGame(setupRules, pieceRuleset, movementRules);
 
 			if (!gameId) return;
 			if (!gameState) return;
