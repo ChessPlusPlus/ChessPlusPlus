@@ -163,9 +163,13 @@ function VariantPlayPage() {
 
 			console.log("generating legal moves");
 
+			console.timeLog("generateLegalMoves");
+
 			const legalMoves = (
 				await generateLegalMoves(activeGameId, [file, rank])
 			)?.legalMoves;
+
+			console.timeEnd("generateLegalMoves");
 
 			console.log("legal moves", legalMoves);
 
