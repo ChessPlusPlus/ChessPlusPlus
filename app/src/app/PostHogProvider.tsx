@@ -9,6 +9,10 @@ posthog.init(import.meta.env.VITE_POSTHOG_KEY, {
 	opt_out_capturing_by_default: true,
 });
 
+posthog.register({
+	environment: import.meta.env.VITE_CURRENT_ENV,
+});
+
 function PostHogPageviewTracker() {
 	const location = useLocation();
 
