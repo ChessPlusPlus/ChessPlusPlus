@@ -101,10 +101,13 @@ function AnalyticsDisclaimerDialog() {
 					<TabsContent value="what-we-will-never-collect">
 						<ul className="list-disc list-outside pl-5">
 							<li>
-								Sensitive information such as your email
+								Information that can be used to identify you such as your email
 								address, name, or other personal information
-								(These will never be collected as part of
-								analytics, but will be collected when you are providing feedback)
+								will never be collected as part of analytics.
+							</li>
+							<li>
+								However, your name and email address will be
+								collected when you are providing feedback, if you choose to provide it.
 							</li>
 						</ul>
 					</TabsContent>
