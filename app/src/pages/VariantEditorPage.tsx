@@ -16,6 +16,7 @@ import { serialiseGameState } from "@/features/variants/variantEditor/common/uti
 import useMovementsEditorStore from "@/features/variants/variantEditor/movementsEditor/stores/movementsEditor";
 import useMovementsEditorSheetStore from "@/features/variants/variantEditor/movementsEditor/stores/movementsEditorSheet";
 import usePiecesEditorSheetStore from "@/features/variants/variantEditor/piecesEditor/stores/piecesEditorSheet";
+import { isValidNumber } from "@/shared/utils/typeChecks";
 
 function VariantEditorPage() {
 	const { variantId } = useParams();
@@ -64,6 +65,10 @@ function VariantEditorPage() {
 				string
 			>([[[4, 3], activePiece]]);
 
+			if (!isValidNumber(offsetX)) return null;
+			if (!isValidNumber(offsetY)) return null;
+			if (!isValidNumber(range)) return null;
+
 			if (activeMovementName) {
 				return await displayLegalMoves({
 					pieceName: activePiece,
@@ -76,9 +81,9 @@ function VariantEditorPage() {
 							forCapture: forCapture ?? false,
 							moveDefinition: {
 								...movementRulesDraft[activeMovementName].moveDefinition,
-								range: range ?? 0,
-								moveX: offsetX ?? 0,
-								moveY: offsetY ?? 0,
+								range: Number(range),
+								moveX: Number(offsetX),
+								moveY: Number(offsetY),
 							}
 						}
 					},

@@ -13,4 +13,12 @@ function hasInternalMap(
 	);
 }
 
-export { isNullOrUndefined, hasInternalMap };
+function isValidNumber(value: unknown): value is number {
+	if (Number.isNaN(Number(value))) return false;
+	if (!Number.isFinite(Number(value))) return false;
+	if (value === "") return false;
+	
+	return true;
+}
+
+export { isNullOrUndefined, hasInternalMap, isValidNumber };
