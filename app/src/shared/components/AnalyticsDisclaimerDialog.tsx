@@ -103,8 +103,11 @@ function AnalyticsDisclaimerDialog() {
 							<li>
 								Sensitive information such as your email
 								address, name, or other personal information
-								(These will never be collected as part of
-								analytics, but will be collected when you are providing feedback)
+								will never be collected as part of analytics.
+							</li>
+							<li>
+								However, your name and email address will be
+								collected when you are providing feedback, if you choose to provide it.
 							</li>
 						</ul>
 					</TabsContent>
