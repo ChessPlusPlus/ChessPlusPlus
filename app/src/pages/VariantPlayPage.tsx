@@ -158,8 +158,9 @@ function VariantPlayPage() {
 			const startLocation = event.operation.source?.data.startLocation;
 			if (!startLocation) return;
 
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const [file, rank] = startLocation;
+			console.log("file", file);
+			console.log("rank", rank);
 
 			// const legalMoves = (
 			// 	await generateLegalMoves(activeGameId, [file, rank])
