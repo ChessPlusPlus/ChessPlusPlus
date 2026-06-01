@@ -84,6 +84,11 @@ function SettingsDialog() {
 
 		clearEmailDraftErrors();
 		updateEmail(emailDraft);
+
+		if (name === null && nameDraft === "") {
+			updateName(nameDraft);
+			return;
+		}
 	}
 
 	function handleNameInputBlur() {
@@ -93,6 +98,11 @@ function SettingsDialog() {
 		}
 
 		updateName(nameDraft);
+
+		if (email === null && emailDraft === "") {
+			updateEmail(emailDraft);
+			return;
+		}
 	}
 
 	return (
