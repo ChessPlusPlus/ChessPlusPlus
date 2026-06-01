@@ -9,6 +9,7 @@ import {
 	Field,
 	FieldContent,
 	FieldDescription,
+	FieldError,
 	FieldLabel,
 } from "@/components/ui/field";
 import { Switch } from "@/components/ui/switch";
@@ -18,18 +19,29 @@ import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
 import posthog from "posthog-js";
 import useResetAllDataAlertStore from "@/features/settings/stores/resetAllDataAlert";
 import { Input } from "@/components/ui/input";
+import validator from "validator";
+import useFeedbackCollectionCredentialsStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentials";
 
 function SettingsDialog() {
 	const { isSettingsDialogOpen, openSettingsDialog, closeSettingsDialog } =
 		useSettingsDialogStore();
 
-	const {
-		analyticsEnabled,
-		enableAnalytics,
-		disableAnalytics,
-	} = useAnalyticsPreferencesStore();
+	const { analyticsEnabled, enableAnalytics, disableAnalytics } =
+		useAnalyticsPreferencesStore();
 
 	const { openResetAllDataAlert } = useResetAllDataAlertStore();
+
+	const {
+		nameDraft,
+		updateNameDraft,
+		emailDraft,
+		updateEmailDraft,
+		emailDraftErrors,
+		updateEmailDraftErrors,
+		clearEmailDraftErrors,
+	} = useSettingsDialogStore();
+
+	const { updateEmail, updateName } = useFeedbackCollectionCredentialsStore();
 
 	function handleAnalyticsChange(checked: boolean) {
 		if (checked) {
@@ -40,6 +52,26 @@ function SettingsDialog() {
 
 		posthog.opt_out_capturing();
 		disableAnalytics();
+	}
+
+	function handleEmailInputBlur() {
+		if (emailDraft === "") {
+			clearEmailDraftErrors();
+			return;
+		}
+
+		const isValidEmail = validator.isEmail(emailDraft);
+		if (!isValidEmail) {
+			updateEmailDraftErrors(["Invalid email"]);
+			return;
+		}
+
+		clearEmailDraftErrors();
+		updateEmail(emailDraft);
+	}
+
+	function handleNameInputBlur() {
+		updateName(nameDraft);
 	}
 
 	return (
@@ -61,7 +93,9 @@ function SettingsDialog() {
 				<Tabs orientation="vertical" className="flex flex-row gap-4">
 					<TabsList className="h-full">
 						<TabsTrigger value="analytics">Analytics</TabsTrigger>
-						<TabsTrigger value="feedback-collection">Feedback collection</TabsTrigger>
+						<TabsTrigger value="feedback-collection">
+							Feedback collection
+						</TabsTrigger>
 						<TabsTrigger value="danger-zone">
 							Danger zone
 						</TabsTrigger>
@@ -94,35 +128,60 @@ function SettingsDialog() {
 						value="feedback-collection"
 						className="flex flex-col gap-4"
 					>
-						<Field className="grid grid-cols-2 gap-4" orientation="horizontal">
+						<Field
+							className="grid grid-cols-2 gap-4"
+							orientation="horizontal"
+						>
 							<FieldContent>
 								<FieldLabel htmlFor="nameInput">
 									Name
 								</FieldLabel>
 								<FieldDescription>
-									Name to be displayed when submitting feedback (optional).
+									Name to be displayed when submitting
+									feedback (optional).
 								</FieldDescription>
 							</FieldContent>
 
 							<Input
 								id="nameInput"
 								placeholder="Enter your name"
+								value={nameDraft}
+								onChange={(e) =>
+									updateNameDraft(e.target.value)
+								}
+								onBlur={handleNameInputBlur}
 							/>
 						</Field>
 
-						<Field className="grid grid-cols-2 gap-4" orientation="horizontal">
+						<Field
+							className="grid grid-cols-2 gap-4"
+							orientation="horizontal"
+						>
 							<FieldContent>
 								<FieldLabel htmlFor="emailInput">
 									Email
 								</FieldLabel>
 								<FieldDescription>
-									Email to be used to contact you if needed (optional).
+									Email to be used to contact you if needed
+									(optional).
 								</FieldDescription>
 							</FieldContent>
 
 							<Input
 								id="emailInput"
 								placeholder="Enter your email"
+								value={emailDraft}
+								onChange={(e) =>
+									updateEmailDraft(e.target.value)
+								}
+								data-invalid={emailDraftErrors.length > 0}
+								aria-invalid={emailDraftErrors.length > 0}
+								onBlur={handleEmailInputBlur}
+							/>
+							<FieldError
+								errors={emailDraftErrors.map((error) => ({
+									message: error,
+								}))}
 							/>
 						</Field>
 					</TabsContent>
