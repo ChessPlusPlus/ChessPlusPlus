@@ -32,11 +32,19 @@ function VariantEditorPage() {
 	} = useVariantDraftStore();
 
 	const { activePiece } = usePiecesEditorStore();
-	const { activeMovementName, forMovement, forCapture, offsetX, offsetY, range, resetMovementsEditorState } = useMovementsEditorStore();
+	const {
+		activeMovementName,
+		forMovement,
+		forCapture,
+		offsetX,
+		offsetY,
+		range,
+		resetMovementsEditorState,
+	} = useMovementsEditorStore();
 	const { resetPiecesEditorState } = usePiecesEditorStore();
 	const { resetMovementsEditorSheetState } = useMovementsEditorSheetStore();
 	const { resetPiecesEditorSheetState } = usePiecesEditorSheetStore();
-	
+
 	const navigate = useNavigate();
 
 	const { data: legalMovesPreview } = useQuery({
@@ -65,10 +73,6 @@ function VariantEditorPage() {
 				string
 			>([[[4, 3], activePiece]]);
 
-			if (!isValidNumber(offsetX)) return null;
-			if (!isValidNumber(offsetY)) return null;
-			if (!isValidNumber(range)) return null;
-
 			if (activeMovementName) {
 				return await displayLegalMoves({
 					pieceName: activePiece,
@@ -80,12 +84,19 @@ function VariantEditorPage() {
 							forMovement: forMovement ?? false,
 							forCapture: forCapture ?? false,
 							moveDefinition: {
-								...movementRulesDraft[activeMovementName].moveDefinition,
-								range: Number(range),
-								moveX: Number(offsetX),
-								moveY: Number(offsetY),
-							}
-						}
+								...movementRulesDraft[activeMovementName]
+									.moveDefinition,
+								...(isValidNumber(range)
+									? { range: Number(range) }
+									: {}),
+								...(isValidNumber(offsetX)
+									? { moveX: Number(offsetX) }
+									: {}),
+								...(isValidNumber(offsetY)
+									? { moveY: Number(offsetY) }
+									: {}),
+							},
+						},
 					},
 					currentPos: [4, 3],
 					gameState: serialiseGameState(previewBoardState),
