@@ -21,6 +21,7 @@ import useResetAllDataAlertStore from "@/features/settings/stores/resetAllDataAl
 import { Input } from "@/components/ui/input";
 import validator from "validator";
 import useFeedbackCollectionCredentialsStore from "@/features/feedbackCollection/stores/feedbackCollectionCredentials";
+import { useEffect } from "react";
 
 function SettingsDialog() {
 	const { isSettingsDialogOpen, openSettingsDialog, closeSettingsDialog } =
@@ -41,7 +42,12 @@ function SettingsDialog() {
 		clearEmailDraftErrors,
 	} = useSettingsDialogStore();
 
-	const { updateEmail, updateName } = useFeedbackCollectionCredentialsStore();
+	const { updateEmail, updateName, email, name } = useFeedbackCollectionCredentialsStore();
+
+	useEffect(() => {
+		updateEmail(email ?? "");
+		updateName(name ?? "");
+	}, [name, email, updateEmail, updateName]);
 
 	function handleAnalyticsChange(checked: boolean) {
 		if (checked) {
