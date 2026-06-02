@@ -5,6 +5,7 @@ from pathlib import Path
 import app.engine.json_validator.json_validator as json_validator
 import app.engine.legal_move_generator.legal_move_generator as lmg
 import app.engine.json_normaliser.json_normaliser as jn
+import app.engine.legal_move_generator.instanceless_legal_move_generator as ilmg
 
 from app.engine.legal_move_generator.legal_move_generator import Piece
 
@@ -106,5 +107,8 @@ def debug_movement():
     legal_moves = game.get_legal_moves((0, 1))
     print(legal_moves)
 
-debug_movement()
+def test_ilmg():
+    game_state = ilmg.get_start_game_state(json.load(open(TEST_NORMALISED_JSON_PATH)))
+    print(ilmg.make_move(game_state, (0, 0), (0, 1)))
 
+test_ilmg()

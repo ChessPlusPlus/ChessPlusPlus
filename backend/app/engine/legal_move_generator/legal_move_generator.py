@@ -1,15 +1,6 @@
 import copy
 from app.engine.legal_move_generator.custom_errors import *
-
-class Piece:
-    def __init__(self, position: tuple, piece_id: int, piece_name: str, data: dict):
-        self.position = position
-        self.piece_id = piece_id
-        self.piece_name = piece_name
-        self.data = data
-
-    def __repr__(self):
-        return f"PieceObject={{position: {self.position}, piece_id: {self.piece_id}, piece_name: {self.piece_name}, data: {self.data}}}"
+from app.engine.legal_move_generator.piece_class import Piece
 
 class Game:
     def __init__(self, rules: dict):
@@ -49,19 +40,19 @@ class Game:
     def overwrite_game_state_raw(self, new_game_state: dict): # Format is the raw game state format, where the items are Piece objects. BE CAREFUL OF THIS
         self._game_state = new_game_state
 
-    def make_move(self, piece_start_postion: tuple, piece_end_postion: tuple): # Note that move will be accepted regardless of whether the move is legal or not
+    def make_move(self, piece_start_position: tuple, piece_end_position: tuple): # Note that move will be accepted regardless of whether the move is legal or not
 
-        if piece_start_postion == piece_end_postion:
+        if piece_start_position == piece_end_position:
             raise StationaryMoveError
 
-        piece_object = self._game_state[piece_start_postion]
+        piece_object = self._game_state[piece_start_position]
         if piece_object.data["has_not_moved"] == True:
             piece_object.data["has_not_moved"] = False
 
-        piece_object.position = piece_end_postion
+        piece_object.position = piece_end_position
 
-        self._game_state[piece_end_postion] = piece_object
-        self._game_state.pop(piece_start_postion)
+        self._game_state[piece_end_position] = piece_object
+        self._game_state.pop(piece_start_position)
 
     def _check_condition(self, condition_name: str, piece_object: Piece):
         match condition_name:
