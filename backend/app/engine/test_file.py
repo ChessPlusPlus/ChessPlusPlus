@@ -109,6 +109,6 @@ def debug_movement():
 
 def test_ilmg():
     game_state = ilmg.get_start_game_state(json.load(open(TEST_NORMALISED_JSON_PATH)))
-    print(ilmg.make_move(game_state, (0, 0), (0, 1)))
+    ilmg.get_legal_moves(None, game_state, None)
 
 test_ilmg()
