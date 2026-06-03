@@ -3,15 +3,18 @@ from app.engine.legal_move_generator.custom_errors import *
 from app.engine.legal_move_generator.piece_class import *
 
 class GameContext:
-    def __init__(self, rules: dict, json_game_state: dict):
-        self.rules = rules
-        self.json_game_state = json_game_state
+    def __init__(self, rules: dict, json_game_state: list):
+        self._rules = rules
+        self._json_game_state = json_game_state
 
     def get_rules(self) -> dict:
-        return self.rules
+        return self._rules
 
-    def get_json_game_state(self) -> dict:
-        return self.json_game_state
+    def get_json_game_state(self) -> list:
+        return self._json_game_state
+
+    def update_json_game_state(self, new_json_game_state: list):
+        self._json_game_state = new_json_game_state
 
 class InstancelessLegalMoveGenerator:
 
@@ -19,7 +22,7 @@ class InstancelessLegalMoveGenerator:
     def _convert_to_external_game_state(game_state: dict) -> list:
         external_game_state = []
         for piece_position, piece_object in game_state.items():
-            external_game_state.append((piece_position, convert_piece_to_dict(piece_object)))
+            external_game_state.append(convert_piece_to_dict(piece_object))
         return external_game_state
 
     @staticmethod

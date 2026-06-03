@@ -1,3 +1,4 @@
+import copy
 
 class Piece:
     def __init__(self, position: tuple, piece_id: int, piece_name: str, data: dict):
@@ -26,5 +27,5 @@ def convert_dict_to_piece(piece_dict: dict):
         (piece_dict["position"]["x_pos"], piece_dict["position"]["y_pos"]),
         piece_dict["piece_id"],
         piece_dict["piece_name"],
-        piece_dict["data"]
+        copy.deepcopy(piece_dict["data"])
     )
