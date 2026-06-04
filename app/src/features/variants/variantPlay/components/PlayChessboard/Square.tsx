@@ -3,6 +3,7 @@ import _ from "lodash";
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import PieceImage from "@/features/variants/variantPlay/components/PlayChessboard/PieceImage";
 import {
+	batchGenerateLegalMoves,
 	generateLegalMoves,
 	processMove,
 } from "@/features/variants/variantPlay/services/moveProcessing";
@@ -68,22 +69,15 @@ function Square({
 
 			updatePrevClickedSquare([squareFile, squareRank]);
 
-			const cachedLegalMoveEntry = legalMoveCache.find(
-				([startLocation]) =>
-					startLocation[0] === squareFile && startLocation[1] === squareRank,
-			);
-			
-			const legalMoves = cachedLegalMoveEntry?.[1] ?? (
-				await generateLegalMoves(activeGameId, [squareFile, squareRank])
-			)?.legalMoves;
+			if (legalMoveCache.length === 0) {
+				const { legalMoves } = await batchGenerateLegalMoves(activeGameId);
+				if (!legalMoves) return;
 
-			if (!legalMoves) return;
-
-			if (!cachedLegalMoveEntry) {
-				updateLegalMoveCache([...legalMoveCache, [[squareFile, squareRank], legalMoves]]);
+				updateLegalMoveCache(legalMoves);
 			}
 
-			updateLegalMoves(legalMoves);
+			const legalMovesForCurrentPiece = legalMoveCache.find(([position]) => position[0] === squareFile && position[1] === squareRank)?.[1] ?? [];
+			updateLegalMoves(legalMovesForCurrentPiece);
 
 			return;
 		}
