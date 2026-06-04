@@ -8,6 +8,7 @@ from fastapi import APIRouter
 from app.schemas.create_game_request import CreateGameRequest, CreateGameResponse
 from app.schemas.game_legal_move_generation_request import GameLegalMoveGenerationRequest, GameLegalMoveGenerationResponse
 from app.schemas.game_make_move_request import GameMakeMoveRequest, GameMakeMoveResponse
+from app.schemas.batch_generate_legal_moves import BatchGenerateLegalMovesRequest, BatchGenerateLegalMovesResponse
 
 from app.engine.legal_move_generator.legal_move_generator import Game, Piece
 from app.engine.legal_move_generator.instanceless_legal_move_generator import InstancelessLegalMoveGenerator
@@ -70,6 +71,29 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 	print(f"full_legal_moves took {time_taken * 1000:.6f} milliseconds")
 
 	return GameLegalMoveGenerationResponse(legal_moves=legal_moves)
+
+@router.post("/batch-generate-legal-moves", response_model=BatchGenerateLegalMovesResponse)
+async def batch_generate_legal_moves(request: BatchGenerateLegalMovesRequest):
+	game_info = await get_game_info(request.game_id)
+	if game_info is None:
+		return BatchGenerateLegalMovesResponse(legal_moves=None)
+
+	all_legal_moves = []
+	game_state = game_info["game_state"]
+	for piece in game_state:
+		position = (piece["position"]["x_pos"], piece["position"]["y_pos"])
+
+		legal_moves = InstancelessLegalMoveGenerator.get_legal_moves(
+			rules=game_info["rules"],
+			json_game_state=game_state,
+			piece_position=position,
+		)
+
+		piece_legal_moves = list(itertools.chain(*legal_moves.values()))
+
+		all_legal_moves.append((position, piece_legal_moves))
+
+	return BatchGenerateLegalMovesResponse(legal_moves=all_legal_moves)
 
 @router.post("/process-move", response_model=GameMakeMoveResponse)
 async def process_move(request: GameMakeMoveRequest):

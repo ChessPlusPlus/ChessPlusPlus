@@ -6,7 +6,7 @@ import type { GameState2DArray } from "@/features/variants/common/types/setupRul
 import PlayChessboard from "@/features/variants/variantPlay/components/PlayChessboard/PlayChessboard";
 import { createGame } from "@/features/variants/variantPlay/services/game";
 import {
-	generateLegalMoves,
+	batchGenerateLegalMoves,
 	processMove,
 } from "@/features/variants/variantPlay/services/moveProcessing";
 import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
@@ -84,8 +84,13 @@ function VariantPlayPage() {
 	useEffect(() => {
 		return () => {
 			clearLegalMoves();
+			clearLegalMoveCache();
 		};
-	}, [clearLegalMoves]);
+	}, [clearLegalMoves, clearLegalMoveCache]);
+
+	useEffect(() => {
+		clearLegalMoveCache();
+	}, [activeGameId, clearLegalMoveCache]);
 
 	function handleBackToHomePage() {
 		navigate("/");
@@ -163,22 +168,21 @@ function VariantPlayPage() {
 
 			const [file, rank] = startLocation;
 
-			const cachedLegalMoveEntry = legalMoveCache.find(
-				([startLocation]) =>
-					startLocation[0] === file && startLocation[1] === rank,
-			);
+			let batchGeneratedLegalMoves = null;
+			if (legalMoveCache.length === 0) {
+				const { legalMoves } = await batchGenerateLegalMoves(activeGameId);
+				if (!legalMoves) return;
 
-			const legalMoves = cachedLegalMoveEntry?.[1] ?? (
-				await generateLegalMoves(activeGameId, [file, rank])
-			)?.legalMoves;
-
-			if (!legalMoves) return;
-
-			if (!cachedLegalMoveEntry) {
-				updateLegalMoveCache([...legalMoveCache, [[file, rank], legalMoves]]);
+				updateLegalMoveCache(legalMoves);
+				batchGeneratedLegalMoves = legalMoves;
 			}
 
-			updateLegalMoves(legalMoves);
+			const legalMovesUsed = legalMoveCache.length > 0 ? legalMoveCache : batchGeneratedLegalMoves;
+			if (!legalMovesUsed) return;
+			
+			const legalMovesForCurrentPiece = legalMovesUsed.find(([position]) => position[0] === file && position[1] === rank)?.[1] ?? [];
+
+			updateLegalMoves(legalMovesForCurrentPiece);
 		},
 		500,
 		{ leading: true, trailing: false },

@@ -3,6 +3,7 @@ import _ from "lodash";
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import PieceImage from "@/features/variants/variantPlay/components/PlayChessboard/PieceImage";
 import {
+	batchGenerateLegalMoves,
 	generateLegalMoves,
 	processMove,
 } from "@/features/variants/variantPlay/services/moveProcessing";
@@ -66,24 +67,28 @@ function Square({
 		if (!currentPrevClickedSquare && !currentClickedSquare) {
 			if (!piece) return;
 
-			updatePrevClickedSquare([squareFile, squareRank]);
-
-			const cachedLegalMoveEntry = legalMoveCache.find(
-				([startLocation]) =>
-					startLocation[0] === squareFile && startLocation[1] === squareRank,
-			);
+			updatePrevClickedSquare([squareFile, squareRank])
 			
-			const legalMoves = cachedLegalMoveEntry?.[1] ?? (
-				await generateLegalMoves(activeGameId, [squareFile, squareRank])
-			)?.legalMoves;
+			let batchGeneratedLegalMoves = null;
+			if (legalMoveCache.length === 0) {
+				const { legalMoves } = await batchGenerateLegalMoves(activeGameId);
+				if (!legalMoves) {
+					clearLegalMoves();
+					clearPrevClickedSquare();
+					clearClickedSquare();
+					return;
+				};
 
-			if (!legalMoves) return;
-
-			if (!cachedLegalMoveEntry) {
-				updateLegalMoveCache([...legalMoveCache, [[squareFile, squareRank], legalMoves]]);
+				updateLegalMoveCache(legalMoves);
+				batchGeneratedLegalMoves = legalMoves;
 			}
 
-			updateLegalMoves(legalMoves);
+			const legalMovesUsed = legalMoveCache.length > 0 ? legalMoveCache : batchGeneratedLegalMoves;
+			if (!legalMovesUsed) return;
+
+			const legalMovesForCurrentPiece = legalMovesUsed.find(([position]) => position[0] === squareFile && position[1] === squareRank)?.[1] ?? [];
+			updateLegalMoves(legalMovesForCurrentPiece);
+			updatePrevClickedSquare([squareFile, squareRank]);
 
 			return;
 		}
@@ -111,10 +116,23 @@ function Square({
 				clearPrevClickedSquare();
 				clearClickedSquare();
 
-				const legalMoves = await generateLegalMoves(activeGameId, [squareFile, squareRank]);
-				if (!legalMoves.legalMoves) return;
+				const cacheLegalMovesEntry = legalMoveCache.find(([position]) => position[0] === squareFile && position[1] === squareRank);
+				if (!cacheLegalMovesEntry) {
+					const { legalMoves } = await generateLegalMoves(activeGameId, [squareFile, squareRank]);
+					if (!legalMoves) {
+						clearLegalMoves();
+						clearPrevClickedSquare();
+						clearClickedSquare();
+						return;
+					};
 
-				updateLegalMoves(legalMoves.legalMoves);
+					updateLegalMoveCache([...legalMoveCache, [[squareFile, squareRank], legalMoves]]);
+					updateLegalMoves(legalMoves);
+					return;
+				}
+
+				updateLegalMoves(cacheLegalMovesEntry[1]);
+				updatePrevClickedSquare([squareFile, squareRank]);
 
 				return;
 			}

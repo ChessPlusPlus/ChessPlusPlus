@@ -6,6 +6,10 @@ type GenerateLegalMovesResponse = {
 	legalMoves: [number, number][] | null;
 };
 
+type BatchGenerateLegalMovesResponse = {
+	legalMoves: [[number, number], [number, number][]][] | null;
+}
+
 type ProcessMoveResponse = {
 	validMove: boolean;
 	newGameState: GameState2DArray | null;
@@ -27,6 +31,27 @@ async function generateLegalMoves(
 		console.log(`Legal move service call took ${t1 - t0} milliseconds`);
 
 		console.log(response.data);
+
+		return { legalMoves: response.data.legalMoves };
+	}
+	catch (error) {
+		console.log("error occured");
+
+		if (error instanceof AxiosError) {
+			console.log(error.response);
+		}
+
+		return { legalMoves: null };
+	}
+}
+
+async function batchGenerateLegalMoves(
+	gameId: string,
+): Promise<BatchGenerateLegalMovesResponse> {
+	try {
+		const response = await api.post("game/batch-generate-legal-moves/", {
+			gameId,
+		});
 
 		return { legalMoves: response.data.legalMoves };
 	}
@@ -67,4 +92,4 @@ async function processMove(
 	}
 }
 
-export { generateLegalMoves, processMove };
+export { generateLegalMoves, batchGenerateLegalMoves, processMove };
