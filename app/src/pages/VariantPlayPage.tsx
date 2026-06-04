@@ -6,6 +6,7 @@ import type { GameState2DArray } from "@/features/variants/common/types/setupRul
 import PlayChessboard from "@/features/variants/variantPlay/components/PlayChessboard/PlayChessboard";
 import { createGame } from "@/features/variants/variantPlay/services/game";
 import {
+	batchGenerateLegalMoves,
 	generateLegalMoves,
 	processMove,
 } from "@/features/variants/variantPlay/services/moveProcessing";
@@ -163,22 +164,16 @@ function VariantPlayPage() {
 
 			const [file, rank] = startLocation;
 
-			const cachedLegalMoveEntry = legalMoveCache.find(
-				([startLocation]) =>
-					startLocation[0] === file && startLocation[1] === rank,
-			);
+			if (legalMoveCache.length === 0) {
+				const { legalMoves } = await batchGenerateLegalMoves(activeGameId);
+				if (!legalMoves) return;
 
-			const legalMoves = cachedLegalMoveEntry?.[1] ?? (
-				await generateLegalMoves(activeGameId, [file, rank])
-			)?.legalMoves;
-
-			if (!legalMoves) return;
-
-			if (!cachedLegalMoveEntry) {
-				updateLegalMoveCache([...legalMoveCache, [[file, rank], legalMoves]]);
+				updateLegalMoveCache(legalMoves);
 			}
 
-			updateLegalMoves(legalMoves);
+			const legalMovesForCurrentPiece = legalMoveCache.find(([position]) => position[0] === file && position[1] === rank)?.[1] ?? [];
+
+			updateLegalMoves(legalMovesForCurrentPiece);
 		},
 		500,
 		{ leading: true, trailing: false },
