@@ -12,7 +12,7 @@ from app.engine.legal_move_generator.legal_move_generator import Game, Piece
 from app.engine.legal_move_generator.instanceless_legal_move_generator import InstancelessLegalMoveGenerator
 from app.utils.case_converter import convert_camel_to_snake
 from app.utils.starting_position_serialiser import serialise_starting_position
-from app.core.game_store import get_game_info, create_game as create_game_in_store
+from app.core.game_store import get_game_info, update_game_state, create_game as create_game_in_store
 
 router = APIRouter()
 
@@ -82,6 +82,8 @@ async def process_move(request: GameMakeMoveRequest):
 			piece_start_position=request.piece_start_pos,
 			piece_end_position=request.piece_end_pos,
 		)
+
+		new_game_state = InstancelessLegalMoveGenerator.get_simple_game_state(new_game_state)
 
 		update_game_state(request.game_id, new_game_state)
 
