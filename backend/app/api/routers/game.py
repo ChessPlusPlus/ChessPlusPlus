@@ -75,7 +75,7 @@ async def process_move(request: GameMakeMoveRequest):
 
 	legal_moves = list(itertools.chain(*legal_moves.values()))
 
-	new_game_state = None
+	simplified_new_game_state = None
 	if request.piece_end_pos in legal_moves:
 		raw_new_game_state = InstancelessLegalMoveGenerator.make_move(
 			json_game_state=game_info["game_state"],
