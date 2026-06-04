@@ -20,7 +20,7 @@ async def get_game_info(game_id: str):
 	if game_info is None:
 		return None
 
-	return game_info
+	return json.loads(game_info)
 
 async def get_game_state(game_id: str):
 	game_info = await get_game_info(game_id)
