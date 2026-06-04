@@ -49,11 +49,13 @@ function Square({
 		clearLegalMoves,
 		gameBoardState,
 		updateGameBoardState,
+
+		legalMoveCache,
+		updateLegalMoveCache,
+		clearLegalMoveCache,
 	} = useGameplayStore();
 
 	async function handleSquareClick(squareFile: number, squareRank: number) {
-		console.log("clicked");
-		
 		if (!activeGameId) return;
 		if (!gameBoardState) return;
 
@@ -61,22 +63,21 @@ function Square({
 			useGameplayStore.getState().prevClickedSquare;
 		const currentClickedSquare = useGameplayStore.getState().clickedSquare;
 
-		console.log("currentPrevClickedSquare", currentPrevClickedSquare);
-		console.log("currentClickedSquare", currentClickedSquare);
-
 		if (!currentPrevClickedSquare && !currentClickedSquare) {
 			if (!piece) return;
 
 			updatePrevClickedSquare([squareFile, squareRank]);
-			console.log("new prev clicked square", useGameplayStore.getState().prevClickedSquare);
-			console.log("new clicked square", useGameplayStore.getState().clickedSquare);
 			
-			const legalMoves = (
+			const legalMoves = legalMoveCache.find(
+				([startLocation]) =>
+					startLocation[0] === squareFile && startLocation[1] === squareRank,
+			)?.[1] ?? (
 				await generateLegalMoves(activeGameId, [squareFile, squareRank])
-			).legalMoves;
+			)?.legalMoves;
 
 			if (!legalMoves) return;
 
+			updateLegalMoveCache([...legalMoveCache, [[squareFile, squareRank], legalMoves]]);
 			updateLegalMoves(legalMoves);
 
 			return;
@@ -91,8 +92,6 @@ function Square({
 			}
 
 			updateClickedSquare([squareFile, squareRank]);
-			console.log("new prev clicked square", [squareFile, squareRank]);
-			console.log("new clicked square", [squareFile, squareRank]);
 
 			const locallyComputedLegalMoves = legalMoves;
 			if (!locallyComputedLegalMoves) return;
@@ -103,8 +102,6 @@ function Square({
 			);
 
 			if (!isLocallyLegal) {
-				console.log("not locally legal");
-
 				clearLegalMoves();
 				clearPrevClickedSquare();
 				clearClickedSquare();
@@ -168,6 +165,7 @@ function Square({
 			}
 
 			updateGameBoardState(newGameState);
+			clearLegalMoveCache();
 			clearPrevClickedSquare();
 			clearClickedSquare();
 
