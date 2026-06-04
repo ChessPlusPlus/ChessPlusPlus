@@ -9,10 +9,11 @@ def create_game(game_id: str, rules: dict, game_state: dict):
 	}))
 
 def get_game_info(game_id: str):
-	if redis_client.get(f"game:{game_id}") is None:
+	game_info = redis_client.get(f"game:{game_id}")
+	if game_info is None:
 		return None
 
-	game_info = json.loads(redis_client.get(f"game:{game_id}"))
+	game_info = json.loads(game_info)
 	return game_info
 
 def get_game_state(game_id: str):
