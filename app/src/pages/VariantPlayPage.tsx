@@ -7,7 +7,6 @@ import PlayChessboard from "@/features/variants/variantPlay/components/PlayChess
 import { createGame } from "@/features/variants/variantPlay/services/game";
 import {
 	batchGenerateLegalMoves,
-	generateLegalMoves,
 	processMove,
 } from "@/features/variants/variantPlay/services/moveProcessing";
 import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
