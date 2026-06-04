@@ -20,14 +20,6 @@ async def get_game_info(game_id: str):
 	if game_info is None:
 		return None
 
-	json_load_start = time.perf_counter()
-	game_info = json.loads(game_info)
-
-	json_load_end = time.perf_counter()
-	time_taken = json_load_end - json_load_start
-	print(f"json_load took {time_taken:.6f} seconds")
-	print(f"json_load took {time_taken * 1000:.6f} milliseconds")
-
 	return game_info
 
 async def get_game_state(game_id: str):
