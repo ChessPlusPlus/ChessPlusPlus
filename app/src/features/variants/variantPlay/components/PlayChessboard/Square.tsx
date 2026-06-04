@@ -110,10 +110,17 @@ function Square({
 				clearPrevClickedSquare();
 				clearClickedSquare();
 
-				const legalMoves = await generateLegalMoves(activeGameId, [squareFile, squareRank]);
-				if (!legalMoves.legalMoves) return;
+				const cacheLegalMovesEntry = legalMoveCache.find(([position]) => position[0] === squareFile && position[1] === squareRank);
+				if (!cacheLegalMovesEntry) {
+					const { legalMoves } = await generateLegalMoves(activeGameId, [squareFile, squareRank]);
+					if (!legalMoves) return;
 
-				updateLegalMoves(legalMoves.legalMoves);
+					updateLegalMoveCache([...legalMoveCache, [[squareFile, squareRank], legalMoves]]);
+					updateLegalMoves(legalMoves);
+					return;
+				}
+
+				updateLegalMoves(cacheLegalMovesEntry[1]);
 
 				return;
 			}
