@@ -67,16 +67,21 @@ function Square({
 		if (!currentPrevClickedSquare && !currentClickedSquare) {
 			if (!piece) return;
 
-			updatePrevClickedSquare([squareFile, squareRank]);
-
+			updatePrevClickedSquare([squareFile, squareRank])
+			
+			let batchGeneratedLegalMoves = null;
 			if (legalMoveCache.length === 0) {
 				const { legalMoves } = await batchGenerateLegalMoves(activeGameId);
 				if (!legalMoves) return;
 
 				updateLegalMoveCache(legalMoves);
+				batchGeneratedLegalMoves = legalMoves;
 			}
 
-			const legalMovesForCurrentPiece = legalMoveCache.find(([position]) => position[0] === squareFile && position[1] === squareRank)?.[1] ?? [];
+			const legalMovesUsed = legalMoveCache.length > 0 ? legalMoveCache : batchGeneratedLegalMoves;
+			if (!legalMovesUsed) return;
+
+			const legalMovesForCurrentPiece = legalMovesUsed.find(([position]) => position[0] === squareFile && position[1] === squareRank)?.[1] ?? [];
 			updateLegalMoves(legalMovesForCurrentPiece);
 
 			return;
