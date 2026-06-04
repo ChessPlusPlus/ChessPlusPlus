@@ -88,6 +88,10 @@ function VariantPlayPage() {
 		};
 	}, [clearLegalMoves, clearLegalMoveCache]);
 
+	useEffect(() => {
+		clearLegalMoveCache();
+	}, [activeGameId, clearLegalMoveCache]);
+
 	function handleBackToHomePage() {
 		navigate("/");
 	}
