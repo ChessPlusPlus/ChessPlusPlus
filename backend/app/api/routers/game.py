@@ -8,10 +8,10 @@ from app.schemas.game_legal_move_generation_request import GameLegalMoveGenerati
 from app.schemas.game_make_move_request import GameMakeMoveRequest, GameMakeMoveResponse
 
 from app.engine.legal_move_generator.legal_move_generator import Game, Piece
+from app.engine.legal_move_generator.instanceless_legal_move_generator import InstancelessLegalMoveGenerator
 from app.utils.case_converter import convert_camel_to_snake
 from app.utils.starting_position_serialiser import serialise_starting_position
-
-active_games = {}
+from app.core.game_store import get_game_info
 
 router = APIRouter()
 
@@ -60,15 +60,16 @@ async def create_game(request: CreateGameRequest):
 
 @router.post("/generate-legal-moves", response_model=GameLegalMoveGenerationResponse)
 async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
-	game_instance = active_games.get(request.game_id)
-	print(f"Game instance: {game_instance}")
-	print(f"Requested game ID: {request.game_id}")
-	print(f"Active games: {active_games}")
-
-	if game_instance is None:
+	game_info = get_game_info(request.game_id)
+	if game_info is None:
 		return GameLegalMoveGenerationResponse(legal_moves=None)
 
-	legal_moves = game_instance.get_legal_moves(request.current_pos)
+	legal_moves = InstancelessLegalMoveGenerator.get_legal_moves(
+		rules=game_info.rules,
+		json_game_state=game_info.game_state,
+		piece_position=request.current_pos,
+	)
+	
 	legal_moves = list(itertools.chain(*legal_moves.values()))
 
 	return GameLegalMoveGenerationResponse(legal_moves=legal_moves)
