@@ -26,7 +26,7 @@ type GameplayStore = {
 	toggleBoardFlip: () => void;
 	resetBoardFlip: () => void;
 
-	legalMoveCache: [[number, number], [number, number][]][] | null;
+	legalMoveCache: [[number, number], [number, number][]][];
 	updateLegalMoveCache: (legalMoveCache: [[number, number], [number, number][]][]) => void;
 	clearLegalMoveCache: () => void;
 };
@@ -60,9 +60,9 @@ const useGameplayStore = create<GameplayStore>((set) => ({
 		set((state) => ({ isBoardFlipped: !state.isBoardFlipped })),
 	resetBoardFlip: () => set({ isBoardFlipped: false }),
 
-	legalMoveCache: null,
+	legalMoveCache: [],
 	updateLegalMoveCache: (legalMoveCache: [[number, number], [number, number][]][]) => set({ legalMoveCache }),
-	clearLegalMoveCache: () => set({ legalMoveCache: null }),
+	clearLegalMoveCache: () => set({ legalMoveCache: [] }),
 }));
 
 export default useGameplayStore;
