@@ -163,16 +163,21 @@ function VariantPlayPage() {
 
 			const [file, rank] = startLocation;
 
-			const legalMoves = legalMoveCache.find(
+			const cachedLegalMoveEntry = legalMoveCache.find(
 				([startLocation]) =>
 					startLocation[0] === file && startLocation[1] === rank,
-			)?.[1] ?? (
+			);
+
+			const legalMoves = cachedLegalMoveEntry?.[1] ?? (
 				await generateLegalMoves(activeGameId, [file, rank])
 			)?.legalMoves;
 
 			if (!legalMoves) return;
 
-			updateLegalMoveCache([...legalMoveCache, [[file, rank], legalMoves]]);
+			if (!cachedLegalMoveEntry) {
+				updateLegalMoveCache([...legalMoveCache, [[file, rank], legalMoves]]);
+			}
+
 			updateLegalMoves(legalMoves);
 		},
 		500,

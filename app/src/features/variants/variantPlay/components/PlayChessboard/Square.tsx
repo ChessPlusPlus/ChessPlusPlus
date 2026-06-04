@@ -67,17 +67,22 @@ function Square({
 			if (!piece) return;
 
 			updatePrevClickedSquare([squareFile, squareRank]);
-			
-			const legalMoves = legalMoveCache.find(
+
+			const cachedLegalMoveEntry = legalMoveCache.find(
 				([startLocation]) =>
 					startLocation[0] === squareFile && startLocation[1] === squareRank,
-			)?.[1] ?? (
+			);
+			
+			const legalMoves = cachedLegalMoveEntry?.[1] ?? (
 				await generateLegalMoves(activeGameId, [squareFile, squareRank])
 			)?.legalMoves;
 
 			if (!legalMoves) return;
 
-			updateLegalMoveCache([...legalMoveCache, [[squareFile, squareRank], legalMoves]]);
+			if (!cachedLegalMoveEntry) {
+				updateLegalMoveCache([...legalMoveCache, [[squareFile, squareRank], legalMoves]]);
+			}
+
 			updateLegalMoves(legalMoves);
 
 			return;
