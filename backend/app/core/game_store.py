@@ -28,6 +28,9 @@ def update_game_info(game_id: str, game_info: dict):
 
 def update_game_state(game_id: str, game_state: dict):
 	game_info = get_game_info(game_id)
+	if game_info is None:
+		return None
+
 	game_info["game_state"] = game_state
 	
 	update_game_info(game_id, game_info)
