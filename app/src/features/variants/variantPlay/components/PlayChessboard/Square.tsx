@@ -72,7 +72,12 @@ function Square({
 			let batchGeneratedLegalMoves = null;
 			if (legalMoveCache.length === 0) {
 				const { legalMoves } = await batchGenerateLegalMoves(activeGameId);
-				if (!legalMoves) return;
+				if (!legalMoves) {
+					clearLegalMoves();
+					clearPrevClickedSquare();
+					clearClickedSquare();
+					return;
+				};
 
 				updateLegalMoveCache(legalMoves);
 				batchGeneratedLegalMoves = legalMoves;
@@ -83,6 +88,7 @@ function Square({
 
 			const legalMovesForCurrentPiece = legalMovesUsed.find(([position]) => position[0] === squareFile && position[1] === squareRank)?.[1] ?? [];
 			updateLegalMoves(legalMovesForCurrentPiece);
+			updatePrevClickedSquare([squareFile, squareRank]);
 
 			return;
 		}
@@ -113,7 +119,12 @@ function Square({
 				const cacheLegalMovesEntry = legalMoveCache.find(([position]) => position[0] === squareFile && position[1] === squareRank);
 				if (!cacheLegalMovesEntry) {
 					const { legalMoves } = await generateLegalMoves(activeGameId, [squareFile, squareRank]);
-					if (!legalMoves) return;
+					if (!legalMoves) {
+						clearLegalMoves();
+						clearPrevClickedSquare();
+						clearClickedSquare();
+						return;
+					};
 
 					updateLegalMoveCache([...legalMoveCache, [[squareFile, squareRank], legalMoves]]);
 					updateLegalMoves(legalMoves);
@@ -121,6 +132,7 @@ function Square({
 				}
 
 				updateLegalMoves(cacheLegalMovesEntry[1]);
+				updatePrevClickedSquare([squareFile, squareRank]);
 
 				return;
 			}
