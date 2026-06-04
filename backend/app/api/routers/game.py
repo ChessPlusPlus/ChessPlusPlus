@@ -51,6 +51,8 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 	if game_info is None:
 		return GameLegalMoveGenerationResponse(legal_moves=None)
 
+	print(game_info["game_state"])
+
 	legal_moves = InstancelessLegalMoveGenerator.get_legal_moves(
 		rules=game_info["rules"],
 		json_game_state=game_info["game_state"],
@@ -77,18 +79,18 @@ async def process_move(request: GameMakeMoveRequest):
 
 	new_game_state = None
 	if request.piece_end_pos in legal_moves:
-		new_game_state = InstancelessLegalMoveGenerator.make_move(
+		raw_new_game_state = InstancelessLegalMoveGenerator.make_move(
 			json_game_state=game_info["game_state"],
 			piece_start_position=request.piece_start_pos,
 			piece_end_position=request.piece_end_pos,
 		)
 
-		new_game_state = InstancelessLegalMoveGenerator.get_simple_game_state(new_game_state)
+		simplified_new_game_state = InstancelessLegalMoveGenerator.get_simple_game_state(raw_new_game_state)
 
-		update_game_state(request.game_id, new_game_state)
+		update_game_state(request.game_id, raw_new_game_state)
 
 		valid_move = True
 	else:
 		valid_move = False
 
-	return GameMakeMoveResponse(valid_move=valid_move, new_game_state=new_game_state)
+	return GameMakeMoveResponse(valid_move=valid_move, new_game_state=simplified_new_game_state)
