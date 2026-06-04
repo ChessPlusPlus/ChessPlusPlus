@@ -71,6 +71,28 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 
 	return GameLegalMoveGenerationResponse(legal_moves=legal_moves)
 
+@router.post("/batch-generate-legal-moves", response_model=BatchGenerateLegalMovesResponse)
+async def batch_generate_legal_moves(request: BatchGenerateLegalMovesRequest):
+	game_info = await get_game_info(request.game_id)
+	if game_info is None:
+		return BatchGenerateLegalMovesResponse(legal_moves=None)
+
+	all_legal_moves = []
+	game_state = game_info["game_state"]
+	for piece in game_state:
+		legal_moves = InstancelessLegalMoveGenerator.get_legal_moves(
+			rules=game_info["rules"],
+			json_game_state=game_info["game_state"],
+			piece_position=piece,
+		)
+
+		position = (piece["position"]["x_pos"], piece["position"]["y_pos"])
+		piece_legal_moves = list(itertools.chain(*legal_moves.values()))
+
+		all_legal_moves.append((position, piece_legal_moves))
+
+	return BatchGenerateLegalMovesResponse(legal_moves=all_legal_moves)
+
 @router.post("/process-move", response_model=GameMakeMoveResponse)
 async def process_move(request: GameMakeMoveRequest):
 	game_info = await get_game_info(request.game_id)
