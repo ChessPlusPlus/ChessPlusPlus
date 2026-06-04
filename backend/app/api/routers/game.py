@@ -51,8 +51,6 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 	if game_info is None:
 		return GameLegalMoveGenerationResponse(legal_moves=None)
 
-	print(game_info["game_state"])
-
 	legal_moves = InstancelessLegalMoveGenerator.get_legal_moves(
 		rules=game_info["rules"],
 		json_game_state=game_info["game_state"],
