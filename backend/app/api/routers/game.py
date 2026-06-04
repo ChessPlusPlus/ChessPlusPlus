@@ -11,7 +11,7 @@ from app.engine.legal_move_generator.legal_move_generator import Game, Piece
 from app.engine.legal_move_generator.instanceless_legal_move_generator import InstancelessLegalMoveGenerator
 from app.utils.case_converter import convert_camel_to_snake
 from app.utils.starting_position_serialiser import serialise_starting_position
-from app.core.game_store import get_game_info
+from app.core.game_store import get_game_info, create_game
 
 router = APIRouter()
 
@@ -35,27 +35,13 @@ async def create_game(request: CreateGameRequest):
 		"setup": setup_rules,
 	}
 
-	game_instance = Game(rules)
+	start_game_state = InstancelessLegalMoveGenerator.get_start_game_state(rules)
 
-	id_counter = 0
-	for starting_piece in setup_rules["starting_position"]:
-		square = (starting_piece["x_pos"], starting_piece["y_pos"])
-		piece_name = starting_piece["piece_name"]
-
-		game_instance._game_state[square] = Piece(
-			position=square,
-			piece_id=id_counter,
-			piece_name=piece_name,
-			data={ "has_not_moved": True }
-		)
-
-		id_counter += 1
-
-	active_games[game_id] = game_instance
+	create_game(game_id, rules, start_game_state)
 
 	return CreateGameResponse(
 		game_id=game_id, 
-		game_state=list[tuple[tuple[int, int], str]]((entry[0], entry[1].piece_name) for entry in game_instance.get_game_state().items())
+		game_state=InstancelessLegalMoveGenerator.get_simple_game_state(start_game_state)
 	)
 
 @router.post("/generate-legal-moves", response_model=GameLegalMoveGenerationResponse)
