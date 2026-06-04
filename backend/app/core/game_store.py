@@ -17,10 +17,10 @@ def get_game_info(game_id: str):
 	return game_info
 
 def get_game_state(game_id: str):
-	if get_game_info(game_id) is None:
+	game_info = get_game_info(game_id)
+	if game_info is None:
 		return None
 
-	game_info = get_game_info(game_id)
 	return game_info["game_state"]
 
 def update_game_info(game_id: str, game_info: dict):
