@@ -1,3 +1,5 @@
+import json
+
 from app.core.redis import redis_client
 
 def create_game(game_id: str, rules: dict, game_state: dict):
