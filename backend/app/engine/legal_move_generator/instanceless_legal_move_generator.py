@@ -1,4 +1,6 @@
 import copy
+import time
+
 from app.engine.legal_move_generator.custom_errors import *
 from app.engine.legal_move_generator.piece_class import *
 
@@ -183,6 +185,7 @@ class InstancelessLegalMoveGenerator:
 
     @staticmethod
     def get_legal_moves(rules: dict, json_game_state: list, piece_position: tuple) -> dict:
+        get_legal_moves_start = time.perf_counter()
         game_state = InstancelessLegalMoveGenerator._convert_to_internal_game_state(json_game_state)
 
         legal_moves = {}
@@ -211,5 +214,10 @@ class InstancelessLegalMoveGenerator:
 
                     if each_legal_moves_both[1] and each_move["terminate_on_stop"]:
                         break
+
+        get_legal_moves_end = time.perf_counter()
+        time_taken = get_legal_moves_end - get_legal_moves_start
+        print(f"get_legal_moves took {time_taken:.6f} seconds")
+        print(f"get_legal_moves took {time_taken * 1000:.6f} milliseconds")
 
         return legal_moves
