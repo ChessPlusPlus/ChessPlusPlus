@@ -42,11 +42,15 @@ async function processMove(
 	pieceEndPos: [number, number],
 ): Promise<ProcessMoveResponse> {
 	try {
+		console.time("processMove");
 		const response = await api.post("game/process-move/", {
 			gameId,
 			pieceStartPos,
 			pieceEndPos,
 		})
+
+		console.timeLog("processMove");
+		console.timeEnd("processMove");
 
 		return { validMove: response.data.validMove, newGameState: response.data.newGameState };
 	} catch (error) {
