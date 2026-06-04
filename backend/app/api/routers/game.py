@@ -39,7 +39,7 @@ async def create_game(request: CreateGameRequest):
 
 	start_game_state = InstancelessLegalMoveGenerator.get_start_game_state(rules)
 
-	create_game_in_store(game_id, rules, start_game_state)
+	await create_game_in_store(game_id, rules, start_game_state)
 
 	return CreateGameResponse(
 		game_id=game_id, 
@@ -51,7 +51,7 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 	full_legal_moves_start = time.perf_counter()
 	
 	game_info_fetch_start = time.perf_counter()
-	game_info = get_game_info(request.game_id)
+	game_info = await get_game_info(request.game_id)
 	game_info_fetch_end = time.perf_counter()
 
 	time_taken = game_info_fetch_end - game_info_fetch_start
@@ -78,7 +78,7 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 
 @router.post("/process-move", response_model=GameMakeMoveResponse)
 async def process_move(request: GameMakeMoveRequest):
-	game_info = get_game_info(request.game_id)
+	game_info = await get_game_info(request.game_id)
 	if game_info is None:
 		return GameMakeMoveResponse(valid_move=False, new_game_state=None)
 
@@ -100,7 +100,7 @@ async def process_move(request: GameMakeMoveRequest):
 
 		simplified_new_game_state = InstancelessLegalMoveGenerator.get_simple_game_state(raw_new_game_state)
 
-		update_game_state(request.game_id, raw_new_game_state)
+		await update_game_state(request.game_id, raw_new_game_state)
 
 		valid_move = True
 	else:
