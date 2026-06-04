@@ -153,7 +153,6 @@ function VariantPlayPage() {
 	const handleDragStart = _.debounce(
 		async (...args: Parameters<NonNullable<OnDragStart>>) => {
 			if (!activeGameId) return;
-			if (!legalMoveCache) return;
 
 			const [event] = args;
 
