@@ -29,6 +29,10 @@ function VariantPlayPage() {
 		updateActiveGameId,
 		updateLegalMoves,
 		clearLegalMoves,
+
+		legalMoveCache,
+		updateLegalMoveCache,
+		clearLegalMoveCache,
 	} = useGameplayStore();
 	const { variants, hasHydrated: hasVariantsHydrated } = useVariantsStore();
 	const { variantId } = useParams();
@@ -143,14 +147,13 @@ function VariantPlayPage() {
 		}
 
 		updateGameBoardState(newGameState);
+		clearLegalMoveCache();
 	}
 
 	const handleDragStart = _.debounce(
 		async (...args: Parameters<NonNullable<OnDragStart>>) => {
-			console.log("drag start");
-			console.log(activeGameId);
-
 			if (!activeGameId) return;
+			if (!legalMoveCache) return;
 
 			const [event] = args;
 
@@ -161,12 +164,16 @@ function VariantPlayPage() {
 
 			const [file, rank] = startLocation;
 
-			const legalMoves = (
+			const legalMoves = legalMoveCache.find(
+				([startLocation]) =>
+					startLocation[0] === file && startLocation[1] === rank,
+			)?.[1] ?? (
 				await generateLegalMoves(activeGameId, [file, rank])
 			)?.legalMoves;
 
 			if (!legalMoves) return;
 
+			updateLegalMoveCache([...legalMoveCache, [[file, rank], legalMoves]]);
 			updateLegalMoves(legalMoves);
 		},
 		500,
