@@ -2,7 +2,8 @@
 name="chessplusplus-backend"
 dependencies = [
 	"fastapi[standard]==0.135.1",
-	"starlette"
+	"starlette",
+	"redis[hiredis]==8.0.0"
 ]
 
 version="0.1.0"
