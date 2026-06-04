@@ -51,6 +51,8 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 	full_legal_moves_start = time.perf_counter()
 	game_info = await get_game_info(request.game_id)
 
+	print(f"Game info: {game_info}")
+
 	if game_info is None:
 		return GameLegalMoveGenerationResponse(legal_moves=None)
 
