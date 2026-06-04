@@ -163,14 +163,19 @@ function VariantPlayPage() {
 
 			const [file, rank] = startLocation;
 
+			let batchGeneratedLegalMoves = null;
 			if (legalMoveCache.length === 0) {
 				const { legalMoves } = await batchGenerateLegalMoves(activeGameId);
 				if (!legalMoves) return;
 
 				updateLegalMoveCache(legalMoves);
+				batchGeneratedLegalMoves = legalMoves;
 			}
 
-			const legalMovesForCurrentPiece = legalMoveCache.find(([position]) => position[0] === file && position[1] === rank)?.[1] ?? [];
+			const legalMovesUsed = legalMoveCache.length > 0 ? legalMoveCache : batchGeneratedLegalMoves;
+			if (!legalMovesUsed) return;
+			
+			const legalMovesForCurrentPiece = legalMovesUsed.find(([position]) => position[0] === file && position[1] === rank)?.[1] ?? [];
 
 			updateLegalMoves(legalMovesForCurrentPiece);
 		},
