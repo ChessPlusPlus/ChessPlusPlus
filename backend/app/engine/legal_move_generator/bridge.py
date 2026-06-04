@@ -4,6 +4,7 @@ from typing import TypedDict
 from app.engine.legal_move_generator.legal_move_generator import Piece
 from app.utils.case_converter import convert_camel_to_snake
 from app.utils.starting_position_serialiser import serialise_starting_position
+from app.engine.legal_move_generator.instanceless_legal_move_generator import InstancelessLegalMoveGenerator
 
 class PieceJSONRuleset(TypedDict):
 	pos: tuple[int, int]
@@ -44,7 +45,10 @@ def generate_legal_moves_for_preview(piece_name: str, current_pos: tuple[int, in
                 "y_pos": square[1]
             },
             "piece_name": piece_name,
+            "piece_id": id_counter,
             "data": { "has_not_moved": True }
         })
+
+        id_counter += 1
 
     return InstancelessLegalMoveGenerator.get_legal_moves(rules, json_game_state, current_pos)
