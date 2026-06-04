@@ -2,3 +2,5 @@
 backend/.venv
 
 __pycache__
+*.egg-info
+.env
