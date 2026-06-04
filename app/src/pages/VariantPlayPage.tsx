@@ -84,8 +84,9 @@ function VariantPlayPage() {
 	useEffect(() => {
 		return () => {
 			clearLegalMoves();
+			clearLegalMoveCache();
 		};
-	}, [clearLegalMoves]);
+	}, [clearLegalMoves, clearLegalMoveCache]);
 
 	function handleBackToHomePage() {
 		navigate("/");
