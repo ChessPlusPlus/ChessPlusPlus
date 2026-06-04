@@ -1,5 +1,6 @@
 import uuid
 import itertools
+import json
 
 from fastapi import APIRouter
 
@@ -11,7 +12,7 @@ from app.engine.legal_move_generator.legal_move_generator import Game, Piece
 from app.engine.legal_move_generator.instanceless_legal_move_generator import InstancelessLegalMoveGenerator
 from app.utils.case_converter import convert_camel_to_snake
 from app.utils.starting_position_serialiser import serialise_starting_position
-from app.core.game_store import get_game_info, create_game
+from app.core.game_store import get_game_info, create_game as create_game_in_store
 
 router = APIRouter()
 
@@ -37,7 +38,7 @@ async def create_game(request: CreateGameRequest):
 
 	start_game_state = InstancelessLegalMoveGenerator.get_start_game_state(rules)
 
-	create_game(game_id, rules, start_game_state)
+	create_game_in_store(game_id, rules, start_game_state)
 
 	return CreateGameResponse(
 		game_id=game_id, 
@@ -51,9 +52,9 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 		return GameLegalMoveGenerationResponse(legal_moves=None)
 
 	legal_moves = InstancelessLegalMoveGenerator.get_legal_moves(
-		rules=game_info.rules,
-		json_game_state=game_info.game_state,
-		piece_position=request.current_pos,
+		rules=game_info["rules"],
+		json_game_state=game_info["game_state"],
+		piece_position=request["current_pos"],
 	)
 	
 	legal_moves = list(itertools.chain(*legal_moves.values()))
@@ -67,9 +68,9 @@ async def process_move(request: GameMakeMoveRequest):
 		return GameMakeMoveResponse(valid_move=False, new_game_state=None)
 
 	legal_moves = InstancelessLegalMoveGenerator.get_legal_moves(
-		rules=game_info.rules,
-		json_game_state=game_info.game_state,
-		piece_position=request.piece_start_pos,
+		rules=game_info["rules"],
+		json_game_state=game_info["game_state"],
+		piece_position=request["piece_start_pos"],
 	)
 
 	legal_moves = list(itertools.chain(*legal_moves.values()))
@@ -77,9 +78,9 @@ async def process_move(request: GameMakeMoveRequest):
 	new_game_state = None
 	if request.piece_end_pos in legal_moves:
 		new_game_state = InstancelessLegalMoveGenerator.make_move(
-			json_game_state=game_info.game_state,
-			piece_start_position=request.piece_start_pos,
-			piece_end_position=request.piece_end_pos,
+			json_game_state=game_info["game_state"],
+			piece_start_position=request["piece_start_pos"],
+			piece_end_position=request["piece_end_pos"],
 		)
 
 		update_game_state(request.game_id, new_game_state)
