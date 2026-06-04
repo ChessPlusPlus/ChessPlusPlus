@@ -62,22 +62,30 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 
 @router.post("/process-move", response_model=GameMakeMoveResponse)
 async def process_move(request: GameMakeMoveRequest):
-	game_instance = active_games.get(request.game_id)
-	if game_instance is None:
+	game_info = get_game_info(request.game_id)
+	if game_info is None:
 		return GameMakeMoveResponse(valid_move=False, new_game_state=None)
 
-	legal_moves = game_instance.get_legal_moves(request.piece_start_pos)
+	legal_moves = InstancelessLegalMoveGenerator.get_legal_moves(
+		rules=game_info.rules,
+		json_game_state=game_info.game_state,
+		piece_position=request.piece_start_pos,
+	)
+
 	legal_moves = list(itertools.chain(*legal_moves.values()))
 
+	new_game_state = None
 	if request.piece_end_pos in legal_moves:
-		game_instance.make_move(request.piece_start_pos, request.piece_end_pos)
+		new_game_state = InstancelessLegalMoveGenerator.make_move(
+			json_game_state=game_info.game_state,
+			piece_start_position=request.piece_start_pos,
+			piece_end_position=request.piece_end_pos,
+		)
+
+		update_game_state(request.game_id, new_game_state)
+
 		valid_move = True
 	else:
 		valid_move = False
-
-	if valid_move:
-		new_game_state = list[tuple[tuple[int, int], str]]((entry[0], entry[1].piece_name) for entry in game_instance.get_game_state().items())
-	else:
-		new_game_state = None
 
 	return GameMakeMoveResponse(valid_move=valid_move, new_game_state=new_game_state)
