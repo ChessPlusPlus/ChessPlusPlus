@@ -33,20 +33,18 @@ def generate_legal_moves_for_preview(piece_name: str, current_pos: tuple[int, in
         "setup": serialized_setup_rules
     }
 
-    game_instance = Game(rules)
-    game_instance.overwrite_game_state({})
-
     serialised_game_state = dict(game_state)
 
+    json_game_state = []
     id_counter = 0
     for square, piece_name in serialised_game_state.items():
-        game_instance._game_state[square] = Piece(
-            position=square,
-            piece_id=id_counter,
-            piece_name=piece_name,
-            data={ "has_not_moved": True }
-        )
+        json_game_state.append({
+            "position": {
+                "x_pos": square[0],
+                "y_pos": square[1]
+            },
+            "piece_name": piece_name,
+            "data": { "has_not_moved": True }
+        })
 
-        id_counter += 1
-
-    return game_instance.get_legal_moves(current_pos)
+    return InstancelessLegalMoveGenerator.get_legal_moves(rules, json_game_state, current_pos)
