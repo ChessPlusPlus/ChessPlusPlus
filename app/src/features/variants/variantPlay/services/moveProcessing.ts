@@ -16,13 +16,15 @@ async function generateLegalMoves(
 	currentPos: [number, number],
 ): Promise<GenerateLegalMovesResponse> {
 	try {
-		console.time("legal move service call");
+		const t0 = performance.now();
+
 		const response = await api.post("game/generate-legal-moves/", {
 			gameId,
 			currentPos,
 		});
-		console.timeLog("legal move service call");
-		console.timeEnd("legal move service call");
+		const t1 = performance.now();
+		
+		console.log(`Legal move service call took ${t1 - t0} milliseconds`);
 
 		console.log(response.data);
 
