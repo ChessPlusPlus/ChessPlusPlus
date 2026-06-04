@@ -1,6 +1,7 @@
 import uuid
 import itertools
 import json
+import time
 
 from fastapi import APIRouter
 
@@ -47,7 +48,16 @@ async def create_game(request: CreateGameRequest):
 
 @router.post("/generate-legal-moves", response_model=GameLegalMoveGenerationResponse)
 async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
+	full_legal_moves_start = time.perf_counter()
+	
+	game_info_fetch_start = time.perf_counter()
 	game_info = get_game_info(request.game_id)
+	game_info_fetch_end = time.perf_counter()
+
+	time_taken = game_info_fetch_end - game_info_fetch_start
+	print(f"game_info_fetch took {time_taken:.6f} seconds")
+	print(f"game_info_fetch took {time_taken * 1000:.6f} milliseconds")
+
 	if game_info is None:
 		return GameLegalMoveGenerationResponse(legal_moves=None)
 
@@ -58,6 +68,11 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 	)
 	
 	legal_moves = list(itertools.chain(*legal_moves.values()))
+
+	full_legal_moves_end = time.perf_counter()
+	time_taken = full_legal_moves_end - full_legal_moves_start
+	print(f"full_legal_moves took {time_taken:.6f} seconds")
+	print(f"full_legal_moves took {time_taken * 1000:.6f} milliseconds")
 
 	return GameLegalMoveGenerationResponse(legal_moves=legal_moves)
 
