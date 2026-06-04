@@ -27,7 +27,6 @@ def generate_legal_moves_for_preview(piece_name: str, current_pos: tuple[int, in
         "starting_position": serialise_starting_position(setup_rules.starting_position),
     }
 
-
     rules = {
         "moves": serialized_movement_rules,
         "pieces": serialized_piece_ruleset,
