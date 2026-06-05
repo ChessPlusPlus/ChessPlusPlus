@@ -76,6 +76,10 @@ function HomePage() {
 		window.uj?.showWidget();
 	}
 
+	function handleFeedbackBoardButtonClick() {
+		window.uj?.redirect({ to: "feedback" });
+	}
+
 	return (
 		<>
 			<div>
@@ -195,7 +199,7 @@ function HomePage() {
 
 				<Tooltip>
 					<TooltipTrigger asChild>
-						<Button variant="ghost" className="p-1 hover:bg-gray-100 rounded-md">
+						<Button onClick={handleFeedbackBoardButtonClick} variant="ghost" className="p-1 hover:bg-gray-100 rounded-md">
 							<IconExternalLink className="size-6" strokeWidth={1.5} />
 						</Button>
 					</TooltipTrigger>
