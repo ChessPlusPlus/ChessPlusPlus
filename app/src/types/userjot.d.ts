@@ -8,6 +8,7 @@ type UserJotIdentifyOptions = {
 
 type UserJotRedirectOptions = {
 	to: "feedback" | "updates";
+	newTab?: boolean;
 }
 
 declare global {

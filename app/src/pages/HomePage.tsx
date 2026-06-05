@@ -77,7 +77,7 @@ function HomePage() {
 	}
 
 	function handleFeedbackBoardButtonClick() {
-		window.uj?.redirect({ to: "feedback" });
+		window.uj?.redirect({ to: "feedback", newTab: true });
 	}
 
 	return (
