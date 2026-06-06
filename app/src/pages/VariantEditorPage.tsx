@@ -214,10 +214,10 @@ function VariantEditorPage() {
 							currentOpenMenu === "movements" ||
 								currentOpenMenu === "pieces"
 								? "-ml-28"
-								: "",
+								: "mr-13 md:mr-0",
 						)}
 					>
-						<div className="aspect-square flex flex-row justify-center w-full max-w-md">
+						<div className="aspect-square flex flex-row justify-center w-full max-w-[12rem] md:max-w-md">
 							<ChessboardGrid
 								boardState={
 									new TupleKeyedMap([[[4, 3], activePiece]])
