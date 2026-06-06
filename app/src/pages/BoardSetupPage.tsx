@@ -167,7 +167,7 @@ function BoardSetupPage() {
 
 				<div className="flex flex-row items-center justify-center w-full h-full">
 					<DragDropProvider onDragEnd={handleDragEnd}>
-						<div className="flex flex-row w-full h-full items-center justify-center gap-4">
+						<div className="flex flex-col md:flex-row w-full h-full items-center justify-center gap-4">
 							<SetupChessboard />
 							<SetupToolbar />
 							<SetupMenu />

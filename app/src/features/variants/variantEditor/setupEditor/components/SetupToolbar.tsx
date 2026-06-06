@@ -28,7 +28,7 @@ function SetupToolbar() {
 	}
 
 	return (
-		<div className="flex flex-col justify-center gap-2 bg-white shadow-md shadow-gray-400 rounded-md py-2 px-1">
+		<div className="flex flex-row md:flex-col justify-center gap-2 bg-white shadow-md shadow-gray-400 rounded-md py-2 px-1">
 			<Tooltip>
 				<TooltipTrigger asChild>
 					<Button
