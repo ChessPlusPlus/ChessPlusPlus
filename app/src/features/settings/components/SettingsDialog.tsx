@@ -121,10 +121,10 @@ function SettingsDialog() {
 					<DialogTitle>Settings</DialogTitle>
 				</DialogHeader>
 
-				<Tabs orientation="vertical" className="flex flex-row gap-4">
+				<Tabs orientation="vertical" className="flex flex-row gap-4 max-w-[40%]">
 					<TabsList className="h-full">
 						<TabsTrigger value="analytics">Analytics</TabsTrigger>
-						<TabsTrigger value="feedback-collection">
+						<TabsTrigger value="feedback-collection" className="whitespace-normal text-left">
 							Feedback collection
 						</TabsTrigger>
 						<TabsTrigger value="danger-zone">
@@ -136,7 +136,7 @@ function SettingsDialog() {
 						value="analytics"
 						className="flex flex-row gap-4"
 					>
-						<Field orientation="horizontal">
+						<Field className="flex flex-col md:grid md:grid-cols-2 gap-4">
 							<FieldContent>
 								<FieldLabel htmlFor="allow-analytics">
 									Allow analytics
