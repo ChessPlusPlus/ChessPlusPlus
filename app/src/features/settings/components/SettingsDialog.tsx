@@ -121,13 +121,13 @@ function SettingsDialog() {
 					<DialogTitle>Settings</DialogTitle>
 				</DialogHeader>
 
-				<Tabs orientation="vertical" className="flex flex-row gap-4 max-w-[40%]">
-					<TabsList className="h-full">
+				<Tabs orientation="vertical" className="flex flex-row gap-4">
+					<TabsList className="h-full max-w-[40%]">
 						<TabsTrigger value="analytics">Analytics</TabsTrigger>
 						<TabsTrigger value="feedback-collection" className="whitespace-normal text-left">
 							Feedback collection
 						</TabsTrigger>
-						<TabsTrigger value="danger-zone">
+						<TabsTrigger value="danger-zone" className="whitespace-normal text-left">
 							Danger zone
 						</TabsTrigger>
 					</TabsList>
