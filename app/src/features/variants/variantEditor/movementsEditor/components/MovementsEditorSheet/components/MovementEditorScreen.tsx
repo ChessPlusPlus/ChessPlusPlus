@@ -273,7 +273,7 @@ export function MovementEditorScreen() {
 					</SheetDescription>
 				</SheetHeader>
 
-				<div className="px-4 flex flex-col gap-4">
+				<div className="px-4 flex flex-col gap-4 overflow-y-auto">
 					<FieldSet>
 						<FieldLegend>Basic information</FieldLegend>
 						<Field
