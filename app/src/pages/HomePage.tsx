@@ -90,9 +90,9 @@ function HomePage() {
 		
 			<div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-linear-to-b from-white to-purple-400">
 				<h1 className="text-6xl font-bold">Chess++</h1>
-				<p>Create and play with your own custom chess pieces</p>
+				<p className="max-w-3/4 text-center">Create and play with your own custom chess pieces</p>
 
-				<div className="flex flex-row gap-4">
+				<div className="flex flex-col md:flex-row gap-4">
 					<Button onClick={openCreateVariantDialog} className="px-4">
 						<IconPlus />
 						Create variant

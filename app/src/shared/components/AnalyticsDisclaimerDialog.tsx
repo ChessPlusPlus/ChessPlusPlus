@@ -1,16 +1,16 @@
-import {
-	AlertDialog,
-	AlertDialogAction,
-	AlertDialogContent,
-	AlertDialogDescription,
-	AlertDialogFooter,
-	AlertDialogHeader,
-	AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
 import posthog from "posthog-js";
 import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
+import {
+	Credenza,
+	CredenzaContent,
+	CredenzaDescription,
+	CredenzaFooter,
+	CredenzaHeader,
+	CredenzaTitle,
+} from "@/components/ui/credenza";
+import { Button } from "@/components/ui/button";
 
 function AnalyticsDisclaimerDialog() {
 	const {
@@ -35,94 +35,101 @@ function AnalyticsDisclaimerDialog() {
 	}
 
 	return (
-		<AlertDialog
+		<Credenza
 			open={isAnalyticsDisclaimerDialogOpen}
 			onOpenChange={(open) => {
 				if (open) {
 					openAnalyticsDisclaimerDialog();
 				} else {
 					closeAnalyticsDisclaimerDialog();
+					posthog.opt_out_capturing();
+					disableAnalytics();
 				}
 			}}
 		>
-			<AlertDialogContent>
-				<AlertDialogHeader>
-					<AlertDialogTitle>Hi there!</AlertDialogTitle>
-					<AlertDialogDescription asChild>
-						<div className="text-sm text-muted-foreground">
-							<span>
-								Would you like to help us improve Chess++ by
-								allowing us to collect anonymous usage data? You
-								may change your decision at any time
-							</span>
+			<CredenzaContent className="flex flex-col">
+				<div className="min-h-0 flex-1 overflow-y-auto flex flex-col gap-4">
+					<CredenzaHeader>
+						<CredenzaTitle>Hi there!</CredenzaTitle>
+						<CredenzaDescription asChild>
+							<div className="text-sm text-muted-foreground">
+								<span>
+									Would you like to help us improve Chess++ by
+									allowing us to collect anonymous usage data?
+									You may change your decision at any time
+								</span>
 
-							<br />
-							<br />
+								<br />
+								<br />
 
-							<span>The data will be used for:</span>
+								<span>The data will be used for:</span>
+								<ul className="list-disc list-outside pl-5">
+									<li>
+										Understanding feature usage patterns to
+										guide product improvements
+									</li>
+									<li>
+										Improving discoverability of underused
+										features
+									</li>
+									<li>
+										Identifying potential performance issues
+									</li>
+								</ul>
+							</div>
+						</CredenzaDescription>
+					</CredenzaHeader>
+
+					<Tabs className="px-4 md:px-0">
+						<TabsList className="w-full">
+							<TabsTrigger value="what-we-collect">
+								We collect
+							</TabsTrigger>
+							<TabsTrigger value="what-we-will-never-collect">
+								We do not collect
+							</TabsTrigger>
+						</TabsList>
+
+						<TabsContent value="what-we-collect">
 							<ul className="list-disc list-outside pl-5">
 								<li>
-									Understanding feature usage patterns to
-									guide product improvements
+									How often you perform certain actions in
+									Chess++
 								</li>
 								<li>
-									Improving discoverability of underused
-									features
-								</li>
-								<li>
-									Identifying potential performance issues
+									How much you use certain features in Chess++
 								</li>
 							</ul>
-						</div>
-					</AlertDialogDescription>
-				</AlertDialogHeader>
+						</TabsContent>
 
-				<Tabs>
-					<TabsList className="w-full">
-						<TabsTrigger value="what-we-collect">
-							What we collect
-						</TabsTrigger>
-						<TabsTrigger value="what-we-will-never-collect">
-							What we will never collect
-						</TabsTrigger>
-					</TabsList>
+						<TabsContent value="what-we-will-never-collect">
+							<ul className="list-disc list-outside pl-5">
+								<li>
+									Information that can be used to identify you
+									such as your email address, name, or other
+									personal information will never be collected
+									as part of analytics.
+								</li>
+								<li>
+									However, your name and email address will be
+									collected when you are providing feedback,
+									if you choose to provide it.
+								</li>
+							</ul>
+						</TabsContent>
+					</Tabs>
 
-					<TabsContent value="what-we-collect">
-						<ul className="list-disc list-outside pl-5">
-							<li>
-								How often you perform certain actions in Chess++
-							</li>
-							<li>
-								How much you use certain features in Chess++
-							</li>
-						</ul>
-					</TabsContent>
-
-					<TabsContent value="what-we-will-never-collect">
-						<ul className="list-disc list-outside pl-5">
-							<li>
-								Information that can be used to identify you such as your email
-								address, name, or other personal information
-								will never be collected as part of analytics.
-							</li>
-							<li>
-								However, your name and email address will be
-								collected when you are providing feedback, if you choose to provide it.
-							</li>
-						</ul>
-					</TabsContent>
-				</Tabs>
-
-				<AlertDialogFooter className="grid grid-cols-2 gap-2">
-					<AlertDialogAction variant="outline" onClick={handleOptOut}>
-						Stay opted out
-					</AlertDialogAction>
-					<AlertDialogAction variant="default" onClick={handleOptIn}>
-						Opt in
-					</AlertDialogAction>
-				</AlertDialogFooter>
-			</AlertDialogContent>
-		</AlertDialog>
+					<CredenzaFooter className="grid grid-cols-2 gap-2">
+						<Button variant="outline" onClick={handleOptOut}>
+							Stay opted out
+						</Button>
+						<Button variant="default" onClick={handleOptIn}>
+							Opt in
+						</Button>
+					</CredenzaFooter>
+				</div>
+			</CredenzaContent>
+		</Credenza>
 	);
 }
 
