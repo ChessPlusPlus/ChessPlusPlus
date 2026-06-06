@@ -87,6 +87,10 @@ function HomePage() {
 				<meta name="description" content="Create and play with your own custom chess pieces" />
 				<meta name="keywords" content="chess variants, custom pieces" />
 			</div>
+
+			<div className="fixed top-2 left-2">
+				<p>v1.1.0</p>
+			</div>
 		
 			<div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-linear-to-b from-white to-purple-400">
 				<h1 className="text-6xl font-bold">Chess++</h1>
