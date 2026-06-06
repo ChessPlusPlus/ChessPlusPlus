@@ -17,7 +17,11 @@
     * [Exporting As JSON](user-guide/core-features/variant-editor/exporting-as-json.md)
   * [Importing A Variant](user-guide/core-features/importing-a-variant.md)
   * [Playing A Variant](user-guide/core-features/playing-a-variant.md)
-* [Help](user-guide/help.md)
-* [Notes](user-guide/notes.md)
-* [Our AI Policy](user-guide/our-ai-policy.md)
-* [Thanks](user-guide/thanks.md)
+
+***
+
+* [Changelog](changelog.md)
+* [Help](help.md)
+* [Notes](notes.md)
+* [Our AI Policy](our-ai-policy.md)
+* [Thanks](thanks.md)
