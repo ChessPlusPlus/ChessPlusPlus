@@ -2,7 +2,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
 import posthog from "posthog-js";
 import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
-import { CredenzaAlert, CredenzaAlertHeader, CredenzaAlertContent, CredenzaAlertTitle, CredenzaAlertDescription, CredenzaAlertAction, CredenzaAlertFooter } from "@/components/ui/credenza-alert";
+import { Credenza, CredenzaContent, CredenzaDescription, CredenzaFooter, CredenzaHeader, CredenzaTitle } from "@/components/ui/credenza";
+import { Button } from "@/components/ui/button";
 
 function AnalyticsDisclaimerDialog() {
 	const {
@@ -27,7 +28,7 @@ function AnalyticsDisclaimerDialog() {
 	}
 
 	return (
-		<CredenzaAlert
+		<Credenza
 			open={isAnalyticsDisclaimerDialogOpen}
 			onOpenChange={(open) => {
 				if (open) {
@@ -37,10 +38,10 @@ function AnalyticsDisclaimerDialog() {
 				}
 			}}
 		>
-			<CredenzaAlertContent>
-				<CredenzaAlertHeader>
-					<CredenzaAlertTitle>Hi there!</CredenzaAlertTitle>
-					<CredenzaAlertDescription asChild>
+			<CredenzaContent>
+				<CredenzaHeader>
+					<CredenzaTitle>Hi there!</CredenzaTitle>
+					<CredenzaDescription asChild>
 						<div className="text-sm text-muted-foreground">
 							<span>
 								Would you like to help us improve Chess++ by
@@ -66,8 +67,8 @@ function AnalyticsDisclaimerDialog() {
 								</li>
 							</ul>
 						</div>
-					</CredenzaAlertDescription>
-				</CredenzaAlertHeader>
+					</CredenzaDescription>
+				</CredenzaHeader>
 
 				<Tabs>
 					<TabsList className="w-full">
@@ -105,16 +106,16 @@ function AnalyticsDisclaimerDialog() {
 					</TabsContent>
 				</Tabs>
 
-				<CredenzaAlertFooter className="grid grid-cols-2 gap-2">
-					<CredenzaAlertAction variant="outline" onClick={handleOptOut}>
+				<CredenzaFooter className="grid grid-cols-2 gap-2">
+					<Button variant="outline" onClick={handleOptOut}>
 						Stay opted out
-					</CredenzaAlertAction>
-					<CredenzaAlertAction variant="default" onClick={handleOptIn}>
+					</Button>
+					<Button variant="default" onClick={handleOptIn}>
 						Opt in
-					</CredenzaAlertAction>
-				</CredenzaAlertFooter>
-			</CredenzaAlertContent>
-		</CredenzaAlert>
+					</Button>
+				</CredenzaFooter>
+			</CredenzaContent>
+		</Credenza>
 	);
 }
 
