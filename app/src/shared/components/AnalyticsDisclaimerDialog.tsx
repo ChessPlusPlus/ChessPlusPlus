@@ -70,7 +70,7 @@ function AnalyticsDisclaimerDialog() {
 					</CredenzaDescription>
 				</CredenzaHeader>
 
-				<Tabs>
+				<Tabs className="px-4 md:px-0">
 					<TabsList className="w-full">
 						<TabsTrigger value="what-we-collect">
 							What we collect
