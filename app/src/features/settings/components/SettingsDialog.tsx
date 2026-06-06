@@ -134,9 +134,9 @@ function SettingsDialog() {
 
 					<TabsContent
 						value="analytics"
-						className="flex flex-row gap-4"
+						className="flex flex-col md:flex-row gap-4"
 					>
-						<Field className="flex flex-col md:grid md:grid-cols-2 gap-4">
+						<Field>
 							<FieldContent>
 								<FieldLabel htmlFor="allow-analytics">
 									Allow analytics
@@ -160,7 +160,7 @@ function SettingsDialog() {
 						className="flex flex-col gap-4"
 					>
 						<Field
-							className="grid grid-cols-2 gap-4"
+							className="flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-4"
 							orientation="horizontal"
 						>
 							<FieldContent>
@@ -185,7 +185,7 @@ function SettingsDialog() {
 						</Field>
 
 						<Field
-							className="grid grid-cols-2 gap-4"
+							className="flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-4"
 							orientation="horizontal"
 						>
 							<FieldContent>
@@ -219,7 +219,7 @@ function SettingsDialog() {
 
 					<TabsContent
 						value="danger-zone"
-						className="flex flex-row gap-4"
+						className="flex flex-col md:flex-row gap-4"
 					>
 						<Field orientation="horizontal">
 							<FieldContent>
