@@ -83,10 +83,10 @@ function AnalyticsDisclaimerDialog() {
 					<Tabs className="px-4 md:px-0">
 						<TabsList className="w-full">
 							<TabsTrigger value="what-we-collect">
-								What we collect
+								We collect
 							</TabsTrigger>
 							<TabsTrigger value="what-we-will-never-collect">
-								What we will never collect
+								We do not collect
 							</TabsTrigger>
 						</TabsList>
 
