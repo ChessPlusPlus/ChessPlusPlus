@@ -6,7 +6,7 @@ ChessPlusPlus is an online website where anyone can create custom chess variants
 
 Go visit the website at: https://chessplusplus.vercel.app
 
-Current version: 1.0.1
+Current version: 1.1.0
 
 ## Our AI policy:
 
