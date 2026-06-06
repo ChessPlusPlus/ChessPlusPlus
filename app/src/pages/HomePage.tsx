@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import {
 	IconBrandGithub,
 	IconChess,
+	IconExternalLink,
 	IconFileImport,
 	IconFolder,
 	IconHelpCircle,
@@ -73,6 +74,10 @@ function HomePage() {
 		}
 
 		window.uj?.showWidget();
+	}
+
+	function handleFeedbackBoardButtonClick() {
+		window.uj?.redirect({ to: "feedback", newTab: true });
 	}
 
 	return (
@@ -163,7 +168,7 @@ function HomePage() {
 				</Tooltip>
 			</div>
 
-			<div className="fixed left-2 bottom-2">
+			<div className="fixed left-2 bottom-2 flex flex-row items-center">
 				<Popover
 					open={isFeedbackCollectionCredentialsFormOpen}
 					onOpenChange={(open) => {
@@ -183,7 +188,7 @@ function HomePage() {
 					}} asChild>
 						<Button
 							variant="ghost"
-							size="icon"
+							className="p-1 hover:bg-gray-100 rounded-md"
 						>
 							<MessagePencilIcon className="size-6" />
 						</Button>
@@ -191,6 +196,17 @@ function HomePage() {
 
 					<FeedbackCollectionCredentialsForm />
 				</Popover>
+
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Button onClick={handleFeedbackBoardButtonClick} variant="ghost" className="p-1 hover:bg-gray-100 rounded-md">
+							<IconExternalLink className="size-6" strokeWidth={1.5} />
+						</Button>
+					</TooltipTrigger>
+					<TooltipContent side="top">
+						Feedback board
+					</TooltipContent>
+				</Tooltip>
 			</div>
 
 			<CreateVariantDialog />

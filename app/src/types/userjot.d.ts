@@ -6,6 +6,11 @@ type UserJotIdentifyOptions = {
 	firstName?: string;	
 }
 
+type UserJotRedirectOptions = {
+	to: "feedback" | "updates";
+	newTab?: boolean;
+}
+
 declare global {
 	interface Window {
 		uj?: {
@@ -17,6 +22,7 @@ declare global {
 				position: "left" | "right";
 			}) => void;
 			identify: (options: UserJotIdentifyOptions | null) => void;
+			redirect: (options?: UserJotRedirectOptions) => void;
 		};
 	}
 }
