@@ -29,6 +29,12 @@ interface CredenzaProps extends BaseProps {
   asChild?: true
 }
 
+interface CredenzaButtonProps extends CredenzaProps {
+	variant?: "default" | "outline" | "destructive"
+	onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+	type?: "button" | "submit" | "reset"
+}
+
 const CredenzaContext = React.createContext<{ isMobile: boolean }>({
   isMobile: false,
 })
@@ -67,7 +73,7 @@ const CredenzaAlertTrigger = ({ className, children, ...props }: CredenzaProps) 
   )
 }
 
-const CredenzaAlertClose = ({ className, children, ...props }: CredenzaProps) => {
+const CredenzaAlertClose = ({ className, children, ...props }: CredenzaButtonProps) => {
   const { isMobile } = useCredenzaContext()
   const CredenzaAlertClose = isMobile ? DrawerClose : AlertDialogCancel
 
@@ -78,7 +84,7 @@ const CredenzaAlertClose = ({ className, children, ...props }: CredenzaProps) =>
   )
 }
 
-const CredenzaAlertAction = ({ className, children, ...props }: CredenzaProps) => {
+const CredenzaAlertAction = ({ className, children, ...props }: CredenzaButtonProps) => {
   const { isMobile } = useCredenzaContext()
   const CredenzaAlertAction = isMobile ? Button : AlertDialogAction
 
