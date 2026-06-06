@@ -37,14 +37,6 @@ function PieceImage({ piece, imageUrl, file, rank }: PieceImageProps) {
 				{piece}
 			</TooltipContent>
 		</Tooltip>
-
-		// <img
-		// 	className="size-full object-contain absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-		// 	ref={ref}
-		// 	src={imageUrl}
-		// 	draggable={false}
-		// 	alt={piece}
-		// />
 	);
 }
 
