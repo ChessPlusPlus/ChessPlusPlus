@@ -38,7 +38,7 @@ function AnalyticsDisclaimerDialog() {
 				}
 			}}
 		>
-			<CredenzaContent>
+			<CredenzaContent className="overflow-y-auto">
 				<CredenzaHeader>
 					<CredenzaTitle>Hi there!</CredenzaTitle>
 					<CredenzaDescription asChild>
