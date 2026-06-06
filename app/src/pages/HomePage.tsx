@@ -176,6 +176,7 @@ function HomePage() {
 				<Tooltip>
 					<TooltipTrigger asChild>
 						<Link
+							rel="noopener noreferrer"
 							to={discordUrl}
 							target="_blank"
 							className="hover:bg-gray-100 rounded-md p-1"
