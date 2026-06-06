@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
+	IconBrandDiscord,
 	IconBrandGithub,
 	IconChess,
 	IconExternalLink,
@@ -35,6 +36,7 @@ import { useEffect } from "react";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
+const discordUrl = "https://discord.gg/Wp52HaBSF2"
 
 function HomePage() {
 	const { openDialog: openCreateVariantDialog } =
@@ -168,6 +170,24 @@ function HomePage() {
 					</TooltipTrigger>
 					<TooltipContent side="top">
 						Help (documentation)
+					</TooltipContent>
+				</Tooltip>
+
+				<Tooltip>
+					<TooltipTrigger asChild>
+						<Link
+							to={discordUrl}
+							target="_blank"
+							className="hover:bg-gray-100 rounded-md p-1"
+						>
+							<IconBrandDiscord
+								className="size-6"
+								strokeWidth={1.5}
+							/>
+						</Link>
+					</TooltipTrigger>
+					<TooltipContent side="top">
+						Discord server
 					</TooltipContent>
 				</Tooltip>
 			</div>
