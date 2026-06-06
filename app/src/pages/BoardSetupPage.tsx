@@ -152,7 +152,7 @@ function BoardSetupPage() {
 
 	return (
 		<>
-			<div className="flex flex-col w-full h-full">
+			<div className="flex flex-col w-full h-dvh">
 				<div className="flex flex-row items-center gap-2 w-full p-3 pb-0">
 					<Button
 						variant="ghost"
@@ -165,9 +165,9 @@ function BoardSetupPage() {
 					</Button>
 				</div>
 
-				<div className="flex flex-row items-center justify-center w-full h-full">
+				<div className="flex flex-row items-start justify-center flex-1 min-h-0 p-2 overflow-auto">
 					<DragDropProvider onDragEnd={handleDragEnd}>
-						<div className="flex flex-col md:flex-row w-full h-full items-center justify-center gap-4">
+						<div className="flex flex-col md:flex-row w-full flex-1 min-h-0 items-center justify-center gap-4">
 							<SetupChessboard />
 							<SetupToolbar />
 							<SetupMenu />
