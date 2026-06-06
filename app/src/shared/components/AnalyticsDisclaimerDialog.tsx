@@ -35,6 +35,8 @@ function AnalyticsDisclaimerDialog() {
 					openAnalyticsDisclaimerDialog();
 				} else {
 					closeAnalyticsDisclaimerDialog();
+					posthog.opt_out_capturing();
+					disableAnalytics();
 				}
 			}}
 		>
