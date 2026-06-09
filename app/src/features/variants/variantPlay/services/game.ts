@@ -20,7 +20,7 @@ async function createGame(
 	console.log("API INSTANCE:", api.defaults.baseURL);
 
 	try {
-		const response = await api.post("game/create-game/", {
+		const response = await api.post("game/create-game", {
 			setupRules,
 			pieceRuleset,
 			movementRules,
