@@ -16,8 +16,6 @@ async function createGame(
 	pieceRuleset: PieceRuleset,
 	movementRules: MovementRules,
 ): Promise<CreateGameResponse> {
-	console.log("BASE URL:", import.meta.env.VITE_API_BASE_URL)
-	
 	try {
 		const response = await api.post("game/create-game/", {
 			setupRules,
