@@ -22,7 +22,7 @@ async function generateLegalMoves(
 	try {
 		const t0 = performance.now();
 
-		const response = await api.post("game/generate-legal-moves/", {
+		const response = await api.post("game/generate-legal-moves", {
 			gameId,
 			currentPos,
 		});
@@ -49,7 +49,7 @@ async function batchGenerateLegalMoves(
 	gameId: string,
 ): Promise<BatchGenerateLegalMovesResponse> {
 	try {
-		const response = await api.post("game/batch-generate-legal-moves/", {
+		const response = await api.post("game/batch-generate-legal-moves", {
 			gameId,
 		});
 
@@ -73,7 +73,7 @@ async function processMove(
 ): Promise<ProcessMoveResponse> {
 	try {
 		console.time("processMove");
-		const response = await api.post("game/process-move/", {
+		const response = await api.post("game/process-move", {
 			gameId,
 			pieceStartPos,
 			pieceEndPos,
