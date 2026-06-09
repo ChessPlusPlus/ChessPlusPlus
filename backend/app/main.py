@@ -10,7 +10,7 @@ from app.api.routers import json
 
 app = FastAPI()
 
-origins = ["http://localhost:5173", "https://chessplusplus.vercel.app"]
+origins = ["http://localhost:5173", "https://chessplusplus.vercel.app", "https://chessplusplusbeta.vercel.app"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
