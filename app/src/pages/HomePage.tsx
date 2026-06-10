@@ -33,6 +33,7 @@ import useFeedbackCollectionCredentialsFormStore from "@/features/feedbackCollec
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import FeedbackCollectionCredentialsForm from "@/features/feedbackCollection/components/FeedbackCollectionCredentialsForm";
 import { useEffect } from "react";
+import { APP_VERSION, BETA_APP_VERSION } from "@/version";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
@@ -56,6 +57,8 @@ function HomePage() {
 		updateEmailDraft,
 		clearEmailDraftErrors,
 	} = useFeedbackCollectionCredentialsFormStore();
+
+	const isBeta = import.meta.env.VITE_IS_BETA === "true";
 
 	useEffect(() => {
 		if (userId === null) {
@@ -91,11 +94,16 @@ function HomePage() {
 			</div>
 
 			<div className="fixed top-2 left-2">
-				<p>v1.1.0</p>
+				<p>v{isBeta ? BETA_APP_VERSION : APP_VERSION}</p>
 			</div>
 		
 			<div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-linear-to-b from-white to-purple-400">
-				<h1 className="text-6xl font-bold">Chess++</h1>
+				<h1 className="text-6xl font-bold">
+					<span>Chess++ </span>
+					{isBeta && (
+						<span className="text-violet-600 font-bold">[BETA]</span>
+					)}
+				</h1>
 				<p className="max-w-3/4 text-center">Create and play with your own custom chess pieces</p>
 
 				<div className="flex flex-col md:flex-row gap-4">
