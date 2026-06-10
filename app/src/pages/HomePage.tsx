@@ -57,6 +57,8 @@ function HomePage() {
 		clearEmailDraftErrors,
 	} = useFeedbackCollectionCredentialsFormStore();
 
+	const isBeta = import.meta.env.VITE_IS_BETA === "true";
+
 	useEffect(() => {
 		if (userId === null) {
 			return;
@@ -95,7 +97,12 @@ function HomePage() {
 			</div>
 		
 			<div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-linear-to-b from-white to-purple-400">
-				<h1 className="text-6xl font-bold">Chess++</h1>
+				<h1 className="text-6xl font-bold">
+					<span>Chess++ </span>
+					{isBeta && (
+						<span className="text-violet-600 font-bold">[BETA]</span>
+					)}
+				</h1>
 				<p className="max-w-3/4 text-center">Create and play with your own custom chess pieces</p>
 
 				<div className="flex flex-col md:flex-row gap-4">
