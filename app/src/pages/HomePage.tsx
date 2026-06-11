@@ -59,7 +59,7 @@ function HomePage() {
 	} = useFeedbackCollectionCredentialsFormStore();
 
 	const isBeta = import.meta.env.VITE_IS_BETA === "true";
-
+	
 	useEffect(() => {
 		if (userId === null) {
 			return;
@@ -98,7 +98,7 @@ function HomePage() {
 			</div>
 		
 			<div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-linear-to-b from-white to-purple-400">
-				<h1 className="text-6xl font-bold">
+				<h1 className="text-6xl font-bold flex flex-col items-center justify-center gap-2 md:block">
 					<span>Chess++ </span>
 					{isBeta && (
 						<span className="text-violet-600 font-bold">[BETA]</span>
