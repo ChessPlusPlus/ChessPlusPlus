@@ -58,8 +58,7 @@ function HomePage() {
 		clearEmailDraftErrors,
 	} = useFeedbackCollectionCredentialsFormStore();
 
-	// const isBeta = import.meta.env.VITE_IS_BETA === "true";
-	const isBeta = true;
+	const isBeta = import.meta.env.VITE_IS_BETA === "true";
 	
 	useEffect(() => {
 		if (userId === null) {
