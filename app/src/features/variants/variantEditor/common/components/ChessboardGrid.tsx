@@ -5,14 +5,13 @@ import type { GameStateMap } from "@/features/variants/common/types/setupRules";
 
 type ChessboardGridProps = {
 	boardState: GameStateMap;
-	legalMoves: Record<number, [number, number][]>;
 	displayLegalMoveComponent: (
 		file: number,
 		rank: number,
 	) => React.ReactNode;
 };
 
-function ChessboardGrid({ boardState, legalMoves }: ChessboardGridProps) {
+function ChessboardGrid({ boardState, displayLegalMoveComponent }: ChessboardGridProps) {
 	const { images } = usePieceImagesStore();
 	const { currentVariantId, setupRulesDraft, pieceRulesetDraft } =
 		useVariantDraftStore();
@@ -27,8 +26,6 @@ function ChessboardGrid({ boardState, legalMoves }: ChessboardGridProps) {
 
 	const ranks = generateNumberSequence(boardYSize).reverse();
 	const files = generateNumberSequence(boardXSize);
-
-	const legalMoveEntries = Object.entries(legalMoves);
 
 	function renderPieceImage(imageId: string, pieceName: string) {
 		if (!currentVariantId) return null;
@@ -56,18 +53,6 @@ function ChessboardGrid({ boardState, legalMoves }: ChessboardGridProps) {
 					const imageId =
 						pieceRulesetDraft[foundSquare ?? ""]?.imageId;
 
-					const legalMovements = legalMoveEntries
-						.filter(([, coordinates]) => {
-							return coordinates.some(
-								(coordinate) =>
-									coordinate[0] === fileNumber &&
-									coordinate[1] === rank,
-							);
-						})
-						.map(([movementLabel]) => {
-							return movementLabel;
-						});
-
 					return (
 						<div
 							key={file}
@@ -84,14 +69,7 @@ function ChessboardGrid({ boardState, legalMoves }: ChessboardGridProps) {
 								key={`${rank}-${file}`}
 								className="absolute top-0 left-0 flex flex-row flex-wrap gap-2 p-2"
 							>
-								{legalMovements.map((movementLabel) => (
-									<span
-										key={movementLabel}
-										className="text-xs"
-									>
-										{movementLabel}
-									</span>
-								))}
+								{displayLegalMoveComponent(fileNumber, rank)}
 							</div>
 						</div>
 					);
