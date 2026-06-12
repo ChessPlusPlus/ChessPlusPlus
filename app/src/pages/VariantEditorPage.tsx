@@ -262,7 +262,7 @@ function VariantEditorPage() {
 			.map(([movementNumber]) => movementNumber);
 
 		return legalMovesForSquare.map((movementNumber) => {
-			return <span key={movementNumber}>{movementNumber}</span>;
+			return <span className="text-xs" key={movementNumber}>{movementNumber}</span>;
 		});
 	}
 
