@@ -1,13 +1,15 @@
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
-import {
-	generateNumberSequence,
-} from "@/features/variants/variantEditor/common/utils/boardGeneration";
+import { generateNumberSequence } from "@/features/variants/variantEditor/common/utils/boardGeneration";
 import type { GameStateMap } from "@/features/variants/common/types/setupRules";
 
 type ChessboardGridProps = {
 	boardState: GameStateMap;
 	legalMoves: Record<number, [number, number][]>;
+	displayLegalMoveComponent: (
+		file: number,
+		rank: number,
+	) => React.ReactNode;
 };
 
 function ChessboardGrid({ boardState, legalMoves }: ChessboardGridProps) {

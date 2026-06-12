@@ -165,7 +165,9 @@ function VariantEditorPage() {
 		navigate("/");
 	}
 
-	function parseLegalMovesPreview() {
+	function parseLegalMovesPreview():
+		| Record<number, [number, number][]>
+		| undefined {
 		if (!legalMovesPreview) return;
 		if (!movementRulesDraft) return;
 
@@ -223,6 +225,37 @@ function VariantEditorPage() {
 									new TupleKeyedMap([[[4, 3], activePiece]])
 								}
 								legalMoves={parseLegalMovesPreview() ?? {}}
+								displayLegalMoveComponent={(file, rank) => {
+									const legalMovesPreview =
+										parseLegalMovesPreview();
+									if (!legalMovesPreview) return null;
+
+									const legalMoveEntries =
+										Object.entries(legalMovesPreview);
+
+									const legalMovesForSquare = legalMoveEntries
+										.filter(([_, coordinates]) =>
+											coordinates.some(
+												([checkedFile, checkedRank]) =>
+													checkedFile === file &&
+													checkedRank === rank,
+											),
+										)
+										.map(
+											([movementNumber]) =>
+												movementNumber,
+										);
+
+									return legalMovesForSquare.map(
+										(movementNumber) => {
+											return (
+												<span key={movementNumber}>
+													{movementNumber}
+												</span>
+											);
+										},
+									);
+								}}
 							/>
 						</div>
 					</div>
