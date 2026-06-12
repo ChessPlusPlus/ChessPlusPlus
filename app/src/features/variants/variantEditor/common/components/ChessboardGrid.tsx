@@ -5,13 +5,13 @@ import type { GameStateMap } from "@/features/variants/common/types/setupRules";
 
 type ChessboardGridProps = {
 	boardState: GameStateMap;
-	displayLegalMoveComponent: (
-		file: number,
-		rank: number,
-	) => React.ReactNode;
+	displayLegalMoveComponent: (file: number, rank: number) => React.ReactNode;
 };
 
-function ChessboardGrid({ boardState, displayLegalMoveComponent }: ChessboardGridProps) {
+function ChessboardGrid({
+	boardState,
+	displayLegalMoveComponent,
+}: ChessboardGridProps) {
 	const { images } = usePieceImagesStore();
 	const { currentVariantId, setupRulesDraft, pieceRulesetDraft } =
 		useVariantDraftStore();
@@ -65,12 +65,7 @@ function ChessboardGrid({ boardState, displayLegalMoveComponent }: ChessboardGri
 									)
 								: null}
 
-							<div
-								key={`${rank}-${file}`}
-								className="absolute top-0 left-0 flex flex-row flex-wrap gap-2 p-2"
-							>
-								{displayLegalMoveComponent(fileNumber, rank)}
-							</div>
+							{displayLegalMoveComponent(fileNumber, rank)}
 						</div>
 					);
 				}),
