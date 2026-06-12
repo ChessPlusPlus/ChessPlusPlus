@@ -211,12 +211,15 @@ function VariantEditorPage() {
 	function parseLegalMovesPreview(
 		previewType: "piece" | "movement",
 	): Record<number, [number, number][]> | [number, number][] | undefined {
-		if (!pieceVisualiserMovesPreview) return;
+		if (previewType === "piece" && !pieceVisualiserMovesPreview) return;
+		if (previewType === "movement" && !movementVisualiserMovesPreview)
+			return;
+
 		if (!movementRulesDraft) return;
 
 		const legalMoveEntries =
 			previewType === "piece"
-				? Object.entries(pieceVisualiserMovesPreview)
+				? Object.entries(pieceVisualiserMovesPreview!)
 				: Object.entries(movementVisualiserMovesPreview ?? {});
 
 		const movementRuleEntries = Object.entries(movementRulesDraft);
@@ -234,10 +237,10 @@ function VariantEditorPage() {
 
 						return [movementIndex + 1, legalMoves];
 					})
-				: Object.values(pieceVisualiserMovesPreview).flat();
+				: Object.values(movementVisualiserMovesPreview ?? {}).flat();
 
 		if (previewType === "piece") {
-			return Object.fromEntries(parsedEntries)
+			return Object.fromEntries(parsedEntries);
 		} else {
 			return parsedEntries as [number, number][];
 		}
@@ -247,7 +250,10 @@ function VariantEditorPage() {
 		file: number,
 		rank: number,
 	) {
-		const legalMovesPreview = parseLegalMovesPreview("piece") as Record<number, [number, number][]>;
+		const legalMovesPreview = parseLegalMovesPreview("piece") as Record<
+			number,
+			[number, number][]
+		>;
 		if (!legalMovesPreview) return null;
 
 		const legalMoveEntries = Object.entries(legalMovesPreview);
@@ -261,24 +267,36 @@ function VariantEditorPage() {
 			)
 			.map(([movementNumber]) => movementNumber);
 
-		return legalMovesForSquare.map((movementNumber) => {
-			return <span className="text-xs" key={movementNumber}>{movementNumber}</span>;
-		});
+		return (
+			<div className="absolute top-0 left-0 flex flex-row flex-wrap gap-2 p-2">
+				{legalMovesForSquare.map((movementNumber) => {
+					return <span className="text-xs">{movementNumber}</span>;
+				})}
+			</div>
+		);
 	}
 
 	function displayLegalMoveComponentForMovementVisualiser(
 		file: number,
 		rank: number,
 	) {
-		const legalMovesPreview = parseLegalMovesPreview("movement") as [number, number][];
+		const legalMovesPreview = parseLegalMovesPreview("movement") as [
+			number,
+			number,
+		][];
 		if (!legalMovesPreview) return null;
 
-		const legalMovesForSquare = legalMovesPreview.filter(([checkedFile, checkedRank]) =>
-			checkedFile === file && checkedRank === rank,
+		const legalMovesForSquare = legalMovesPreview.filter(
+			([checkedFile, checkedRank]) =>
+				checkedFile === file && checkedRank === rank,
 		);
 
-		return legalMovesForSquare.map(([movementNumber]) => {
-			return <span key={movementNumber}>{movementNumber}</span>;
+		return legalMovesForSquare.map(() => {
+			return (
+				<div className="relative w-full h-full">
+					<span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-4 rounded-full bg-primary"></span>
+				</div>
+			);
 		});
 	}
 
