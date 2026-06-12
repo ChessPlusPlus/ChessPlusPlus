@@ -7,7 +7,7 @@ import type { GameStateMap } from "@/features/variants/common/types/setupRules";
 
 type ChessboardGridProps = {
 	boardState: GameStateMap;
-	legalMoves: Record<string, [number, number][]>;
+	legalMoves: Record<number, [number, number][]>;
 };
 
 function ChessboardGrid({ boardState, legalMoves }: ChessboardGridProps) {
