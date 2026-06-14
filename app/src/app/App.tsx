@@ -24,7 +24,7 @@ const queryClient = new QueryClient();
 function App() {
 	const { analyticsEnabled } = useAnalyticsPreferencesStore();
 	const { openAnalyticsDisclaimerDialog } = useAnalyticsDisclaimerDialogStore();
-	const { images, addImage } = usePieceImagesStore();
+	const { images, updateImages } = usePieceImagesStore();
 	
 	useEffect(() => {
 		if (analyticsEnabled === null) {
@@ -56,10 +56,15 @@ function App() {
 	useEffect(() => {
 		if (!images) return;
 
+		console.log(Object.keys(images));
+
 		if (!Object.keys(images).includes("movement_preview")) {
-			addImage(defaultPieceImages.movement_preview.image);
+			updateImages({
+				...images,
+				movement_preview: defaultPieceImages.movement_preview,
+			});
 		}
-	}, [images, addImage]);
+	}, [images, updateImages]);
 	
 	return (
 		<PostHogProvider>
