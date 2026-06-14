@@ -358,7 +358,7 @@ function VariantEditorPage() {
 								<ChessboardGrid
 									boardState={
 										new TupleKeyedMap([
-											[[4, 3], "piecePreview"],
+											[[4, 3], "movement_preview"],
 										])
 									}
 									displayLegalMoveComponent={
