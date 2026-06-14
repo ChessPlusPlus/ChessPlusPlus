@@ -155,7 +155,19 @@ function VariantEditorPage() {
 						moveset: [{ moveName: activeMovementName }],
 					},
 				},
-				movementRules: movementRulesDraft,
+				movementRules: {
+					[activeMovementName]: {
+						forMovement: forMovement ?? false,
+						forCapture: forCapture ?? false,
+						conditions: [],
+						moveDefinition: {
+							moveX: Number(offsetX) ?? 0,
+							moveY: Number(offsetY) ?? 0,
+							range: range ?? 0,
+							moveStopConditions: ["inside_piece"],
+						},
+					}
+				},
 				currentPos: [4, 3],
 				gameState: serialiseGameState(previewBoardState),
 				setupRules: {
