@@ -16,7 +16,6 @@ import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
 import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
 import AnalyticsDisclaimerDialog from "@/shared/components/AnalyticsDisclaimerDialog";
 import posthog from "posthog-js";
-import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
 
@@ -60,7 +59,7 @@ function App() {
 		if (!Object.keys(images).includes("movement_preview")) {
 			addImage(defaultPieceImages.movement_preview.image);
 		}
-	}, []);
+	}, [images, addImage]);
 	
 	return (
 		<PostHogProvider>

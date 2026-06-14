@@ -161,8 +161,8 @@ function VariantEditorPage() {
 						forCapture: forCapture ?? false,
 						conditions: [],
 						moveDefinition: {
-							moveX: Number(offsetX) ?? 0,
-							moveY: Number(offsetY) ?? 0,
+							moveX: Number(offsetX),
+							moveY: Number(offsetY),
 							range: range ?? 0,
 							moveStopConditions: ["inside_piece"],
 						},
@@ -271,7 +271,7 @@ function VariantEditorPage() {
 		const legalMoveEntries = Object.entries(legalMovesPreview);
 
 		const legalMovesForSquare = legalMoveEntries
-			.filter(([_, coordinates]) =>
+			.filter(([, coordinates]) =>
 				coordinates.some(
 					([checkedFile, checkedRank]) =>
 						checkedFile === file && checkedRank === rank,
