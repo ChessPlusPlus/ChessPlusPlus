@@ -146,12 +146,12 @@ function VariantEditorPage() {
 			const previewBoardState = new TupleKeyedMap<
 				[number, number],
 				string
-			>([[[4, 3], "piecePreview"]]);
+			>([[[4, 3], "movement_preview"]]);
 
 			return await displayLegalMoves({
-				pieceName: "piecePreview",
+				pieceName: "movement_preview",
 				pieceRuleset: {
-					piecePreview: {
+					movement_preview: {
 						moveset: [{ moveName: activeMovementName }],
 					},
 				},
