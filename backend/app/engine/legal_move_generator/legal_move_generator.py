@@ -30,11 +30,11 @@ class Game:
             return (self._rules["setup"]["board_x_size"], self._rules["setup"]["board_y_size"]), self._game_state
         return self._game_state
 
-    def get_game_state(self, include_size: bool = False):
+    def get_game_state(self):
         game_state = {}
         for position, piece_object in self._game_state.items():
             game_state[position] = piece_object.piece_name
-            
+
         return game_state
 
     def overwrite_game_state(self, new_game_state: dict): # Format is a dictionary with tuple position as the keys, and piece name as the values
