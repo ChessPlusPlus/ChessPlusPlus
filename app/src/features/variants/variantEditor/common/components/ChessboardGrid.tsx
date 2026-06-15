@@ -20,8 +20,7 @@ function ChessboardGrid({
 		useVariantDraftStore();
 
 	if (!setupRulesDraft) return null;
-	if (!pieceRulesetDraft) return null;
-	if (!pieceRuleset) return null;
+	if (!pieceRuleset && !pieceRulesetDraft) return null;
 	if (!images) return null;
 	if (!currentVariantId) return null;
 
@@ -55,7 +54,7 @@ function ChessboardGrid({
 
 					const foundSquare = boardState.get([fileNumber, rank]);
 					const imageId =
-						(pieceRuleset ?? pieceRulesetDraft)[foundSquare ?? ""]?.imageId;
+						(pieceRuleset ?? pieceRulesetDraft)![foundSquare ?? ""]?.imageId;
 
 					return (
 						<div
