@@ -16,12 +16,15 @@ import useAnalyticsPreferencesStore from "@/shared/stores/analyticsPreferences";
 import useAnalyticsDisclaimerDialogStore from "@/shared/stores/analyticsDisclaimerDialog";
 import AnalyticsDisclaimerDialog from "@/shared/components/AnalyticsDisclaimerDialog";
 import posthog from "posthog-js";
+import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
+import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
 
 const queryClient = new QueryClient();
 
 function App() {
 	const { analyticsEnabled } = useAnalyticsPreferencesStore();
 	const { openAnalyticsDisclaimerDialog } = useAnalyticsDisclaimerDialogStore();
+	const { images, updateImages } = usePieceImagesStore();
 	
 	useEffect(() => {
 		if (analyticsEnabled === null) {
@@ -49,6 +52,19 @@ function App() {
 			})
 		}
 	}, []);
+
+	useEffect(() => {
+		if (!images) return;
+
+		console.log(Object.keys(images));
+
+		if (!Object.keys(images).includes("movement_preview")) {
+			updateImages({
+				...images,
+				movement_preview: defaultPieceImages.movement_preview,
+			});
+		}
+	}, [images, updateImages]);
 	
 	return (
 		<PostHogProvider>
