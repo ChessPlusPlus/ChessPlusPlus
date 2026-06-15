@@ -9,7 +9,7 @@ async def create_game(game_id: str, game_class: Game):
 	await redis_client.set(f"game:{game_id}", pickle.dumps(game_class))
 
 
-async def get_game_class(game_id: str):
+async def get_game_instance(game_id: str):
 	store_retrieval_start = time.perf_counter()
 	game_class = await redis_client.get(f"game:{game_id}")
 	store_retrieval_end = time.perf_counter()
@@ -23,11 +23,11 @@ async def get_game_class(game_id: str):
 	return pickle.loads(game_class)
 
 async def get_game_state(game_id: str):
-	game_class = await get_game_class(game_id)
+	game_class = await get_game_instance(game_id)
 	if game_class is None:
 		return None
 
 	return game_class.get_game_state()
 
-async def update_game_class(game_id: str, game_class: Game):
+async def update_game_instance(game_id: str, game_class: Game):
 	await redis_client.set(f"game:{game_id}", pickle.dumps(game_class))
