@@ -364,6 +364,12 @@ function VariantEditorPage() {
 									displayLegalMoveComponent={
 										displayLegalMoveComponentForMovementVisualiser
 									}
+									pieceRuleset={{
+										movement_preview: {
+											moveset: [{ moveName: activeMovementName! }],
+											imageId: "movement_preview",
+										},
+									}}
 								/>
 							</div>
 						)}
