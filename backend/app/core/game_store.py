@@ -3,7 +3,7 @@ import pickle
 import time
 
 from app.core.redis import redis_client
-from backend.app.engine.legal_move_generator.legal_move_generator import Game
+from app.engine.legal_move_generator.legal_move_generator import Game
 
 async def create_game(game_id: str, game_class: Game):
 	await redis_client.set(f"game:{game_id}", pickle.dumps(game_class))
