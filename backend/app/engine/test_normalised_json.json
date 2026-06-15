@@ -183,358 +183,388 @@
 			}
 		]
 	},
+    "conditions": {
+		"for_capture": {
+			"type": "square_occupied",
+			"offset_x": 0,
+			"offset_y": 0,
+			"invert": false
+		},
+		"for_movement": {
+			"type": "square_occupied",
+			"offset_x": 0,
+			"offset_y": 0,
+			"invert": true
+		},
+        "test_all_of": {
+			"type": "all_of",
+			"conditions": [
+				{"condition": "example_condition_1", "invert": false},
+				{"condition": "example_condition_2", "invert": true},
+				{"condition": "example_condition_3", "invert": false}
+			],
+			"invert": false
+		},
+		"test_any_of": {
+			"type": "any_of",
+			"conditions": [
+				{"condition": "example_condition_1", "invert": false},
+				{"condition": "example_condition_2", "invert": true},
+				{"condition": "example_condition_3", "invert": false}
+			],
+			"invert": false
+		},
+        "test_range_check_x": {
+			"type": "range",
+			"value_source": "piece_x",
+			"offset": 0,
+			"min": 1,
+			"max": 1,
+			"invert": false
+        },
+		"test_range_check_y": {
+			"type": "range",
+			"value_source": "piece_y",
+			"offset": 0,
+			"min": 1,
+			"max": 1,
+			"invert": false
+        },
+		"test_square_occupied": {
+			"type": "square_occupied",
+			"offset_x": 0,
+			"offset_y": 0,
+			"invert": false
+		},
+		"test_range_check_piece_move_count": {
+			"type": "range",
+			"value_source": "piece_move_count",
+			"offset": 0,
+			"min": 1,
+			"max": 1,
+			"invert": false
+        }
+	},
 	"moves": {
 		"white_pawn_forward": {
-			"for_movement": true,
-			"for_capture": false,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 0,
 				"move_y": 1,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"white_pawn_double_step": {
-			"for_movement": true,
-			"for_capture": false,
-			"conditions": ["has_not_moved"],
+			"start_conditions": ["has_not_moved"],
 			"move_definition": {
 				"move_x": 0,
 				"move_y": 1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"white_pawn_capture_east": {
-			"for_movement": false,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": 1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"white_pawn_capture_west": {
-			"for_movement": false,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": 1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"black_pawn_forward": {
-			"for_movement": true,
-			"for_capture": false,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 0,
 				"move_y": -1,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"black_pawn_double_step": {
-			"for_movement": true,
-			"for_capture": false,
-			"conditions": ["has_not_moved"],
+			"start_conditions": ["has_not_moved"],
 			"move_definition": {
 				"move_x": 0,
 				"move_y": -1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"black_pawn_capture_east": {
-			"for_movement": false,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": -1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"black_pawn_capture_west": {
-			"for_movement": false,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": -1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"east": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": 0,
 				"range": "inf",
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"west": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": 0,
 				"range": "inf",
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"north": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 0,
 				"move_y": 1,
 				"range": "inf",
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"south": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 0,
 				"move_y": -1,
 				"range": "inf",
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"northeast": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": 1,
 				"range": "inf",
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"southwest": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": -1,
 				"range": "inf",
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"southeast": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": -1,
 				"range": "inf",
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"northwest": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": 1,
 				"range": "inf",
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"knight_0201": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 2,
 				"move_y": 1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"knight_02m1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 2,
 				"move_y": -1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"knight_m201": {
-			"for_movement": true,
-			"for_capture": true,
 			"conditions": [],
 			"move_definition": {
 				"move_x": -2,
 				"move_y": 1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"knight_m2m1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -2,
 				"move_y": -1,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"knight_0102": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": 2,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"knight_m102": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": 2,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"knight_01m2": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": -2,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"knight_m1m2": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": -2,
 				"range": 1,
 				"move_stop_conditions": []
-			}
+			},
+			"end_conditions": []
 		},
 		"east_1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": 0,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"west_1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": 0,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"north_1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 0,
 				"move_y": 1,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"south_1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 0,
 				"move_y": -1,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"northeast_1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": 1,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"southwest_1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": -1,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"southeast_1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": 1,
 				"move_y": -1,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		},
 		"northwest_1": {
-			"for_movement": true,
-			"for_capture": true,
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -1,
 				"move_y": 1,
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
-			}
+			},
+			"end_conditions": []
 		}
 	},
 	"pieces": {
