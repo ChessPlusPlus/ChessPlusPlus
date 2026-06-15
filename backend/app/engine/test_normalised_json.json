@@ -184,6 +184,8 @@
 		]
 	},
     "conditions": {
+		"inside_piece": {},
+		"has_not_moved": {},
 		"for_capture": {
 			"type": "square_occupied",
 			"offset_x": 0,
@@ -427,7 +429,7 @@
 			"end_conditions": []
 		},
 		"knight_m201": {
-			"conditions": [],
+			"start_conditions": [],
 			"move_definition": {
 				"move_x": -2,
 				"move_y": 1,

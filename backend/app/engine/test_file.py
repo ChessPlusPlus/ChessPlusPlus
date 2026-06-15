@@ -7,8 +7,6 @@ import app.engine.legal_move_generator.legal_move_generator as lmg
 import app.engine.json_normaliser.json_normaliser as jn
 import app.engine.legal_move_generator.instanceless_legal_move_generator as ilmg
 
-from app.engine.legal_move_generator.legal_move_generator import Piece
-
 BASE_DIR = Path(__file__).parent.resolve()
 TEST_NORMALISED_JSON_PATH = BASE_DIR / "test_normalised_json.json"
 TEST_SIMPLE_JSON_PATH = BASE_DIR / "test_simple_json.json"
@@ -20,7 +18,10 @@ def test_validate_json():
         return False, "JSON Decode Error detected. Please check the file's syntax."
 
     output = json_validator.validate_json(test_data)
-    return output
+    return f"""
+    Output: {output[0]}
+    Message: {output[1]}
+    """
 
 def display_game_state(board_size: tuple, game_state: dict, show_coords: bool = False):
     print("\nGame state:")
@@ -120,4 +121,4 @@ def test_ilmg():
     game.update_json_game_state(g.make_move(game.get_json_game_state(), (1, 0), (0, 0)))
     print(game.get_json_game_state())
 
-test_ilmg()
+print(test_validate_json())

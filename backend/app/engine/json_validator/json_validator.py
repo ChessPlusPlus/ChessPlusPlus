@@ -1,10 +1,8 @@
 from app.engine.json_validator.components import *
-import app.engine.json_validator.move_conditions as mc
-import app.engine.json_validator.move_stop_conditions as msc
 
 def validate_json(data: dict):
 
-    if not (temp := check_keys(data, {"setup", "pieces", "moves"}, "main"))[0]:
+    if not (temp := check_keys(data, {"setup", "pieces", "moves", "conditions"}, "main"))[0]:
         return temp
 
     if not (temp := check_keys(data["setup"], {"piece_ownership", "board_x_size", "board_y_size", "starting_position"}, "main/setup"))[0]:
@@ -46,18 +44,26 @@ def validate_json(data: dict):
     for move_name, move in data["moves"].items():
         if get_if_wrong_data_type(move, dict):
             return False, get_wrong_data_type_error_message(type(move), dict, f"main/moves/{move_name} (value)")
-        if not (temp := check_keys(move, {"for_movement", "for_capture", "conditions", "move_definition"}, f"main/moves/{move_name}"))[0]:
+        if not (temp := check_keys(move, {"start_conditions", "end_conditions", "move_definition"}, f"main/moves/{move_name}"))[0]:
             return temp
-        if get_if_wrong_data_type(move["for_movement"], bool):
-            return False, get_wrong_data_type_error_message(type(move["for_movement"]), bool, f"main/moves/{move_name}/for_movement (value)")
-        if get_if_wrong_data_type(move["for_capture"], bool):
-            return False, get_wrong_data_type_error_message(type(move["for_capture"]), bool, f"main/moves/{move_name}/for_capture (value)")
-        if (move["for_movement"] == False) and (move["for_capture"] == False):
-            return False, f"Impossibility error detected. \"for_movement\" and \"for_capture\" cannot both be false. Location: main/moves/{move_name} (value: for_movement, for_capture)"
-        if get_if_wrong_data_type(move["conditions"], list):
-            return False, get_wrong_data_type_error_message(type(move["conditions"]), list, f"main/moves/{move_name}/conditions (value)")
-        if get_invalid(mc.conditions, set(move["conditions"])) != set():
-            return False, get_wrong_values_error_message(get_invalid(mc.conditions, set(move["conditions"])), f"main/moves/{move_name}/conditions (value)")
+
+        if get_if_wrong_data_type(move["start_conditions"], list):
+            return False, get_wrong_data_type_error_message(type(move["start_conditions"]), list, f"main/moves/{move_name}/start_conditions (value)")
+        for index, start_condition in enumerate(move["start_conditions"]):
+            if get_if_wrong_data_type(start_condition, str):
+                return False, get_wrong_data_type_error_message(type(start_condition), str, f"main/moves/{move_name}/start_conditions/[{index}] (value)")
+        wrong_values = get_invalid(set(data["conditions"].keys()), set(move["start_conditions"]))
+        if wrong_values != set():
+            return False, get_wrong_values_error_message(wrong_values, f"main/moves/{move_name}/start_conditions (values)", "Wrong conditions do not exist in \"main/conditions (keys)\"")
+
+        if get_if_wrong_data_type(move["end_conditions"], list):
+            return False, get_wrong_data_type_error_message(type(move["end_conditions"]), list, f"main/moves/{move_name}/conditions (value)")
+        for index, end_condition in enumerate(move["end_conditions"]):
+            if get_if_wrong_data_type(end_condition, str):
+                return False, get_wrong_data_type_error_message(type(end_condition), str, f"main/moves/{move_name}/end_conditions/[{index}] (value)")
+        wrong_values = get_invalid(set(data["conditions"].keys()), set(move["end_conditions"]))
+        if wrong_values != set():
+            return False, get_wrong_values_error_message(wrong_values, f"main/moves/{move_name}/end_conditions (values)", "Wrong conditions do not exist in \"main/conditions (keys)\"")
 
         if get_if_wrong_data_type(move["move_definition"], dict):
             return False, get_wrong_data_type_error_message(type(move["move_definition"]), dict, f"main/moves/{move_name}/move_definition (value)")
@@ -72,8 +78,9 @@ def validate_json(data: dict):
                 return False, get_wrong_data_type_error_message(type(move["move_definition"]["range"]), int, f"main/moves/{move_name}/move_definition/range (value)")
         if get_if_wrong_data_type(move["move_definition"]["move_stop_conditions"], list):
             return False, get_wrong_data_type_error_message(type(move["move_definition"]["move_stop_conditions"]), list, f"main/moves/{move_name}/move_definition/move_stop_conditions (value)")
-        if get_invalid(msc.move_stop_conditions, set(move["move_definition"]["move_stop_conditions"])) != set():
-            return False, get_wrong_values_error_message(get_invalid(msc.move_stop_conditions, set(move["move_definition"]["move_stop_conditions"])), f"main/moves/{move_name}/move_stop_conditions (value)")
+        wrong_values = get_invalid(set(data["conditions"].keys()), set(move["move_definition"]["move_stop_conditions"]))
+        if wrong_values != set():
+            return False, get_wrong_values_error_message(wrong_values, f"main/moves/{move_name}/move_definition/move_stop_conditions (values)", "Wrong conditions do not exist in \"main/conditions (keys)\"")
 
     for piece_name, piece in data["pieces"].items():
         if get_if_wrong_data_type(piece, dict):
