@@ -38,13 +38,15 @@ async def create_game(request: CreateGameRequest):
 		"setup": setup_rules,
 	}
 
-	start_game_state = InstancelessLegalMoveGenerator.get_start_game_state(rules)
+	game_instance = Game(rules)
+	await create_game_in_store(game_id, game_instance)
 
-	await create_game_in_store(game_id, rules, start_game_state)
+	print(game_instance.get_game_state())
+	print(dict.items(game_instance.get_game_state()))
 
 	return CreateGameResponse(
 		game_id=game_id, 
-		game_state=InstancelessLegalMoveGenerator.get_simple_game_state(start_game_state)
+		game_state=dict.items(game_instance.get_game_state())
 	)
 
 @router.post("/generate-legal-moves", response_model=GameLegalMoveGenerationResponse)
@@ -74,13 +76,9 @@ async def batch_generate_legal_moves(request: BatchGenerateLegalMovesRequest):
 
 	all_legal_moves = []
 	game_state = game_instance.get_game_state()
-	for piece in game_state:
-		position = (piece["position"]["x_pos"], piece["position"]["y_pos"])
-
+	for position in game_state.keys():
 		legal_moves = game_instance.get_legal_moves(position)
-
 		piece_legal_moves = list(itertools.chain(*legal_moves.values()))
-
 		all_legal_moves.append((position, piece_legal_moves))
 
 	return BatchGenerateLegalMovesResponse(legal_moves=all_legal_moves)
