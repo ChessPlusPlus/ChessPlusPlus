@@ -14,7 +14,7 @@ from app.engine.legal_move_generator.legal_move_generator import Game, Piece
 from app.engine.legal_move_generator.instanceless_legal_move_generator import InstancelessLegalMoveGenerator
 from app.utils.case_converter import convert_camel_to_snake
 from app.utils.starting_position_serialiser import serialise_starting_position
-from app.core.game_store import get_game_instance, update_game_state, create_game as create_game_in_store
+from app.core.game_store import get_game_instance, update_game_instance, create_game as create_game_in_store
 
 router = APIRouter()
 
@@ -50,14 +50,12 @@ async def create_game(request: CreateGameRequest):
 @router.post("/generate-legal-moves", response_model=GameLegalMoveGenerationResponse)
 async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 	full_legal_moves_start = time.perf_counter()
-	game_class = await get_game_instance(request.game_id)
+	game_instance = await get_game_instance(request.game_id)
 
-	print(f"Game class: {game_class}")
-
-	if game_class is None:
+	if game_instance is None:
 		return GameLegalMoveGenerationResponse(legal_moves=None)
 
-	legal_moves = game_c
+	legal_moves = game_instance.get_legal_moves(request.current_pos)
 	
 	legal_moves = list(itertools.chain(*legal_moves.values()))
 
@@ -70,7 +68,7 @@ async def generate_legal_moves(request: GameLegalMoveGenerationRequest):
 
 @router.post("/batch-generate-legal-moves", response_model=BatchGenerateLegalMovesResponse)
 async def batch_generate_legal_moves(request: BatchGenerateLegalMovesRequest):
-	game_info = await get_game_instance(request.game_id)
+	game_info = await get_game_class(request.game_id)
 	if game_info is None:
 		return BatchGenerateLegalMovesResponse(legal_moves=None)
 
@@ -93,7 +91,7 @@ async def batch_generate_legal_moves(request: BatchGenerateLegalMovesRequest):
 
 @router.post("/process-move", response_model=GameMakeMoveResponse)
 async def process_move(request: GameMakeMoveRequest):
-	game_info = await get_game_instance(request.game_id)
+	game_info = await get_game_class(request.game_id)
 	if game_info is None:
 		return GameMakeMoveResponse(valid_move=False, new_game_state=None)
 
