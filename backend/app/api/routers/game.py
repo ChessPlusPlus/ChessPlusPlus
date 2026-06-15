@@ -41,9 +41,6 @@ async def create_game(request: CreateGameRequest):
 	game_instance = Game(rules)
 	await create_game_in_store(game_id, game_instance)
 
-	print(game_instance.get_game_state())
-	print(dict.items(game_instance.get_game_state()))
-
 	return CreateGameResponse(
 		game_id=game_id, 
 		game_state=dict.items(game_instance.get_game_state())
