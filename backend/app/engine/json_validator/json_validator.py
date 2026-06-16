@@ -1,7 +1,8 @@
-from app.engine.json_validator.components import *
+from app.engine.json_validator.helper_functions import HelperGet
+from app.engine.json_validator.components import Component
 from app.engine.json_validator.error_messages import ErrorMessageGet
 
-INF = float("inf")
+inf = float("inf")
 
 def validate_json(data: dict):
 
@@ -20,10 +21,10 @@ def validate_json(data: dict):
         if wrong_values != set():
             return False, ErrorMessageGet.wrong_values(wrong_values, f"main/setup/piece_ownership/{player} (values)", "Wrong pieces do not exist in \"main/pieces (keys)\"")
 
-    if not (temp := Component.check_range(data["setup"]["board_x_size"], 1, INF, "main/setup/board_x_size"))[0]:
+    if not (temp := Component.check_range(data["setup"]["board_x_size"], 1, inf, "main/setup/board_x_size"))[0]:
         return temp
 
-    if not (temp := Component.check_range(data["setup"]["board_y_size"], 1, INF, "main/setup/board_y_size"))[0]:
+    if not (temp := Component.check_range(data["setup"]["board_y_size"], 1, inf, "main/setup/board_y_size"))[0]:
         return temp
 
     if HelperGet.if_wrong_data_type(data["setup"]["starting_position"], list):
@@ -82,7 +83,7 @@ def validate_json(data: dict):
             return False, ErrorMessageGet.wrong_data_type(type(move["move_definition"]["move_x"]), int, f"main/moves/{move_name}/move_definition/move_x (value)")
         if HelperGet.if_wrong_data_type(move["move_definition"]["move_y"], int):
             return False, ErrorMessageGet.wrong_data_type(type(move["move_definition"]["move_y"]), int, f"main/moves/{move_name}/move_definition/move_y (value)")
-        if move["move_definition"]["range"] != "INF":
+        if move["move_definition"]["range"] != "inf":
             if HelperGet.if_wrong_data_type(move["move_definition"]["range"], int):
                 return False, ErrorMessageGet.wrong_data_type(type(move["move_definition"]["range"]), int, f"main/moves/{move_name}/move_definition/range (value)")
         if HelperGet.if_wrong_data_type(move["move_definition"]["move_stop_conditions"], list):
