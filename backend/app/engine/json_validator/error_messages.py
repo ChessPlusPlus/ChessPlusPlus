@@ -3,11 +3,31 @@ class ErrorMessageGet:
 
     @staticmethod
     def wrong_keys(missing_and_invalid: tuple, location: str):
-        return f"Incorrect keys detected. Missing: {missing_and_invalid[0]}; Invalid: {missing_and_invalid[1]}. Location: {location}. "
+
+        missing = ""
+        show_missing = False
+        if missing_and_invalid[0] != set():
+            missing = f"Missing: {missing_and_invalid[0]}"
+            show_missing = True
+        invalid = ""
+        show_invalid = False
+        if missing_and_invalid[1] != set():
+            invalid = f"Invalid: {missing_and_invalid[1]}"
+            show_invalid = True
+
+        seperator = ""
+        if show_missing and show_invalid:
+            seperator = "; "
+
+        return f"Incorrect keys detected. {missing}{seperator}{invalid}. Location: {location}. "
 
     @staticmethod
-    def wrong_values(wrong_values: set, location: str, extra: str = ""):
-        return f"Invalid values detected. Wrong values: {wrong_values}. Location: {location}. {extra}."
+    def wrong_values(wrong_values: set | str, location: str, extra: str = ""):
+        if type(wrong_values) is set:
+            return f"Invalid values detected. Wrong values: {wrong_values}. Location: {location}. {extra}."
+        elif type(wrong_values) is str:
+            return f"Invalid value detected. Wrong value: \"{wrong_values}\". Location: {location}. {extra}."
+        return None
 
     @staticmethod
     def wrong_data_type(current_type, correct_type, location: str, multiple_types: bool = False):
