@@ -4,7 +4,6 @@ from typing import TypedDict
 from app.engine.legal_move_generator.legal_move_generator import Piece
 from app.utils.case_converter import convert_camel_to_snake
 from app.utils.starting_position_serialiser import serialise_starting_position
-from app.engine.legal_move_generator.instanceless_legal_move_generator import InstancelessLegalMoveGenerator
 
 class PieceJSONRuleset(TypedDict):
 	pos: tuple[int, int]
