@@ -11,7 +11,6 @@ from app.schemas.game_make_move_request import GameMakeMoveRequest, GameMakeMove
 from app.schemas.batch_generate_legal_moves import BatchGenerateLegalMovesRequest, BatchGenerateLegalMovesResponse
 
 from app.engine.legal_move_generator.legal_move_generator import Game, Piece
-from app.engine.legal_move_generator.instanceless_legal_move_generator import InstancelessLegalMoveGenerator
 from app.utils.case_converter import convert_camel_to_snake
 from app.utils.starting_position_serialiser import serialise_starting_position
 from app.core.game_store import get_game_instance, update_game_instance, create_game as create_game_in_store
