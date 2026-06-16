@@ -77,7 +77,7 @@ def validate_json(data: dict):
                     if parameter_condition["condition"] not in data["conditions"].keys():
                         return False, ErrorMessageGet.wrong_values(parameter_condition["condition"], f"main/setup/conditions/{condition_name}/conditions/[{index}]/condition (value)")
             case "range":
-                if not (temp := Component.check_keys(condition, {"type", "invert", "value_source", "offset", "min", "max"},f"main/setup/conditions/{condition_name}"))[0]:
+                if not (temp := Component.check_keys(condition, {"type", "invert", "value_source", "offset", "min", "max"}, f"main/setup/conditions/{condition_name}"))[0]:
                     return temp
                 if HelperGet.if_wrong_data_type(condition["value_source"], str):
                     return False, ErrorMessageGet.wrong_data_type(condition["value_source"], str, f"main/setup/conditions/{condition_name}/value_source (value)")
@@ -91,9 +91,9 @@ def validate_json(data: dict):
                     return False, ErrorMessageGet.wrong_data_type(condition["max"], int, f"main/setup/conditions/{condition_name}/max (value)")
             case "square_occupied":
                 if HelperGet.if_wrong_data_type(condition["offset_x"], int):
-                    return False, ErrorMessageGet.wrong_data_type(condition["offset_x"], int,f"main/setup/conditions/{condition_name}/offset_x (value)")
+                    return False, ErrorMessageGet.wrong_data_type(condition["offset_x"], int, f"main/setup/conditions/{condition_name}/offset_x (value)")
                 if HelperGet.if_wrong_data_type(condition["offset_y"], int):
-                    return False, ErrorMessageGet.wrong_data_type(condition["offset_y"], int,f"main/setup/conditions/{condition_name}/offset_y (value)")
+                    return False, ErrorMessageGet.wrong_data_type(condition["offset_y"], int, f"main/setup/conditions/{condition_name}/offset_y (value)")
 
     if HelperGet.if_wrong_data_type(data["moves"], dict):
         return False, ErrorMessageGet.wrong_data_type(type(data["moves"]), dict, "main/moves (value)")
