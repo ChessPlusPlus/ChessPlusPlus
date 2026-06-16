@@ -23,10 +23,12 @@ class ErrorMessageGet:
 
     @staticmethod
     def wrong_values(wrong_values: set | str, location: str, extra: str = ""):
+        if extra != "":
+            extra = extra + "."
         if type(wrong_values) is set:
-            return f"Invalid values detected. Wrong values: {wrong_values}. Location: {location}. {extra}."
+            return f"Invalid values detected. Wrong values: {wrong_values}. Location: {location}. {extra}"
         elif type(wrong_values) is str:
-            return f"Invalid value detected. Wrong value: \"{wrong_values}\". Location: {location}. {extra}."
+            return f"Invalid value detected. Wrong value: \"{wrong_values}\". Location: {location}. {extra}"
         return None
 
     @staticmethod

@@ -16,11 +16,11 @@ class HelperGet:
     def if_wrong_data_type(value, correct_type, multiple_types: bool = False):
         if multiple_types == True:
             for each_ct in correct_type:
-                if type(value) == each_ct:
+                if type(value) is each_ct:
                     return False
             else:
                 return True
-        if type(value) == correct_type:
+        if type(value) is correct_type:
             return False
         return True
 

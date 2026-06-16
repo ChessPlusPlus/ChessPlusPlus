@@ -2,6 +2,9 @@ from app.engine.json_validator.helper_functions import HelperGet
 from app.engine.json_validator.components import Component
 from app.engine.json_validator.error_messages import ErrorMessageGet
 
+from app.engine.json_validator.condition_types import CONDITION_TYPES
+from app.engine.json_validator.value_sources import VALUE_SOURCES
+
 inf = float("inf")
 
 def validate_json(data: dict):
@@ -48,6 +51,49 @@ def validate_json(data: dict):
     for condition_name, condition in data["conditions"].items():
         if HelperGet.if_wrong_data_type(condition, dict):
             return False, ErrorMessageGet.wrong_data_type(type(condition), dict, f"main/setup/conditions/{condition_name} (value)")
+        if "type" not in condition.keys():
+            return False, ErrorMessageGet.missing_compulsory_key("type", f"main/setup/conditions/{condition_name} (value)")
+        if HelperGet.if_wrong_data_type(condition["type"], str):
+            return False, ErrorMessageGet.wrong_data_type(type(condition["type"]), str, f"main/setup/conditions/{condition_name}/type (value)")
+        if condition["type"] not in CONDITION_TYPES:
+            return False, ErrorMessageGet.wrong_values(condition["type"], f"main/setup/conditions/{condition_name}/type (value)", f"Condition type \"{condition["type"]}\" is not a built-in condition type")
+        if "invert" not in condition.keys():
+            return False, ErrorMessageGet.missing_compulsory_key("invert", f"main/setup/conditions/{condition_name} (value)")
+        if HelperGet.if_wrong_data_type(condition["invert"], bool):
+            return False, ErrorMessageGet.wrong_data_type(type(condition["invert"]), bool, f"main/setup/conditions/{condition_name}/invert (value)")
+
+        match condition["type"]:
+            case "all_of" | "any_of":
+                # still need to add a recursion checker
+                if not (temp := Component.check_keys(condition, {"type", "invert", "conditions"}, f"main/setup/conditions/{condition_name}"))[0]:
+                    return temp
+                if HelperGet.if_wrong_data_type(condition["conditions"], list):
+                    return False, ErrorMessageGet.wrong_data_type(condition["conditions"], list, f"main/setup/conditions/{condition_name}/conditions (value)")
+                for index, parameter_condition in enumerate(condition["conditions"]):
+                    if HelperGet.if_wrong_data_type(parameter_condition, dict):
+                        return False, ErrorMessageGet.wrong_data_type(parameter_condition, dict, f"main/setup/conditions/{condition_name}/conditions/[{index}] (value)")
+                    if not (temp := Component.check_keys(parameter_condition, {"condition", "invert"}, f"main/setup/conditions/{condition_name}/conditions/[{index}]"))[0]:
+                        return temp
+                    if parameter_condition["condition"] not in data["conditions"].keys():
+                        return False, ErrorMessageGet.wrong_values(parameter_condition["condition"], f"main/setup/conditions/{condition_name}/conditions/[{index}]/condition (value)")
+            case "range":
+                if not (temp := Component.check_keys(condition, {"type", "invert", "value_source", "offset", "min", "max"},f"main/setup/conditions/{condition_name}"))[0]:
+                    return temp
+                if HelperGet.if_wrong_data_type(condition["value_source"], str):
+                    return False, ErrorMessageGet.wrong_data_type(condition["value_source"], str, f"main/setup/conditions/{condition_name}/value_source (value)")
+                if condition["value_source"] not in VALUE_SOURCES:
+                    return False, ErrorMessageGet.wrong_values(condition["value_source"], f"main/setup/conditions/{condition_name}/value_source (value)", f"Value source type \"{condition["value_source"]}\" is not a built-in value source")
+                if HelperGet.if_wrong_data_type(condition["offset"], int):
+                    return False, ErrorMessageGet.wrong_data_type(condition["offset"], int, f"main/setup/conditions/{condition_name}/offset (value)")
+                if HelperGet.if_wrong_data_type(condition["min"], int):
+                    return False, ErrorMessageGet.wrong_data_type(condition["min"], int, f"main/setup/conditions/{condition_name}/min (value)")
+                if HelperGet.if_wrong_data_type(condition["max"], int):
+                    return False, ErrorMessageGet.wrong_data_type(condition["max"], int, f"main/setup/conditions/{condition_name}/max (value)")
+            case "square_occupied":
+                if HelperGet.if_wrong_data_type(condition["offset_x"], int):
+                    return False, ErrorMessageGet.wrong_data_type(condition["offset_x"], int,f"main/setup/conditions/{condition_name}/offset_x (value)")
+                if HelperGet.if_wrong_data_type(condition["offset_y"], int):
+                    return False, ErrorMessageGet.wrong_data_type(condition["offset_y"], int,f"main/setup/conditions/{condition_name}/offset_y (value)")
 
     if HelperGet.if_wrong_data_type(data["moves"], dict):
         return False, ErrorMessageGet.wrong_data_type(type(data["moves"]), dict, "main/moves (value)")
