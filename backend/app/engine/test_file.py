@@ -6,6 +6,7 @@ import app.engine.json_validator.json_validator as json_validator
 import app.engine.legal_move_generator.legal_move_generator as lmg
 import app.engine.json_normaliser.json_normaliser as jn
 import app.engine.legal_move_generator.instanceless_legal_move_generator as ilmg
+import app.engine.json_validator.condition_cyclicity_detector as ccd
 
 BASE_DIR = Path(__file__).parent.resolve()
 TEST_NORMALISED_JSON_PATH = BASE_DIR / "test_normalised_json.json"
@@ -120,5 +121,9 @@ def test_ilmg():
 
     game.update_json_game_state(g.make_move(game.get_json_game_state(), (1, 0), (0, 0)))
     print(game.get_json_game_state())
+
+def test_ccd():
+    conditions = json.load(open(TEST_NORMALISED_JSON_PATH))["conditions"]
+    return ccd.check_for_cyclicity_in_conditions(conditions)
 
 print(test_validate_json())

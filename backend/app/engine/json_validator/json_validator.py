@@ -5,6 +5,8 @@ from app.engine.json_validator.error_messages import ErrorMessageGet
 from app.engine.json_validator.condition_types import CONDITION_TYPES
 from app.engine.json_validator.value_sources import VALUE_SOURCES
 
+from app.engine.json_validator.condition_cyclicity_detector import check_for_cyclicity_in_conditions
+
 inf = float("inf")
 
 def validate_json(data: dict):
@@ -64,7 +66,6 @@ def validate_json(data: dict):
 
         match condition["type"]:
             case "all_of" | "any_of":
-                # still need to add a recursion checker
                 if not (temp := Component.check_keys(condition, {"type", "invert", "conditions"}, f"main/setup/conditions/{condition_name}"))[0]:
                     return temp
                 if HelperGet.if_wrong_data_type(condition["conditions"], list):
@@ -100,6 +101,14 @@ def validate_json(data: dict):
                     return False, ErrorMessageGet.wrong_data_type(condition["offset_x"], int, f"main/setup/conditions/{condition_name}/offset_x (value)")
                 if HelperGet.if_wrong_data_type(condition["offset_y"], int):
                     return False, ErrorMessageGet.wrong_data_type(condition["offset_y"], int, f"main/setup/conditions/{condition_name}/offset_y (value)")
+
+    cyclic, cycle = check_for_cyclicity_in_conditions(data["conditions"])
+    if cyclic:
+        cycle_text = ""
+        for node in cycle:
+            cycle_text += f"{node} > "
+            cycle_text += "\b" * 3
+        return False, f"There is cyclicity detected in conditions. The cycle is: {cycle_text}. Location: main/conditions"
 
     if HelperGet.if_wrong_data_type(data["moves"], dict):
         return False, ErrorMessageGet.wrong_data_type(type(data["moves"]), dict, "main/moves (value)")
