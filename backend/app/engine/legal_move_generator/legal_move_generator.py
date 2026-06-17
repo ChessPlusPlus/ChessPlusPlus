@@ -182,8 +182,8 @@ class Game:
             return legal_moves
 
     def get_legal_moves(self, piece_position: tuple):
-
         legal_moves = {}
+        print(self._game_state, piece_position)
 
         if not piece_position in self._game_state:
             raise NoPieceFoundError
