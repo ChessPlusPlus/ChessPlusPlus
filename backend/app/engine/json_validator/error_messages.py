@@ -48,3 +48,7 @@ class ErrorMessageGet:
     @staticmethod
     def empty_field(key_name: str, location: str):
         return f"Field \"{key_name}\" cannot be empty. Location: {location}. "
+
+    @staticmethod
+    def duplicate_value(value_name: str, location: str):
+        return f"Duplicate value \"{value_name}\" detected. Location: {location}. "

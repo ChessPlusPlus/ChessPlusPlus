@@ -71,6 +71,7 @@ def validate_json(data: dict):
                     return False, ErrorMessageGet.wrong_data_type(condition["conditions"], list, f"main/setup/conditions/{condition_name}/conditions (value)")
                 if condition["conditions"] == []:
                     return False, ErrorMessageGet.empty_field("conditions", f"main/setup/conditions/{condition_name}/conditions (value)")
+                parameter_conditions = set()
                 for index, parameter_condition in enumerate(condition["conditions"]):
                     if HelperGet.if_wrong_data_type(parameter_condition, dict):
                         return False, ErrorMessageGet.wrong_data_type(parameter_condition, dict, f"main/setup/conditions/{condition_name}/conditions/[{index}] (value)")
@@ -78,6 +79,9 @@ def validate_json(data: dict):
                         return temp
                     if parameter_condition["condition"] not in data["conditions"].keys():
                         return False, ErrorMessageGet.wrong_values(parameter_condition["condition"], f"main/setup/conditions/{condition_name}/conditions/[{index}]/condition (value)")
+                    if parameter_condition["condition"] in parameter_conditions:
+                        return False, ErrorMessageGet.duplicate_value(parameter_condition["condition"], f"main/setup/conditions/{condition_name}/conditions/[{index}]/condition (value)")
+                    parameter_conditions.add(parameter_condition["condition"])
             case "range":
                 if not (temp := Component.check_keys(condition, {"type", "invert", "value_source", "offset", "min", "max"}, f"main/setup/conditions/{condition_name}"))[0]:
                     return temp
