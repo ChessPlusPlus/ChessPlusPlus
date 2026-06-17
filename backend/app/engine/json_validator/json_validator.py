@@ -107,8 +107,8 @@ def validate_json(data: dict):
         cycle_text = ""
         for node in cycle:
             cycle_text += f"{node} > "
-            cycle_text += "\b" * 3
-        return False, f"There is cyclicity detected in conditions. The cycle is: {cycle_text}. Location: main/conditions"
+        cycle_text += "\b" * 3
+        return False, f"There is cyclicity detected in conditions. The cycle is: {{ {cycle_text} }}. Location: main/conditions"
 
     if HelperGet.if_wrong_data_type(data["moves"], dict):
         return False, ErrorMessageGet.wrong_data_type(type(data["moves"]), dict, "main/moves (value)")
