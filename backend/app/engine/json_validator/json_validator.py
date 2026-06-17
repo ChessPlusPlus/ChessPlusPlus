@@ -69,6 +69,8 @@ def validate_json(data: dict):
                     return temp
                 if HelperGet.if_wrong_data_type(condition["conditions"], list):
                     return False, ErrorMessageGet.wrong_data_type(condition["conditions"], list, f"main/setup/conditions/{condition_name}/conditions (value)")
+                if condition["conditions"] == []:
+                    return False, ErrorMessageGet.empty_field("conditions", f"main/setup/conditions/{condition_name}/conditions (value)")
                 for index, parameter_condition in enumerate(condition["conditions"]):
                     if HelperGet.if_wrong_data_type(parameter_condition, dict):
                         return False, ErrorMessageGet.wrong_data_type(parameter_condition, dict, f"main/setup/conditions/{condition_name}/conditions/[{index}] (value)")

@@ -43,4 +43,8 @@ class ErrorMessageGet:
 
     @staticmethod
     def missing_compulsory_key(compulsory_key: str, location: str):
-        return f"Compulsory key \"{compulsory_key}\" is missing. Location: {location}. \""
+        return f"Compulsory key \"{compulsory_key}\" is missing. Location: {location}. "
+
+    @staticmethod
+    def empty_field(key_name: str, location: str):
+        return f"Field \"{key_name}\" cannot be empty. Location: {location}. "
