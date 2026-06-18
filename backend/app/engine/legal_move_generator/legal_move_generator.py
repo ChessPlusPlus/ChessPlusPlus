@@ -11,7 +11,7 @@ class Game:
         self._id_counter = 0
 
         self.piece_default_start_data = {
-            "has_not_moved": True
+            "piece_move_count": 0
         }
 
         for starting_piece in rules["setup"]["starting_position"]:
@@ -46,8 +46,8 @@ class Game:
             raise StationaryMoveError
 
         piece_object = self._game_state[piece_start_position]
-        if piece_object.data["has_not_moved"] == True:
-            piece_object.data["has_not_moved"] = False
+
+        piece_object.data["piece_move_count"] += 1
 
         piece_object.position = piece_end_position
 
@@ -55,13 +55,70 @@ class Game:
         self._game_state.pop(piece_start_position)
 
     def _check_condition(self, condition_name: str, piece_object: Piece):
-        match condition_name:
-            case "has_not_moved":
-                if piece_object.data["has_not_moved"] == True:
-                    return True
+        condition_definition = self._rules["conditions"][condition_name]
+        condition_type = condition_definition["type"]
+
+        output = None
+        match condition_type:
+
+            case "all_of":
+                parameter_conditions = condition_definition["conditions"]
+                for parameter_condition in parameter_conditions:
+                    para_condition_name = parameter_condition["condition"]
+                    para_output = self._check_condition(para_condition_name, piece_object)
+                    if parameter_condition["invert"] == True:
+                        para_output = not para_output
+                    if para_output == False:
+                        break
                 else:
-                    return False
-        raise InvalidConditionError
+                    output = True
+                if output != True:
+                    output = False
+
+            case "any_of":
+                parameter_conditions = condition_definition["conditions"]
+                for parameter_condition in parameter_conditions:
+                    para_condition_name = parameter_condition["condition"]
+                    para_output = self._check_condition(para_condition_name, piece_object)
+                    if parameter_condition["invert"] == True:
+                        para_output = not para_output
+                    if para_output == True:
+                        break
+                else:
+                    output = True
+                if output != True:
+                    output = False
+
+            case "square_occupied":
+                check_position = piece_object.position
+                check_position[0] += condition_definition["offset_x"]
+                check_position[1] += condition_definition["offset_y"]
+                if check_position in self._game_state:
+                    output = True
+                else:
+                    output = False
+
+            case "range":
+                value = None
+                value_source = condition_definition["value_source"]
+                match value_source:
+                    case "piece_x":
+                        value = piece_object.position[0]
+                    case "piece_y":
+                        value = piece_object.position[1]
+                    case "piece_move_count":
+                        value = piece_object.data["piece_move_count"]
+
+                value += condition_definition["offset"]
+                if condition_definition["min"] <= value <= condition_definition["max"]:
+                    output = True
+                else:
+                    output = False
+
+        invert = condition_definition["invert"]
+        if invert:
+            output = not output
+        return output
 
     def _position_within_board(self, position: tuple):
         board_x_size = self._rules["setup"]["board_x_size"]
@@ -78,27 +135,19 @@ class Game:
         else:
             return False
 
-    def _check_move_stop_condition(self, condition_name: str, piece_object: Piece):
-        match condition_name:
-            case "inside_piece":
-                if self._inside_piece(piece_object.position):
-                    return True
-                else:
-                    return False
-        raise InvalidConditionError
-
     def _loop_move(self, start_object: Piece, move_name: str, get_termination: bool = False):
         self._debug_print(f"Move name: {move_name}")
         self._debug_print(f"Start: {start_object.position}")
 
         terminate = False
 
-        legal_moves = []
         move_definition = self._rules["moves"][move_name]
 
-        if move_definition["conditions"] != []:
+        start_conditions = move_definition["start_conditions"]
+
+        if start_conditions != []:
             pass_conditions = True
-            for condition in move_definition["conditions"]:
+            for condition in start_conditions:
                 if self._check_condition(condition, start_object) == False:
                     pass_conditions = False
                     terminate = True
@@ -117,6 +166,8 @@ class Game:
         move_stop_conditions = move_definition["move_definition"]["move_stop_conditions"]
         for_movement = move_definition["for_movement"]
         for_capture = move_definition["for_capture"]
+
+        legal_moves = []
 
         current_position = start_object.position
         range_counter = 0
@@ -145,7 +196,7 @@ class Game:
                 self._debug_print(f"Checking move_stop_conditions at {current_position}")
                 for move_stop_condition in move_stop_conditions:
                     piece_object.position = current_position
-                    if self._check_move_stop_condition(move_stop_condition, piece_object):
+                    if self._check_condition(move_stop_condition, piece_object):
                         pass_conditions = False
                         break
                 if pass_conditions == False:
