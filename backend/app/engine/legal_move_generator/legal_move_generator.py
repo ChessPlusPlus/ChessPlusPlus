@@ -153,7 +153,7 @@ class Game:
                     terminate = True
                     break
             if pass_conditions == False:
-                self._debug_print("Failed conditions")
+                self._debug_print("Failed start conditions")
                 if get_termination == True:
                     return [], terminate
                 else:
@@ -164,8 +164,7 @@ class Game:
         move_range = move_definition["move_definition"]["range"]
 
         move_stop_conditions = move_definition["move_definition"]["move_stop_conditions"]
-        for_movement = move_definition["for_movement"]
-        for_capture = move_definition["for_capture"]
+        move_end_conditions = move_definition["move_end_conditions"]
 
         legal_moves = []
 
@@ -200,23 +199,23 @@ class Game:
                         pass_conditions = False
                         break
                 if pass_conditions == False:
-                    self._debug_print("Failed conditions: break")
+                    self._debug_print("Failed move stop conditions: break")
                     terminate = True
                     stop_loop = True
 
-                if stop_loop == True:
-                    if self._inside_piece(current_position):
-                        if for_capture:
-                            legal_moves.append(current_position)
-                            self._debug_print(f"Added {current_position} to legal move")
-                    else:
-                        if for_movement:
-                            legal_moves.append(current_position)
-                            self._debug_print(f"Added {current_position} to legal move")
+            pass_end_conditions = True
+            for end_condition_name in move_end_conditions:
+                if self._check_condition(end_condition_name, piece_object) == False:
+                    pass_end_conditions = False
                     break
-            if for_movement:
+            if pass_end_conditions:
                 legal_moves.append(current_position)
-                self._debug_print(f"Added {current_position} to legal move")
+                self._debug_print(f"Added position {current_position} to legal moves")
+            else:
+                self._debug_print("Failed end conditions: break")
+
+            if stop_loop:
+                break
 
         self._debug_print(f"Returned at {current_position}")
         self._debug_print("")
@@ -231,7 +230,7 @@ class Game:
 
         if not piece_position in self._game_state:
             raise NoPieceFoundError
-        piece_object = self._game_state[piece_position]
+        piece_object = copy.deepcopy(self._game_state[piece_position])
 
         piece_name = self._game_state[piece_position].piece_name
         piece_move_names = self._rules["pieces"][piece_name]["moveset"]
