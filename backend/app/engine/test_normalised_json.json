@@ -184,36 +184,6 @@
 		]
 	},
     "conditions": {
-		"example_condition": {
-			"type": "square_occupied",
-			"offset_x": 0,
-			"offset_y": 0,
-			"invert": false
-		},
-		"example_condition_1": {
-			"type": "square_occupied",
-			"offset_x": 0,
-			"offset_y": 0,
-			"invert": false
-		},
-		"example_condition_2": {
-			"type": "square_occupied",
-			"offset_x": 0,
-			"offset_y": 0,
-			"invert": false
-		},
-		"example_condition_3": {
-			"type": "square_occupied",
-			"offset_x": 0,
-			"offset_y": 0,
-			"invert": false
-		},
-		"inside_piece": {
-			"type": "square_occupied",
-			"offset_x": 0,
-			"offset_y": 0,
-			"invert": false
-		},
 		"has_not_moved": {
 			"type": "range",
 			"value_source": "piece_move_count",
@@ -222,7 +192,7 @@
 			"max": 1,
 			"invert": false
 		},
-		"for_capture": {
+		"inside_piece": {
 			"type": "square_occupied",
 			"offset_x": 0,
 			"offset_y": 0,
@@ -234,54 +204,12 @@
 			"offset_y": 0,
 			"invert": true
 		},
-        "test_all_of": {
-			"type": "all_of",
-			"conditions": [
-				{"condition": "example_condition_1", "invert": false},
-				{"condition": "example_condition_2", "invert": true},
-				{"condition": "example_condition_3", "invert": false}
-			],
-			"invert": false
-		},
-		"test_any_of": {
-			"type": "any_of",
-			"conditions": [
-				{"condition": "example_condition_1", "invert": false},
-				{"condition": "example_condition_2", "invert": true},
-				{"condition": "example_condition_3", "invert": false}
-			],
-			"invert": false
-		},
-        "test_range_check_x": {
-			"type": "range",
-			"value_source": "piece_x",
-			"offset": 0,
-			"min": 1,
-			"max": 1,
-			"invert": false
-        },
-		"test_range_check_y": {
-			"type": "range",
-			"value_source": "piece_y",
-			"offset": 0,
-			"min": 1,
-			"max": 1,
-			"invert": false
-        },
-		"test_square_occupied": {
+		"for_capture": {
 			"type": "square_occupied",
 			"offset_x": 0,
 			"offset_y": 0,
 			"invert": false
-		},
-		"test_range_check_piece_move_count": {
-			"type": "range",
-			"value_source": "piece_move_count",
-			"offset": 0,
-			"min": 1,
-			"max": 1,
-			"invert": false
-        }
+		}
 	},
 	"moves": {
 		"white_pawn_forward": {
@@ -292,7 +220,7 @@
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
 			},
-			"end_conditions": []
+			"end_conditions": ["for_movement"]
 		},
 		"white_pawn_double_step": {
 			"start_conditions": ["has_not_moved"],
@@ -300,9 +228,9 @@
 				"move_x": 0,
 				"move_y": 1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
-			"end_conditions": []
+			"end_conditions": ["for_movement"]
 		},
 		"white_pawn_capture_east": {
 			"start_conditions": [],
@@ -310,9 +238,9 @@
 				"move_x": 1,
 				"move_y": 1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
-			"end_conditions": []
+			"end_conditions": ["for_capture"]
 		},
 		"white_pawn_capture_west": {
 			"start_conditions": [],
@@ -320,9 +248,9 @@
 				"move_x": -1,
 				"move_y": 1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
-			"end_conditions": []
+			"end_conditions": ["for_capture"]
 		},
 		"black_pawn_forward": {
 			"start_conditions": [],
@@ -332,7 +260,7 @@
 				"range": 1,
 				"move_stop_conditions": ["inside_piece"]
 			},
-			"end_conditions": []
+			"end_conditions": ["for_movement"]
 		},
 		"black_pawn_double_step": {
 			"start_conditions": ["has_not_moved"],
@@ -340,9 +268,9 @@
 				"move_x": 0,
 				"move_y": -1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
-			"end_conditions": []
+			"end_conditions": ["for_movement"]
 		},
 		"black_pawn_capture_east": {
 			"start_conditions": [],
@@ -350,9 +278,9 @@
 				"move_x": 1,
 				"move_y": -1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
-			"end_conditions": []
+			"end_conditions": ["for_capture"]
 		},
 		"black_pawn_capture_west": {
 			"start_conditions": [],
@@ -360,9 +288,9 @@
 				"move_x": -1,
 				"move_y": -1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
-			"end_conditions": []
+			"end_conditions": ["for_capture"]
 		},
 		"east": {
 			"start_conditions": [],
@@ -450,7 +378,7 @@
 				"move_x": 2,
 				"move_y": 1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
 			"end_conditions": []
 		},
@@ -460,7 +388,7 @@
 				"move_x": 2,
 				"move_y": -1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
 			"end_conditions": []
 		},
@@ -470,7 +398,7 @@
 				"move_x": -2,
 				"move_y": 1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
 			"end_conditions": []
 		},
@@ -480,7 +408,7 @@
 				"move_x": -2,
 				"move_y": -1,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
 			"end_conditions": []
 		},
@@ -490,7 +418,7 @@
 				"move_x": 1,
 				"move_y": 2,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
 			"end_conditions": []
 		},
@@ -500,7 +428,7 @@
 				"move_x": -1,
 				"move_y": 2,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
 			"end_conditions": []
 		},
@@ -510,7 +438,7 @@
 				"move_x": 1,
 				"move_y": -2,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
 			"end_conditions": []
 		},
@@ -520,7 +448,7 @@
 				"move_x": -1,
 				"move_y": -2,
 				"range": 1,
-				"move_stop_conditions": []
+				"move_stop_conditions": ["inside_piece"]
 			},
 			"end_conditions": []
 		},
