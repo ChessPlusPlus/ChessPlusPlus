@@ -2,20 +2,28 @@ import copy
 from app.engine.legal_move_generator.custom_errors import *
 from app.engine.legal_move_generator.piece_class import Piece
 
+from app.engine.json_validator.json_validator import validate_json
+
 class Game:
+
+    piece_default_start_data = {
+        "piece_move_count": 0
+    }
+
     def __init__(self, rules: dict):
+
+        validated, validate_message = validate_json(rules)
+        if not validated:
+            raise InvalidJSONRulesError(validate_message)
+
         self.debug_mode = False
 
         self._rules = rules
         self._game_state = {}
         self._id_counter = 0
 
-        self.piece_default_start_data = {
-            "piece_move_count": 0
-        }
-
         for starting_piece in rules["setup"]["starting_position"]:
-            self._game_state[(starting_piece["x_pos"], starting_piece["y_pos"])] = Piece((starting_piece["x_pos"], starting_piece["y_pos"]), self._id_counter, starting_piece["piece_name"], copy.deepcopy(self.piece_default_start_data))
+            self._game_state[(starting_piece["x_pos"], starting_piece["y_pos"])] = Piece((starting_piece["x_pos"], starting_piece["y_pos"]), self._id_counter, starting_piece["piece_name"], copy.deepcopy(Game.piece_default_start_data))
             self._id_counter += 1
 
     def set_debug_mode(self, debug_mode: bool):
