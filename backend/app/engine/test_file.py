@@ -5,6 +5,8 @@ from pathlib import Path
 import app.engine.json_validator.json_validator as json_validator
 import app.engine.legal_move_generator.legal_move_generator as lmg
 import app.engine.json_normaliser.json_normaliser as jn
+import app.engine.legal_move_generator.instanceless_legal_move_generator as ilmg
+import app.engine.json_validator.condition_cyclicity_detector as ccd
 
 BASE_DIR = Path(__file__).parent.resolve()
 TEST_NORMALISED_JSON_PATH = BASE_DIR / "test_normalised_json.json"
@@ -17,7 +19,10 @@ def test_validate_json():
         return False, "JSON Decode Error detected. Please check the file's syntax."
 
     output = json_validator.validate_json(test_data)
-    return output
+    return f"""
+    Output: {output[0]}
+    Message: {output[1]}
+    """
 
 def display_game_state(board_size: tuple, game_state: dict, show_coords: bool = False):
     print("\nGame state:")
@@ -103,3 +108,22 @@ def debug_movement():
     display_game_state(game_state[0], game_state[1], True)
     legal_moves = game.get_legal_moves((0, 1))
     print(legal_moves)
+
+def test_ilmg():
+    g = ilmg.InstancelessLegalMoveGenerator
+    rules = json.load(open(TEST_NORMALISED_JSON_PATH))
+    game = ilmg.GameContext(rules, g.get_start_game_state(rules))
+
+    print(g.get_simple_game_state(game.get_json_game_state()))
+
+    game.update_json_game_state(g.make_move(game.get_json_game_state(), (0, 0), (1, 0)))
+    print(game.get_json_game_state())
+
+    game.update_json_game_state(g.make_move(game.get_json_game_state(), (1, 0), (0, 0)))
+    print(game.get_json_game_state())
+
+def test_ccd():
+    conditions = json.load(open(TEST_NORMALISED_JSON_PATH))["conditions"]
+    return ccd.check_for_cyclicity_in_conditions(conditions)
+
+print(test_validate_json())
