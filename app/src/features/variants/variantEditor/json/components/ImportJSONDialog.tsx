@@ -55,7 +55,12 @@ function ImportJSONDialog() {
 	} = useImportJSONDialogStore();
 
 	const { variants, createVariant } = useVariantsStore();
-	const { images, defaultImagesCreated, markAsDefaultImagesCreated, updateImages } = usePieceImagesStore();
+	const {
+		images,
+		defaultImagesCreated,
+		markAsDefaultImagesCreated,
+		updateImages,
+	} = usePieceImagesStore();
 
 	const navigate = useNavigate();
 
@@ -81,24 +86,35 @@ function ImportJSONDialog() {
 
 		clearVariantNameErrors();
 
+		let jsonToUse: Record<string, unknown> | null = null;
+
 		const json = await readJSONFromBlob(jsonFile);
 		if (!json) return;
 
-		const normalisedJSON =( await normaliseJSON(json))?.normalisedJSON;
-		if (!normalisedJSON) return;
+		const initialValidationStatus = await validateJSON(json);
+		if (initialValidationStatus?.validationStatus) {
+			jsonToUse = structuredClone(json);
+		} else {
+			const normalisedJSON = (await normaliseJSON(json))?.normalisedJSON;
+			if (!normalisedJSON) return;
 
-		const validationResponse = await validateJSON(normalisedJSON);
-		if (!validationResponse) return;
+			jsonToUse = structuredClone(normalisedJSON);
 
-		const isJsonValid = validationResponse.validationStatus;
-		if (!isJsonValid) {
-			updateJsonFileErrors([validationResponse.validationMessage]);
-			return;
+			const validationResponse = await validateJSON(normalisedJSON);
+			if (!validationResponse) return;
+
+			const isJsonValid = validationResponse.validationStatus;
+			if (!isJsonValid) {
+				updateJsonFileErrors([validationResponse.validationMessage]);
+				return;
+			}
 		}
 
 		clearJsonFileErrors();
 
-		const serialisedVariantRules = serialiseJSONForImport(json);
+		const serialisedVariantRules = serialiseJSONForImport(
+			jsonToUse! as Record<string, Record<string, unknown>>,
+		);
 
 		const variantId = createVariant({
 			variantName: trimmedVariantName,
