@@ -5,6 +5,10 @@ type ChainedMovesDialogStore = {
 	openChainedMovesDialog: () => void;
 	closeChainedMovesDialog: () => void;
 
+	nodeIds: string[];
+	updateNodeIds: (nodeIds: string[]) => void;
+	clearNodeIds: () => void;
+
 	activePiece: string | null;
 	updateActivePiece: (piece: string) => void;
 	clearActivePiece: () => void;
@@ -14,6 +18,14 @@ const useChainedMovesDialogStore = create<ChainedMovesDialogStore>((set) => ({
 	isChainedMovesDialogOpen: false,
 	openChainedMovesDialog: () => set({ isChainedMovesDialogOpen: true }),
 	closeChainedMovesDialog: () => set({ isChainedMovesDialogOpen: false }),
+
+	nodeIds: [],
+	updateNodeIds: (nodeIds) => {
+		set({ nodeIds: nodeIds });
+	},
+	clearNodeIds: () => {
+		set({ nodeIds: [] });
+	},
 
 	activePiece: null,
 	updateActivePiece: (piece) => set({ activePiece: piece }),
