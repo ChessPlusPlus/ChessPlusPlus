@@ -5,8 +5,8 @@ type ChainedMovesDialogStore = {
 	openChainedMovesDialog: () => void;
 	closeChainedMovesDialog: () => void;
 
-	nodeIds: string[][] | null;
-	updateNodeIds: (nodeIds: string[][]) => void;
+	nodeIds: [number, string[]][] | null;
+	updateNodeIds: (nodeIds: [number, string[]][]) => void;
 	clearNodeIds: () => void;
 
 	activePiece: string | null;
