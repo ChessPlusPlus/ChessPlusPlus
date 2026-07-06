@@ -248,7 +248,7 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get, store) => ({
 						? [
 								sequence[0],
 								sequence[1].map((move, index) =>
-									index === moveIndex ? { nodeId: move.nodeId, ...newMove } : move,
+									index === moveIndex ? { ...newMove } : move,
 								),
 							]
 						: sequence,
@@ -341,14 +341,14 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get, store) => ({
 					get().updatePieceName(originalPieceName);
 					get().removePieceEditorChanges(["pieceName"]);
 					return;
-				};
+				}
 
 				if (Object.keys(pieceRulesetDraft).includes(trimmedPieceName)) {
 					get().updatePieceName(originalPieceName);
 					get().removePieceEditorChanges(["pieceName"]);
 					return;
-				};
-				
+				}
+
 				handlePieceNameUpdate(
 					originalPieceName,
 					updatedPieceRulesetDraft,
@@ -385,13 +385,13 @@ const usePiecesEditorStore = create<PiecesEditorStore>((set, get, store) => ({
 					get().updatePieceName(originalPieceName);
 					get().removePieceEditorChanges(["pieceName"]);
 					return;
-				};
+				}
 
 				if (Object.keys(pieceRulesetDraft).includes(trimmedPieceName)) {
 					get().updatePieceName(originalPieceName);
 					get().removePieceEditorChanges(["pieceName"]);
 					return;
-				};
+				}
 
 				handlePieceNameUpdate(
 					originalPieceName,
