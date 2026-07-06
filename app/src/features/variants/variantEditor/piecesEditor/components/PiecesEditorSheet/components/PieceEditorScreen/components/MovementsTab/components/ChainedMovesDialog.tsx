@@ -88,6 +88,8 @@ function SequenceNodeCard({
 		updateNewMovementName,
 	} = useEditChainedMoveDialogStore();
 
+	const { deleteNodeIdSequence } = useChainedMovesDialogStore();
+
 	const { ref, handleRef } = useSortable({
 		id: nodeId,
 		index: nodeIndex,
@@ -96,6 +98,7 @@ function SequenceNodeCard({
 	function handleDeleteSequenceButtonClick(e: MouseEvent<HTMLDivElement>) {
 		e.stopPropagation();
 		removeChainedMoveSequence(sequenceIndex);
+		deleteNodeIdSequence(sequenceIndex);
 
 		if (isNullOrUndefined(sequenceIndexInMoveset)) return;
 
@@ -405,6 +408,8 @@ function ChainedMovesDialog() {
 	} = useAddChainedMoveDialogStore();
 
 	useEffect(() => {
+		console.log(nodeIds);
+
 		if (nodeIds) return;
 
 		updateNodeIds(

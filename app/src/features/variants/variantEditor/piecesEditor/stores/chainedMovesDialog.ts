@@ -8,6 +8,10 @@ type ChainedMovesDialogStore = {
 	nodeIds: [number, string[]][] | null;
 	updateNodeIds: (nodeIds: [number, string[]][]) => void;
 	addNodeId: (sequenceIndex: number, insertPos: number | "end") => void;
+	addEmptyNodeIdSequence: () => void;
+
+	deleteNodeIdSequence: (sequenceIndex: number) => void;
+
 	moveNodeId: (
 		sequenceIndexOfNode: number,
 		oldNodeIndex: number,
@@ -28,6 +32,24 @@ const useChainedMovesDialogStore = create<ChainedMovesDialogStore>((set) => ({
 	nodeIds: null,
 	updateNodeIds: (nodeIds) => {
 		set({ nodeIds: nodeIds });
+	},
+
+	addEmptyNodeIdSequence: () => {
+		set((state) => {
+			if (!state.nodeIds) return {};
+
+			return {
+				nodeIds: [...state.nodeIds, [state.nodeIds.length, []]],
+			};
+		});
+	},
+
+	deleteNodeIdSequence: (sequenceIndexToDelete) => {
+		set((state) => ({
+			nodeIds: state.nodeIds?.filter(([sequenceIndex]) => {
+				return sequenceIndex !== sequenceIndexToDelete;
+			}),
+		}));
 	},
 
 	addNodeId: (sequenceIndexOfNode, insertPos) => {
