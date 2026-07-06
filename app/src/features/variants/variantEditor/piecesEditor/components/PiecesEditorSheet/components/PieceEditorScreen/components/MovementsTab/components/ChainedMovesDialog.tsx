@@ -63,8 +63,6 @@ function SequenceNodeCard({
 	sequenceIndexInMoveset,
 	sequenceLength,
 }: SequenceNodeCardProps) {
-	console.log(nodeIndex, sequenceLength);
-
 	const {
 		chainedMoveSequences,
 		removeChainedMoveSequence,
