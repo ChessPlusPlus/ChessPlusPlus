@@ -7,6 +7,12 @@ type ChainedMovesDialogStore = {
 
 	nodeIds: [number, string[]][] | null;
 	updateNodeIds: (nodeIds: [number, string[]][]) => void;
+	addNodeId: (sequenceIndex: number, insertPos: number | "end") => void;
+	moveNodeId: (
+		sequenceIndexOfNode: number,
+		oldNodeIndex: number,
+		newNodeIndex: number,
+	) => void;
 	clearNodeIds: () => void;
 
 	activePiece: string | null;
@@ -22,6 +28,57 @@ const useChainedMovesDialogStore = create<ChainedMovesDialogStore>((set) => ({
 	nodeIds: null,
 	updateNodeIds: (nodeIds) => {
 		set({ nodeIds: nodeIds });
+	},
+
+	addNodeId: (sequenceIndexOfNode, insertPos) => {
+		if (insertPos === "end") {
+			set((state) => ({
+				nodeIds: state.nodeIds?.map(([sequenceIndex, sequence]) => {
+					if (sequenceIndexOfNode === sequenceIndex) {
+						return [
+							sequenceIndex,
+							[...sequence, crypto.randomUUID()],
+						];
+					} else {
+						return [sequenceIndex, sequence];
+					}
+				}),
+			}));
+		} else {
+			set((state) => ({
+				nodeIds: state.nodeIds?.map(([sequenceIndex, sequence]) => {
+					if (sequenceIndexOfNode === sequenceIndex) {
+						return [
+							sequenceIndex,
+							[
+								...sequence.slice(0, insertPos),
+								crypto.randomUUID(),
+								...sequence.slice(insertPos),
+							],
+						];
+					} else {
+						return [sequenceIndex, sequence];
+					}
+				}),
+			}));
+		}
+	},
+
+	moveNodeId: (sequenceIndexOfNode, oldNodeIndex, newNodeIndex) => {
+		set((state) => ({
+			nodeIds: state.nodeIds?.map(([sequenceIndex, sequence]) => {
+				if (sequenceIndexOfNode === sequenceIndex) {
+					const newSequence = structuredClone(sequence);
+					const [nodeIdToMove] = newSequence.splice(oldNodeIndex, 1);
+
+					newSequence.splice(newNodeIndex, 0, nodeIdToMove);
+
+					return [sequenceIndex, newSequence];
+				} else {
+					return [sequenceIndex, sequence];
+				}
+			}),
+		}));
 	},
 
 	clearNodeIds: () => {
