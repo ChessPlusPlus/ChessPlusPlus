@@ -63,6 +63,8 @@ function SequenceNodeCard({
 	sequenceIndexInMoveset,
 	sequenceLength,
 }: SequenceNodeCardProps) {
+	console.log(nodeIndex, sequenceLength);
+
 	const {
 		chainedMoveSequences,
 		removeChainedMoveSequence,
@@ -354,15 +356,15 @@ function ChainedMoveSequenceCard({
 			>
 				<div className="flex min-w-max w-full flex-col gap-2 p-4">
 					{sequence.map((node, nodeIndex) => {
-						const sequence = nodeIds.find(
+						const nodeIdSequence = nodeIds.find(
 							([position]) => position === sequenceIndex,
 						);
-						if (!sequence) return;
+						if (!nodeIdSequence) return;
 
 						return (
 							<SequenceNodeCard
-								key={sequence[1][nodeIndex]}
-								nodeId={sequence[1][nodeIndex]}
+								key={nodeIdSequence[1][nodeIndex]}
+								nodeId={nodeIdSequence[1][nodeIndex]}
 								chainedMoveNode={node}
 								sequenceIndex={sequenceIndex}
 								sequenceIndexInMoveset={indexInMoveset}
@@ -387,6 +389,7 @@ function ChainedMovesDialog() {
 		nodeIds,
 		updateNodeIds,
 		addNodeId,
+		addEmptyNodeIdSequence,
 	} = useChainedMovesDialogStore();
 	const {
 		chainedMoveSequences,
@@ -481,6 +484,7 @@ function ChainedMovesDialog() {
 
 	function handleAddSequenceButtonClick() {
 		addChainedMoveSequence([]);
+		addEmptyNodeIdSequence();
 	}
 
 	return (
