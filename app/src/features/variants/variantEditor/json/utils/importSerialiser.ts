@@ -41,9 +41,19 @@ function serialiseJSONForImport(
 		startingPosition: serialisedStartingPosition,
 	};
 
+	const serialisedPieceRules = Object.fromEntries(
+		Object.entries(caseConvertedPieces).map(([pieceName, pieceRuleset]) => [
+			pieceName,
+			{
+				...(pieceRuleset as Record<string, unknown>),
+				imageId: "placeholder",
+			},
+		]),
+	);
+
 	return {
 		setupRules: serialisedSetupRules,
-		pieceRuleset: caseConvertedPieces as PieceRuleset,
+		pieceRuleset: serialisedPieceRules as PieceRuleset,
 		movementRules: caseConvertedJSON.moves,
 	};
 }
