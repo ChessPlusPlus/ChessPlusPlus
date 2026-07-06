@@ -411,8 +411,6 @@ function ChainedMovesDialog() {
 	} = useAddChainedMoveDialogStore();
 
 	useEffect(() => {
-		console.log(nodeIds);
-
 		if (nodeIds) return;
 
 		updateNodeIds(
