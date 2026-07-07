@@ -4,3 +4,5 @@ backend/.venv
 __pycache__
 *.egg-info
 .env
+
+/backend/app/engine/test_file.py

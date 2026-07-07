@@ -1,4 +1,3 @@
-import type { PieceRules } from "@/features/variants/common/types/pieceRules";
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import type { VariantInfo } from "@/features/variants/common/types/variants";
 import { convertDictToSnakeCase } from "@/features/variants/common/utils/caseConverter";
@@ -51,36 +50,18 @@ function serialiseJSONForExport(rawJSON: VariantInfo) {
 		}),
 	);
 
-	newJSON.pieces = Object.fromEntries(
-		Object.entries(newJSON.pieces).map(([pieceName, pieceRuleset]) => {
-			return [
-				pieceName,
-				{
-					...(pieceRuleset as Record<string, unknown>),
-					moveset: (pieceRuleset as PieceRules).moveset.map(
-						(move) => {
-							if (Array.isArray(move)) {
-								return move.map((chainedMove) => {
-									return {
-										moveName: chainedMove.moveName,
-										validMove: chainedMove.validMove,
-										terminateOnStop:
-											chainedMove.terminateOnStop,
-									};
-								});
-							} else {
-								return move;
-							}
-						},
-					),
-				},
-			];
-		}),
-	);
-
-	newJSON.pieces = convertDictToSnakeCase(newJSON.pieces, [0]) as Record<string, unknown>;
-	newJSON.setup = convertDictToSnakeCase(newJSON.setup, []) as Record<string, unknown>;
-	newJSON.moves = convertDictToSnakeCase(newJSON.moves, [0]) as Record<string, unknown>;
+	newJSON.pieces = convertDictToSnakeCase(newJSON.pieces, [0]) as Record<
+		string,
+		unknown
+	>;
+	newJSON.setup = convertDictToSnakeCase(newJSON.setup, []) as Record<
+		string,
+		unknown
+	>;
+	newJSON.moves = convertDictToSnakeCase(newJSON.moves, [0]) as Record<
+		string,
+		unknown
+	>;
 
 	return newJSON;
 }
