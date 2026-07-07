@@ -28,6 +28,7 @@ import { defaultPieceImages } from "@/features/variants/variantCreation/constant
 import { useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
 import { normaliseJSON } from "@/features/variants/variantEditor/json/services/jsonNormalisation";
+import type { VariantRules } from "@/features/variants/common/types/variants";
 
 function ImportJSONDialog() {
 	const {
@@ -66,7 +67,10 @@ function ImportJSONDialog() {
 
 	const jsonFileInputRef = useRef<HTMLInputElement>(null);
 
-	async function handleImportJSON(shouldOpen: boolean) {
+	async function handleImportJSON(
+		shouldOpen: boolean,
+		shouldSerialise: boolean = true,
+	) {
 		if (!jsonFile) return;
 
 		const trimmedVariantName = variantName.trim();
@@ -118,7 +122,9 @@ function ImportJSONDialog() {
 
 		const variantId = createVariant({
 			variantName: trimmedVariantName,
-			variantRules: serialisedVariantRules,
+			variantRules: shouldSerialise
+				? serialisedVariantRules
+				: (jsonToUse as VariantRules),
 		});
 
 		if (!_.isEqual(images, defaultPieceImages) || !defaultImagesCreated) {
