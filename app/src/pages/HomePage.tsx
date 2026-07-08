@@ -7,6 +7,7 @@ import {
 	IconFileImport,
 	IconFolder,
 	IconHelpCircle,
+	IconInfoCircle,
 	IconPlus,
 	IconSettings,
 } from "@tabler/icons-react";
@@ -34,10 +35,12 @@ import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import FeedbackCollectionCredentialsForm from "@/features/feedbackCollection/components/FeedbackCollectionCredentialsForm";
 import { useEffect } from "react";
 import { APP_VERSION, BETA_APP_VERSION } from "@/version";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
-const discordUrl = "https://discord.gg/Wp52HaBSF2"
+const discordUrl = "https://discord.gg/Wp52HaBSF2";
 
 function HomePage() {
 	const { openDialog: openCreateVariantDialog } =
@@ -59,7 +62,7 @@ function HomePage() {
 	} = useFeedbackCollectionCredentialsFormStore();
 
 	const isBeta = import.meta.env.VITE_IS_BETA === "true";
-	
+
 	useEffect(() => {
 		if (userId === null) {
 			return;
@@ -69,7 +72,7 @@ function HomePage() {
 			id: userId,
 			email: email || undefined,
 			firstName: name || undefined,
-		})
+		});
 	}, [name, email, userId]);
 
 	function handleGiveFeedbackButtonClick() {
@@ -89,22 +92,29 @@ function HomePage() {
 		<>
 			<div>
 				<title>Chess++</title>
-				<meta name="description" content="Create and play with your own custom chess pieces" />
+				<meta
+					name="description"
+					content="Create and play with your own custom chess pieces"
+				/>
 				<meta name="keywords" content="chess variants, custom pieces" />
 			</div>
 
 			<div className="fixed top-2 left-2">
 				<p>v{isBeta ? BETA_APP_VERSION : APP_VERSION}</p>
 			</div>
-		
+
 			<div className="flex flex-col items-center justify-center w-full h-full gap-2 bg-linear-to-b from-white to-purple-400">
 				<h1 className="text-6xl font-bold flex flex-col items-center justify-center gap-2 md:block">
 					<span>Chess++ </span>
 					{isBeta && (
-						<span className="text-violet-600 font-bold">[BETA]</span>
+						<span className="text-violet-600 font-bold">
+							[BETA]
+						</span>
 					)}
 				</h1>
-				<p className="max-w-3/4 text-center">Create and play with your own custom chess pieces</p>
+				<p className="max-w-3/4 text-center">
+					Create and play with your own custom chess pieces
+				</p>
 
 				<div className="flex flex-col md:flex-row gap-4">
 					<Button onClick={openCreateVariantDialog} className="px-4">
@@ -127,6 +137,29 @@ function HomePage() {
 						Play variant
 					</Button>
 				</div>
+
+				<Field
+					className="flex flex-row w-max mt-2"
+					orientation="horizontal"
+				>
+					<Checkbox />
+					<FieldContent className="flex flex-row items-center">
+						<FieldLabel>Dev mode</FieldLabel>
+
+						<Tooltip>
+							<TooltipTrigger>
+								<IconInfoCircle
+									className="size-5"
+									strokeWidth={1.5}
+								/>
+							</TooltipTrigger>
+
+							<TooltipContent side="right">
+								Use at your own risk
+							</TooltipContent>
+						</Tooltip>
+					</FieldContent>
+				</Field>
 			</div>
 
 			<div className="fixed bottom-2 right-2 flex flex-row gap-2 items-center">
@@ -195,9 +228,7 @@ function HomePage() {
 							/>
 						</Link>
 					</TooltipTrigger>
-					<TooltipContent side="top">
-						Discord server
-					</TooltipContent>
+					<TooltipContent side="top">Discord server</TooltipContent>
 				</Tooltip>
 			</div>
 
@@ -215,10 +246,13 @@ function HomePage() {
 						}
 					}}
 				>
-					<PopoverTrigger onClick={(e) => {
-						e.preventDefault();
-						handleGiveFeedbackButtonClick();
-					}} asChild>
+					<PopoverTrigger
+						onClick={(e) => {
+							e.preventDefault();
+							handleGiveFeedbackButtonClick();
+						}}
+						asChild
+					>
 						<Button
 							variant="ghost"
 							className="p-1 hover:bg-gray-100 rounded-md"
@@ -232,13 +266,18 @@ function HomePage() {
 
 				<Tooltip>
 					<TooltipTrigger asChild>
-						<Button onClick={handleFeedbackBoardButtonClick} variant="ghost" className="p-1 hover:bg-gray-100 rounded-md">
-							<IconExternalLink className="size-6" strokeWidth={1.5} />
+						<Button
+							onClick={handleFeedbackBoardButtonClick}
+							variant="ghost"
+							className="p-1 hover:bg-gray-100 rounded-md"
+						>
+							<IconExternalLink
+								className="size-6"
+								strokeWidth={1.5}
+							/>
 						</Button>
 					</TooltipTrigger>
-					<TooltipContent side="top">
-						Feedback board
-					</TooltipContent>
+					<TooltipContent side="top">Feedback board</TooltipContent>
 				</Tooltip>
 			</div>
 
