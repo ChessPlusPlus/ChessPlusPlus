@@ -18,11 +18,11 @@ function PlayChessboard() {
 	const selectedVariant = variants[variantId ?? ""];
 	if (!selectedVariant) return null;
 
-	const pieceRulesetDraft = selectedVariant.variantRules.pieceRuleset;
+	const pieceRulesetDraft = selectedVariant.variantRules.pieces;
 	if (!pieceRulesetDraft) return null;
 
-	const boardXSize = selectedVariant.variantRules.setupRules.boardXSize;
-	const boardYSize = selectedVariant.variantRules.setupRules.boardYSize;
+	const boardXSize = selectedVariant.variantRules.setup.boardXSize;
+	const boardYSize = selectedVariant.variantRules.setup.boardYSize;
 
 	const boardStateMap = new TupleKeyedMap<[number, number], string>(
 		gameBoardState ?? [],

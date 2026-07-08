@@ -52,9 +52,9 @@ function serialiseJSONForImport(
 	);
 
 	return {
-		setupRules: serialisedSetupRules,
-		pieceRuleset: serialisedPieceRules as PieceRuleset,
-		movementRules: caseConvertedJSON.moves,
+		setup: serialisedSetupRules,
+		pieces: serialisedPieceRules as PieceRuleset,
+		moves: caseConvertedJSON.moves,
 	};
 }
 

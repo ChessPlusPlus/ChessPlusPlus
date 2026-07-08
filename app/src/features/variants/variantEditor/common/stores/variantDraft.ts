@@ -70,9 +70,9 @@ const useVariantDraftStore = create<VariantDraftStore>((set, get, store) => ({
 		updateVariant(currentVariantId, {
 			...originalVariantInfo,
 			variantRules: {
-				setupRules: setupRulesDraft,
-				pieceRuleset: pieceRulesetDraft,
-				movementRules: movementRulesDraft,
+				setup: setupRulesDraft,
+				pieces: pieceRulesetDraft,
+				moves: movementRulesDraft,
 			},
 		});
 	},
@@ -95,7 +95,7 @@ const useVariantDraftStore = create<VariantDraftStore>((set, get, store) => ({
 				...originalVariantInfo,
 				variantRules: {
 					...originalVariantInfo.variantRules,
-					setupRules: setupRulesDraft,
+					setup: setupRulesDraft,
 				},
 			});
 		} else {
@@ -109,8 +109,8 @@ const useVariantDraftStore = create<VariantDraftStore>((set, get, store) => ({
 				...originalVariantInfo,
 				variantRules: {
 					...originalVariantInfo.variantRules,
-					setupRules: {
-						...originalVariantInfo.variantRules.setupRules,
+					setup: {
+						...originalVariantInfo.variantRules.setup,
 						...draftToSync,
 					},
 				},
@@ -135,7 +135,7 @@ const useVariantDraftStore = create<VariantDraftStore>((set, get, store) => ({
 			...originalVariantInfo,
 			variantRules: {
 				...originalVariantInfo.variantRules,
-				pieceRuleset: pieceRulesetDraft,
+				pieces: pieceRulesetDraft,
 			},
 		});
 	},
@@ -157,13 +157,13 @@ const useVariantDraftStore = create<VariantDraftStore>((set, get, store) => ({
 			...originalVariantInfo,
 			variantRules: {
 				...originalVariantInfo.variantRules,
-				movementRules: movementRulesDraft,
+				moves: movementRulesDraft,
 			},
 		});
 	},
 
 	resetVariantDraftState: () => {
-		set(store.getInitialState())
+		set(store.getInitialState());
 	},
 }));
 

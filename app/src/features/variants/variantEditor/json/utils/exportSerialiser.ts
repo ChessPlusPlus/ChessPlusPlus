@@ -29,12 +29,12 @@ function serialiseJSONForExport(rawJSON: VariantInfo) {
 		pieces: {},
 	};
 
-	newJSON.setup = structuredClone(rawJSON.variantRules.setupRules);
-	newJSON.moves = structuredClone(rawJSON.variantRules.movementRules);
-	newJSON.pieces = structuredClone(rawJSON.variantRules.pieceRuleset);
+	newJSON.setup = structuredClone(rawJSON.variantRules.setup);
+	newJSON.moves = structuredClone(rawJSON.variantRules.moves);
+	newJSON.pieces = structuredClone(rawJSON.variantRules.pieces);
 
 	newJSON.setup.startingPosition = serialiseStartingPositionForExport(
-		rawJSON.variantRules.setupRules.startingPosition,
+		rawJSON.variantRules.setup.startingPosition,
 	);
 
 	newJSON.pieces = Object.fromEntries(
