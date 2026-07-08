@@ -42,7 +42,8 @@ async def create_game(request: CreateGameRequest):
 
 	return CreateGameResponse(
 		game_id=game_id, 
-		game_state=dict.items(game_instance.get_game_state())
+		game_state=dict.items(game_instance.get_game_state()),
+		board_size=game_instance.get_board_size()
 	)
 
 @router.post("/generate-legal-moves", response_model=GameLegalMoveGenerationResponse)
