@@ -166,7 +166,7 @@ function VariantEditorPage() {
 							range: range ?? 0,
 							moveStopConditions: ["inside_piece"],
 						},
-					}
+					},
 				},
 				currentPos: [4, 3],
 				gameState: serialiseGameState(previewBoardState),
@@ -187,9 +187,9 @@ function VariantEditorPage() {
 		if (!selectedVariant) return;
 
 		updateCurrentVariantId(variantId);
-		updateSetupRulesDraft(selectedVariant.variantRules.setupRules);
-		updateMovementRulesDraft(selectedVariant.variantRules.movementRules);
-		updatePieceRulesetDraft(selectedVariant.variantRules.pieceRuleset);
+		updateSetupRulesDraft(selectedVariant.variantRules.setup);
+		updateMovementRulesDraft(selectedVariant.variantRules.moves);
+		updatePieceRulesetDraft(selectedVariant.variantRules.pieces);
 	}, [
 		updateCurrentVariantId,
 		updateMovementRulesDraft,
@@ -366,7 +366,12 @@ function VariantEditorPage() {
 									}
 									pieceRuleset={{
 										movement_preview: {
-											moveset: [{ moveName: activeMovementName! }],
+											moveset: [
+												{
+													moveName:
+														activeMovementName!,
+												},
+											],
 											imageId: "movement_preview",
 										},
 									}}

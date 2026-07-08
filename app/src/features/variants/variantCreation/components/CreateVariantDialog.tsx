@@ -86,15 +86,15 @@ function CreateVariantDialog() {
 		clearVariantNameErrors();
 
 		const blankTemplateRules: VariantRules = {
-			setupRules: {
+			setup: {
 				pieceOwnership: {},
 				boardXSize: 8,
 				boardYSize: 8,
 				startingPosition: [],
 			},
 
-			pieceRuleset: {},
-			movementRules: {},
+			pieces: {},
+			moves: {},
 		};
 
 		const chessPresetRules = structuredClone(defaultVariantRules);
@@ -126,9 +126,9 @@ function CreateVariantDialog() {
 
 		if (submitAction === "create-and-open") {
 			posthog.capture("variant_opened", {
-				source: "post_create"
+				source: "post_create",
 			});
-			
+
 			navigate(`/variants/${variantId}`);
 		}
 	}

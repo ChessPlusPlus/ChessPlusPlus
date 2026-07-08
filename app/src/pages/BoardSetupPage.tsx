@@ -13,7 +13,10 @@ import SaveSetupConfirmationDialog from "@/features/variants/variantEditor/setup
 import useSetupSaveConfirmationDialogStore from "@/features/variants/variantEditor/setupEditor/stores/setupSaveConfirmationDialog";
 import _ from "lodash";
 import useSetupMenuStore from "@/features/variants/variantEditor/setupEditor/stores/setupMenu";
-import type { GameState2DArray, PieceOwnershipRules } from "@/features/variants/common/types/setupRules";
+import type {
+	GameState2DArray,
+	PieceOwnershipRules,
+} from "@/features/variants/common/types/setupRules";
 
 type OnDragEnd = React.ComponentProps<typeof DragDropProvider>["onDragEnd"];
 
@@ -27,7 +30,8 @@ function BoardSetupPage() {
 		updatePieceRulesetDraft,
 	} = useVariantDraftStore();
 
-	const { openSetupSaveConfirmationDialog } = useSetupSaveConfirmationDialogStore();
+	const { openSetupSaveConfirmationDialog } =
+		useSetupSaveConfirmationDialogStore();
 	const { originalSetupRulesDraft } = useSetupMenuStore();
 
 	const { images, hasHydrated } = usePieceImagesStore();
@@ -44,9 +48,9 @@ function BoardSetupPage() {
 		if (!selectedVariant) return;
 
 		updateCurrentVariantId(variantId);
-		updateSetupRulesDraft(selectedVariant.variantRules.setupRules);
-		updateMovementRulesDraft(selectedVariant.variantRules.movementRules);
-		updatePieceRulesetDraft(selectedVariant.variantRules.pieceRuleset);
+		updateSetupRulesDraft(selectedVariant.variantRules.setup);
+		updateMovementRulesDraft(selectedVariant.variantRules.moves);
+		updatePieceRulesetDraft(selectedVariant.variantRules.pieces);
 	}, [
 		updateCurrentVariantId,
 		updateMovementRulesDraft,
@@ -60,42 +64,52 @@ function BoardSetupPage() {
 
 	if (!setupRulesDraft) return null;
 
-	const hasUnsavedChanges = originalSetupRulesDraft && !_.isEqual(
-		Object.fromEntries(
-			Object.entries(originalSetupRulesDraft).filter(
-				([key, value]) => {
+	const hasUnsavedChanges =
+		originalSetupRulesDraft &&
+		!_.isEqual(
+			Object.fromEntries(
+				Object.entries(originalSetupRulesDraft).filter(
+					([key, value]) => {
+						if (key === "startingPosition") {
+							return [key, (value as GameState2DArray).sort()];
+						} else if (key === "pieceOwnership") {
+							return [
+								key,
+								Object.fromEntries(
+									Object.entries(
+										value as PieceOwnershipRules,
+									).map(([key, value]) => {
+										return [key, value.sort()];
+									}),
+								),
+							];
+						} else {
+							return [key, value];
+						}
+					},
+				),
+			),
+			Object.fromEntries(
+				Object.entries(setupRulesDraft).filter(([key, value]) => {
 					if (key === "startingPosition") {
 						return [key, (value as GameState2DArray).sort()];
 					} else if (key === "pieceOwnership") {
-						return [key, Object.fromEntries(
-							Object.entries(value as PieceOwnershipRules).map(([key, value]) => {
-								return [key, value.sort()];
-							})
-						)];
+						return [
+							key,
+							Object.fromEntries(
+								Object.entries(
+									value as PieceOwnershipRules,
+								).map(([key, value]) => {
+									return [key, value.sort()];
+								}),
+							),
+						];
 					} else {
 						return [key, value];
 					}
-				}
-			)
-		),
-		Object.fromEntries(
-			Object.entries(setupRulesDraft).filter(
-				([key, value]) => {
-					if (key === "startingPosition") {
-						return [key, (value as GameState2DArray).sort()];
-					} else if (key === "pieceOwnership") {
-						return [key, Object.fromEntries(
-							Object.entries(value as PieceOwnershipRules).map(([key, value]) => {
-								return [key, value.sort()];
-							})
-						)];
-					} else {
-						return [key, value];
-					}
-				}
-			)
-		)
-	);
+				}),
+			),
+		);
 
 	function handleDragEnd(...args: Parameters<NonNullable<OnDragEnd>>) {
 		if (!setupRulesDraft) return;
