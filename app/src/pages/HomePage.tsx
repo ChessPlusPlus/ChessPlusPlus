@@ -138,28 +138,30 @@ function HomePage() {
 					</Button>
 				</div>
 
-				<Field
-					className="flex flex-row w-max mt-2"
-					orientation="horizontal"
-				>
-					<Checkbox />
-					<FieldContent className="flex flex-row items-center">
-						<FieldLabel>Dev mode</FieldLabel>
+				{isBeta && (
+					<Field
+						className="flex flex-row w-max mt-2"
+						orientation="horizontal"
+					>
+						<Checkbox />
+						<FieldContent className="flex flex-row items-center">
+							<FieldLabel>Dev mode</FieldLabel>
 
-						<Tooltip>
-							<TooltipTrigger>
-								<IconInfoCircle
-									className="size-5"
-									strokeWidth={1.5}
-								/>
-							</TooltipTrigger>
+							<Tooltip>
+								<TooltipTrigger>
+									<IconInfoCircle
+										className="size-5"
+										strokeWidth={1.5}
+									/>
+								</TooltipTrigger>
 
-							<TooltipContent side="right">
-								Use at your own risk
-							</TooltipContent>
-						</Tooltip>
-					</FieldContent>
-				</Field>
+								<TooltipContent side="right">
+									Use at your own risk
+								</TooltipContent>
+							</Tooltip>
+						</FieldContent>
+					</Field>
+				)}
 			</div>
 
 			<div className="fixed bottom-2 right-2 flex flex-row gap-2 items-center">
