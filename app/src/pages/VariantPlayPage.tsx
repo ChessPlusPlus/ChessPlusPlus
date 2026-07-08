@@ -44,18 +44,6 @@ function VariantPlayPage() {
 		const selectedVariant = variants[variantId];
 		if (!selectedVariant) return;
 
-		const startingPosition =
-			selectedVariant.variantRules.setup.startingPosition;
-		updateGameBoardState(startingPosition);
-	}, [updateGameBoardState, variants, variantId, hasVariantsHydrated]);
-
-	useEffect(() => {
-		if (!hasVariantsHydrated) return;
-		if (!variantId) return;
-
-		const selectedVariant = variants[variantId];
-		if (!selectedVariant) return;
-
 		const setupRules = selectedVariant.variantRules.setup;
 		const pieceRuleset = selectedVariant.variantRules.pieces;
 		const movementRules = selectedVariant.variantRules.moves;
