@@ -5,9 +5,16 @@ import Square from "@/features/variants/variantPlay/components/PlayChessboard/Sq
 import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
 import { TupleKeyedMap } from "@itwin/core-bentley";
 import { useParams } from "react-router-dom";
+import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 
 function PlayChessboard() {
-	const { isBoardFlipped, gameBoardState, legalMoves } = useGameplayStore();
+	const {
+		isBoardFlipped,
+		gameBoardState,
+		legalMoves,
+		boardXSize,
+		boardYSize,
+	} = useGameplayStore();
 	const { variantId } = useParams();
 	const { variants, hasHydrated: hasVariantsHydrated } = useVariantsStore();
 	const { images, hasHydrated: hasImagesHydrated } = usePieceImagesStore();
@@ -21,8 +28,8 @@ function PlayChessboard() {
 	const pieceRulesetDraft = selectedVariant.variantRules.pieces;
 	if (!pieceRulesetDraft) return null;
 
-	const boardXSize = selectedVariant.variantRules.setup.boardXSize;
-	const boardYSize = selectedVariant.variantRules.setup.boardYSize;
+	if (isNullOrUndefined(boardXSize)) return null;
+	if (isNullOrUndefined(boardYSize)) return null;
 
 	const boardStateMap = new TupleKeyedMap<[number, number], string>(
 		gameBoardState ?? [],
@@ -58,7 +65,8 @@ function PlayChessboard() {
 					files.map((file) => {
 						const foundSquare = boardStateMap.get([file, rank]);
 						const imageId =
-							pieceRulesetDraft[foundSquare ?? ""]?.imageId;
+							pieceRulesetDraft[foundSquare ?? ""]?.imageId ??
+							"placeholder";
 
 						const imageUrl = imageId ? getImageUrl(imageId) : null;
 
