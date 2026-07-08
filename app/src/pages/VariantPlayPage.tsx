@@ -28,6 +28,8 @@ function VariantPlayPage() {
 		activeGameId,
 		updateActiveGameId,
 		updateLegalMoves,
+		updateBoardXSize,
+		updateBoardYSize,
 		clearLegalMoves,
 
 		legalMoveCache,
@@ -51,7 +53,7 @@ function VariantPlayPage() {
 		console.log(setupRules, pieceRuleset, movementRules);
 
 		async function handleCreateGame() {
-			const { gameId, gameState } = await createGame(
+			const { gameId, gameState, boardSize } = await createGame(
 				setupRules,
 				pieceRuleset,
 				movementRules,
@@ -59,8 +61,11 @@ function VariantPlayPage() {
 
 			if (!gameId) return;
 			if (!gameState) return;
+			if (!boardSize) return;
 
 			updateGameBoardState(gameState as GameState2DArray);
+			updateBoardXSize(boardSize[0]);
+			updateBoardYSize(boardSize[1]);
 			updateActiveGameId(gameId);
 		}
 
