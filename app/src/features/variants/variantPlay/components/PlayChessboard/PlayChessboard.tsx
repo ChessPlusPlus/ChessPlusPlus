@@ -41,9 +41,8 @@ function PlayChessboard() {
 		if (!variantId) return null;
 
 		const imageBlob = images[imageId][variantId] ?? images[imageId].image;
-		const imageUrl = URL.createObjectURL(imageBlob);
 
-		return imageUrl;
+		return URL.createObjectURL(imageBlob);
 	}
 
 	return (
