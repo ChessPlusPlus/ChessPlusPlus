@@ -28,6 +28,8 @@ function VariantPlayPage() {
 		activeGameId,
 		updateActiveGameId,
 		updateLegalMoves,
+		updateBoardXSize,
+		updateBoardYSize,
 		clearLegalMoves,
 
 		legalMoveCache,
@@ -44,18 +46,6 @@ function VariantPlayPage() {
 		const selectedVariant = variants[variantId];
 		if (!selectedVariant) return;
 
-		const startingPosition =
-			selectedVariant.variantRules.setup.startingPosition;
-		updateGameBoardState(startingPosition);
-	}, [updateGameBoardState, variants, variantId, hasVariantsHydrated]);
-
-	useEffect(() => {
-		if (!hasVariantsHydrated) return;
-		if (!variantId) return;
-
-		const selectedVariant = variants[variantId];
-		if (!selectedVariant) return;
-
 		const setupRules = selectedVariant.variantRules.setup;
 		const pieceRuleset = selectedVariant.variantRules.pieces;
 		const movementRules = selectedVariant.variantRules.moves;
@@ -63,7 +53,7 @@ function VariantPlayPage() {
 		console.log(setupRules, pieceRuleset, movementRules);
 
 		async function handleCreateGame() {
-			const { gameId, gameState } = await createGame(
+			const { gameId, gameState, boardSize } = await createGame(
 				setupRules,
 				pieceRuleset,
 				movementRules,
@@ -71,8 +61,11 @@ function VariantPlayPage() {
 
 			if (!gameId) return;
 			if (!gameState) return;
+			if (!boardSize) return;
 
 			updateGameBoardState(gameState as GameState2DArray);
+			updateBoardXSize(boardSize[0]);
+			updateBoardYSize(boardSize[1]);
 			updateActiveGameId(gameId);
 		}
 

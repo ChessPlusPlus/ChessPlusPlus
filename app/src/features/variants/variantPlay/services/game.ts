@@ -5,10 +5,12 @@ import type {
 	GameState2DArray,
 	SetupRules,
 } from "@/features/variants/common/types/setupRules";
+import { AxiosError } from "axios";
 
 type CreateGameResponse = {
 	gameId: string | null;
 	gameState: GameState2DArray | null;
+	boardSize: [number, number] | null;
 };
 
 async function createGame(
@@ -17,10 +19,13 @@ async function createGame(
 	movementRules: MovementRules,
 ): Promise<CreateGameResponse> {
 	try {
+		console.log(setupRules, pieceRuleset, movementRules);
+
 		const response = await api.post("game/create-game", {
 			setupRules,
 			pieceRuleset,
 			movementRules,
+			serialise: import.meta.env.VITE_IS_BETA != "true",
 		});
 
 		console.log(response.data);
@@ -28,13 +33,17 @@ async function createGame(
 		return {
 			gameId: response.data.gameId,
 			gameState: response.data.gameState,
+			boardSize: response.data.boardSize,
 		};
 	} catch (error) {
-		console.error(error);
+		if (error instanceof AxiosError) {
+			console.error(error.response?.data);
+		}
 
 		return {
 			gameId: null,
 			gameState: null,
+			boardSize: null,
 		};
 	}
 }
