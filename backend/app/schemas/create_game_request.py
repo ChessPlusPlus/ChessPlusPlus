@@ -10,3 +10,4 @@ class CreateGameRequest(BaseSchema):
 class CreateGameResponse(BaseSchema):
 	game_id: str
 	game_state: list[tuple[tuple[int, int], str]]
+	board_size: tuple[int, int]
