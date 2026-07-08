@@ -10,6 +10,7 @@ import { AxiosError } from "axios";
 type CreateGameResponse = {
 	gameId: string | null;
 	gameState: GameState2DArray | null;
+	boardSize: [number, number] | null;
 };
 
 async function createGame(
@@ -32,6 +33,7 @@ async function createGame(
 		return {
 			gameId: response.data.gameId,
 			gameState: response.data.gameState,
+			boardSize: response.data.boardSize,
 		};
 	} catch (error) {
 		if (error instanceof AxiosError) {
@@ -41,6 +43,7 @@ async function createGame(
 		return {
 			gameId: null,
 			gameState: null,
+			boardSize: null,
 		};
 	}
 }
