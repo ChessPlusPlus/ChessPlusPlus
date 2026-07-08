@@ -37,6 +37,7 @@ import { useEffect } from "react";
 import { APP_VERSION, BETA_APP_VERSION } from "@/version";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Field, FieldContent, FieldLabel } from "@/components/ui/field";
+import useDevModeStore from "@/shared/stores/devMode";
 
 const githubUrl = "https://github.com/ChessPlusPlus/ChessPlusPlus";
 const docsUrl = "https://chpp.gitbook.io/docs";
@@ -50,6 +51,7 @@ function HomePage() {
 		useVariantPlaySelectionDialogStore();
 	const { openImportJSONDialog } = useImportJSONDialogStore();
 	const { openSettingsDialog } = useSettingsDialogStore();
+	const { devModeEnabled, enableDevMode, disableDevMode } = useDevModeStore();
 
 	const { name, email, userId } = useFeedbackCollectionCredentialsStore();
 	const {
@@ -86,6 +88,14 @@ function HomePage() {
 
 	function handleFeedbackBoardButtonClick() {
 		window.uj?.redirect({ to: "feedback", newTab: true });
+	}
+
+	function handleDevModeCheckboxChange(checked: boolean) {
+		if (checked) {
+			enableDevMode();
+		} else {
+			disableDevMode();
+		}
 	}
 
 	return (
@@ -143,7 +153,10 @@ function HomePage() {
 						className="flex flex-row w-max mt-2"
 						orientation="horizontal"
 					>
-						<Checkbox />
+						<Checkbox
+							checked={devModeEnabled}
+							onCheckedChange={handleDevModeCheckboxChange}
+						/>
 						<FieldContent className="flex flex-row items-center">
 							<FieldLabel>Dev mode</FieldLabel>
 
