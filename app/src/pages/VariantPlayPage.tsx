@@ -79,6 +79,9 @@ function VariantPlayPage() {
 		variants,
 		updateGameBoardState,
 		updateActiveGameId,
+		devModeEnabled,
+		updateBoardXSize,
+		updateBoardYSize,
 	]);
 
 	useEffect(() => {
