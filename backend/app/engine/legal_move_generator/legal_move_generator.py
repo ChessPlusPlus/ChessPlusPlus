@@ -108,9 +108,10 @@ class Game:
                     output = False
 
             case "square_occupied":
-                check_position = piece_object.position
+                check_position = list(piece_object.position)
                 check_position[0] += condition_definition["offset_x"]
                 check_position[1] += condition_definition["offset_y"]
+                check_position = tuple(check_position)
                 if check_position in self._game_state:
                     output = True
                 else:
@@ -182,7 +183,7 @@ class Game:
         move_range = move_definition["move_definition"]["range"]
 
         move_stop_conditions = move_definition["move_definition"]["move_stop_conditions"]
-        move_end_conditions = move_definition["move_end_conditions"]
+        end_conditions = move_definition["end_conditions"]
 
         legal_moves = []
 
@@ -222,7 +223,7 @@ class Game:
                     stop_loop = True
 
             pass_end_conditions = True
-            for end_condition_name in move_end_conditions:
+            for end_condition_name in end_conditions:
                 if self._check_condition(end_condition_name, piece_object) == False:
                     pass_end_conditions = False
                     break

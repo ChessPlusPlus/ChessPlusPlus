@@ -9,7 +9,7 @@ class Piece:
         self.data = data
 
     def __repr__(self):
-        return f"PieceObject={{position: {self.position}, piece_id: {self.piece_id}, piece_name: {self.piece_name}, data: {self.data}}}"
+        return f"PieceObject(position: {self.position}, piece_id: {self.piece_id}, piece_name: {self.piece_name}, data: {self.data})"
 
 def convert_piece_to_dict(piece: Piece):
     return {
