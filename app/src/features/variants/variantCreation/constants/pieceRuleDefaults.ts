@@ -2,7 +2,6 @@ import type {
 	PieceRules,
 	PieceRuleset,
 } from "@/features/variants/common/types/pieceRules";
-import { generateId } from "@/shared/utils/idGeneration";
 
 const queenRules: PieceRules = {
 	moveset: [
@@ -127,8 +126,16 @@ const defaultPieceRuleset: PieceRuleset = {
 	white_pawn: {
 		moveset: [
 			[
-				{ moveName: "white_pawn_forward", validMove: true, terminateOnStop: true, nodeId: generateId() },
-				{ moveName: "white_pawn_double_step", validMove: true, terminateOnStop: true, nodeId: generateId() },
+				{
+					moveName: "white_pawn_forward",
+					validMove: true,
+					terminateOnStop: true,
+				},
+				{
+					moveName: "white_pawn_double_step",
+					validMove: true,
+					terminateOnStop: true,
+				},
 			],
 			{
 				moveName: "white_pawn_capture_east",
@@ -143,8 +150,16 @@ const defaultPieceRuleset: PieceRuleset = {
 	black_pawn: {
 		moveset: [
 			[
-				{ moveName: "black_pawn_forward", validMove: true, terminateOnStop: true, nodeId: generateId() },
-				{ moveName: "black_pawn_double_step", validMove: true, terminateOnStop: true, nodeId: generateId() },
+				{
+					moveName: "black_pawn_forward",
+					validMove: true,
+					terminateOnStop: true,
+				},
+				{
+					moveName: "black_pawn_double_step",
+					validMove: true,
+					terminateOnStop: true,
+				},
 			],
 			{
 				moveName: "black_pawn_capture_east",
@@ -159,11 +174,11 @@ const defaultPieceRuleset: PieceRuleset = {
 	white_queen: { ...queenRules, imageId: "white_queen" },
 	black_queen: { ...queenRules, imageId: "black_queen" },
 
-	white_rook: { ...rookRules, imageId: "white_rook" },	
+	white_rook: { ...rookRules, imageId: "white_rook" },
 	black_rook: { ...rookRules, imageId: "black_rook" },
 
 	white_bishop: { ...bishopRules, imageId: "white_bishop" },
-	black_bishop: { ...bishopRules, imageId: "black_bishop" },	
+	black_bishop: { ...bishopRules, imageId: "black_bishop" },
 
 	white_knight: { ...knightRules, imageId: "white_knight" },
 	black_knight: { ...knightRules, imageId: "black_knight" },

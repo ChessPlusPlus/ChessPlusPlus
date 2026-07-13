@@ -28,6 +28,8 @@ import { defaultPieceImages } from "@/features/variants/variantCreation/constant
 import { useNavigate } from "react-router-dom";
 import posthog from "posthog-js";
 import { normaliseJSON } from "@/features/variants/variantEditor/json/services/jsonNormalisation";
+import useDevModeStore from "@/shared/stores/devMode";
+import type { VariantRules } from "@/features/variants/common/types/variants";
 
 function ImportJSONDialog() {
 	const {
@@ -61,6 +63,7 @@ function ImportJSONDialog() {
 		markAsDefaultImagesCreated,
 		updateImages,
 	} = usePieceImagesStore();
+	const { devModeEnabled } = useDevModeStore();
 
 	const navigate = useNavigate();
 
@@ -112,9 +115,11 @@ function ImportJSONDialog() {
 
 		clearJsonFileErrors();
 
-		const serialisedVariantRules = serialiseJSONForImport(
-			jsonToUse! as Record<string, Record<string, unknown>>,
-		);
+		const serialisedVariantRules = devModeEnabled
+			? (jsonToUse! as VariantRules)
+			: serialiseJSONForImport(
+					jsonToUse! as Record<string, Record<string, unknown>>,
+				);
 
 		const variantId = createVariant({
 			variantName: trimmedVariantName,

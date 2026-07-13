@@ -5,9 +5,16 @@ import Square from "@/features/variants/variantPlay/components/PlayChessboard/Sq
 import useGameplayStore from "@/features/variants/variantPlay/stores/gameplay";
 import { TupleKeyedMap } from "@itwin/core-bentley";
 import { useParams } from "react-router-dom";
+import { isNullOrUndefined } from "@/shared/utils/typeChecks";
 
 function PlayChessboard() {
-	const { isBoardFlipped, gameBoardState, legalMoves } = useGameplayStore();
+	const {
+		isBoardFlipped,
+		gameBoardState,
+		legalMoves,
+		boardXSize,
+		boardYSize,
+	} = useGameplayStore();
 	const { variantId } = useParams();
 	const { variants, hasHydrated: hasVariantsHydrated } = useVariantsStore();
 	const { images, hasHydrated: hasImagesHydrated } = usePieceImagesStore();
@@ -18,11 +25,11 @@ function PlayChessboard() {
 	const selectedVariant = variants[variantId ?? ""];
 	if (!selectedVariant) return null;
 
-	const pieceRulesetDraft = selectedVariant.variantRules.pieceRuleset;
+	const pieceRulesetDraft = selectedVariant.variantRules.pieces;
 	if (!pieceRulesetDraft) return null;
 
-	const boardXSize = selectedVariant.variantRules.setupRules.boardXSize;
-	const boardYSize = selectedVariant.variantRules.setupRules.boardYSize;
+	if (isNullOrUndefined(boardXSize)) return null;
+	if (isNullOrUndefined(boardYSize)) return null;
 
 	const boardStateMap = new TupleKeyedMap<[number, number], string>(
 		gameBoardState ?? [],
@@ -41,9 +48,8 @@ function PlayChessboard() {
 		if (!variantId) return null;
 
 		const imageBlob = images[imageId][variantId] ?? images[imageId].image;
-		const imageUrl = URL.createObjectURL(imageBlob);
 
-		return imageUrl;
+		return URL.createObjectURL(imageBlob);
 	}
 
 	return (
@@ -59,7 +65,8 @@ function PlayChessboard() {
 					files.map((file) => {
 						const foundSquare = boardStateMap.get([file, rank]);
 						const imageId =
-							pieceRulesetDraft[foundSquare ?? ""]?.imageId;
+							pieceRulesetDraft[foundSquare ?? ""]?.imageId ??
+							"placeholder";
 
 						const imageUrl = imageId ? getImageUrl(imageId) : null;
 

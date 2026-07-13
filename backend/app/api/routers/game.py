@@ -25,7 +25,7 @@ async def create_game(request: CreateGameRequest):
 		"piece_ownership": request.setup_rules.piece_ownership,
 		"board_x_size": request.setup_rules.board_x_size,
 		"board_y_size": request.setup_rules.board_y_size,
-		"starting_position": serialise_starting_position(request.setup_rules.starting_position),
+		"starting_position": serialise_starting_position(request.setup_rules.starting_position) if request.serialise else request.setup_rules.starting_position,
 	}
 
 	piece_ruleset = convert_camel_to_snake(request.piece_ruleset, [0])
@@ -42,7 +42,8 @@ async def create_game(request: CreateGameRequest):
 
 	return CreateGameResponse(
 		game_id=game_id, 
-		game_state=dict.items(game_instance.get_game_state())
+		game_state=dict.items(game_instance.get_game_state()),
+		board_size=game_instance.get_board_size()
 	)
 
 @router.post("/generate-legal-moves", response_model=GameLegalMoveGenerationResponse)

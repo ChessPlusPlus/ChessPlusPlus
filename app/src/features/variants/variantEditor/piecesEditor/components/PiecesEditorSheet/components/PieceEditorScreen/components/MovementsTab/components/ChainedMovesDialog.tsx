@@ -35,7 +35,7 @@ import {
 	IconPlus,
 	IconTrash,
 } from "@tabler/icons-react";
-import { type MouseEvent } from "react";
+import { type MouseEvent, useEffect } from "react";
 
 import { isSortable, useSortable } from "@dnd-kit/react/sortable";
 import { DragDropProvider } from "@dnd-kit/react";
@@ -79,12 +79,16 @@ function SequenceNodeCard({
 		updateOnAddChainedMove,
 	} = useAddChainedMoveDialogStore();
 
+	const { addNodeId } = useChainedMovesDialogStore();
+
 	const {
 		openEditChainedMoveDialog,
 		updateSequenceIndex,
 		updateNodeIndex,
 		updateNewMovementName,
 	} = useEditChainedMoveDialogStore();
+
+	const { deleteNodeIdSequence } = useChainedMovesDialogStore();
 
 	const { ref, handleRef } = useSortable({
 		id: nodeId,
@@ -94,6 +98,7 @@ function SequenceNodeCard({
 	function handleDeleteSequenceButtonClick(e: MouseEvent<HTMLDivElement>) {
 		e.stopPropagation();
 		removeChainedMoveSequence(sequenceIndex);
+		deleteNodeIdSequence(sequenceIndex);
 
 		if (isNullOrUndefined(sequenceIndexInMoveset)) return;
 
@@ -157,6 +162,8 @@ function SequenceNodeCard({
 				validMove: true,
 				terminateOnStop: true,
 			});
+
+			addNodeId(sequenceIndex, nodeIndex);
 		});
 
 		updateChainedMoveSequenceIndex(sequenceIndex);
@@ -183,6 +190,8 @@ function SequenceNodeCard({
 				validMove: true,
 				terminateOnStop: true,
 			});
+
+			addNodeId(sequenceIndex, nodeIndex + 1);
 		});
 
 		updateChainedMoveSequenceIndex(sequenceIndex);
@@ -315,9 +324,11 @@ function ChainedMoveSequenceCard({
 	sequenceIndex,
 	indexInMoveset,
 }: ChainedMoveSequenceCardProps) {
-	const { moveChainedMoveInSequence } =
-		usePiecesEditorStore();
-	
+	const { moveChainedMoveInSequence } = usePiecesEditorStore();
+	const { nodeIds, moveNodeId } = useChainedMovesDialogStore();
+
+	if (!nodeIds) return;
+
 	return (
 		<div className="w-full">
 			<DragDropProvider
@@ -327,23 +338,31 @@ function ChainedMoveSequenceCard({
 					if (!operation.target) return;
 					if (!isSortable(operation.source)) return;
 
-					const { initialIndex: startIndex, index: endIndex } = operation.source;
+					const { initialIndex: startIndex, index: endIndex } =
+						operation.source;
 
-					if (startIndex === endIndex) return;			
+					if (startIndex === endIndex) return;
 
 					moveChainedMoveInSequence(
 						sequenceIndex,
 						startIndex,
 						endIndex,
 					);
+
+					moveNodeId(sequenceIndex, startIndex, endIndex);
 				}}
 			>
 				<div className="flex min-w-max w-full flex-col gap-2 p-4">
 					{sequence.map((node, nodeIndex) => {
+						const nodeIdSequence = nodeIds.find(
+							([position]) => position === sequenceIndex,
+						);
+						if (!nodeIdSequence) return;
+
 						return (
 							<SequenceNodeCard
-								key={node.nodeId}
-								nodeId={node.nodeId}
+								key={nodeIdSequence[1][nodeIndex]}
+								nodeId={nodeIdSequence[1][nodeIndex]}
 								chainedMoveNode={node}
 								sequenceIndex={sequenceIndex}
 								sequenceIndexInMoveset={indexInMoveset}
@@ -365,6 +384,10 @@ function ChainedMovesDialog() {
 		closeChainedMovesDialog,
 		activePiece,
 		clearActivePiece,
+		nodeIds,
+		updateNodeIds,
+		addNodeId,
+		addEmptyNodeIdSequence,
 	} = useChainedMovesDialogStore();
 	const {
 		chainedMoveSequences,
@@ -384,6 +407,17 @@ function ChainedMovesDialog() {
 		updateAdditionalInfo,
 		updateOnAddChainedMove,
 	} = useAddChainedMoveDialogStore();
+
+	useEffect(() => {
+		if (nodeIds) return;
+
+		updateNodeIds(
+			chainedMoveSequences.map(([, sequence], index) => [
+				index,
+				sequence.map(() => crypto.randomUUID()),
+			]),
+		);
+	}, [nodeIds, chainedMoveSequences, updateNodeIds]);
 
 	function handleAddChainedMoveButtonClick(chainedMoveSequenceIndex: number) {
 		updateChainedMoveSequenceIndex(chainedMoveSequenceIndex);
@@ -405,6 +439,8 @@ function ChainedMovesDialog() {
 					terminateOnStop: true,
 				},
 			);
+
+			addNodeId(additionalInfoData.chainedMoveSequenceIndex, "end");
 		});
 
 		openChainedMoveDialog();
@@ -444,6 +480,7 @@ function ChainedMovesDialog() {
 
 	function handleAddSequenceButtonClick() {
 		addChainedMoveSequence([]);
+		addEmptyNodeIdSequence();
 	}
 
 	return (

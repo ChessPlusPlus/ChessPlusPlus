@@ -28,6 +28,8 @@ function VariantPlayPage() {
 		activeGameId,
 		updateActiveGameId,
 		updateLegalMoves,
+		updateBoardXSize,
+		updateBoardYSize,
 		clearLegalMoves,
 
 		legalMoveCache,
@@ -44,31 +46,26 @@ function VariantPlayPage() {
 		const selectedVariant = variants[variantId];
 		if (!selectedVariant) return;
 
-		const startingPosition =
-			selectedVariant.variantRules.setupRules.startingPosition;
-		updateGameBoardState(startingPosition);
-	}, [updateGameBoardState, variants, variantId, hasVariantsHydrated]);
-
-	useEffect(() => {
-		if (!hasVariantsHydrated) return;
-		if (!variantId) return;
-
-		const selectedVariant = variants[variantId];
-		if (!selectedVariant) return;
-
-		const setupRules = selectedVariant.variantRules.setupRules;
-		const pieceRuleset = selectedVariant.variantRules.pieceRuleset;
-		const movementRules = selectedVariant.variantRules.movementRules;
+		const setupRules = selectedVariant.variantRules.setup;
+		const pieceRuleset = selectedVariant.variantRules.pieces;
+		const movementRules = selectedVariant.variantRules.moves;
 
 		console.log(setupRules, pieceRuleset, movementRules);
 
 		async function handleCreateGame() {
-			const { gameId, gameState } = await createGame(setupRules, pieceRuleset, movementRules);
+			const { gameId, gameState, boardSize } = await createGame(
+				setupRules,
+				pieceRuleset,
+				movementRules,
+			);
 
 			if (!gameId) return;
 			if (!gameState) return;
+			if (!boardSize) return;
 
 			updateGameBoardState(gameState as GameState2DArray);
+			updateBoardXSize(boardSize[0]);
+			updateBoardYSize(boardSize[1]);
 			updateActiveGameId(gameId);
 		}
 
@@ -119,7 +116,11 @@ function VariantPlayPage() {
 		if (!startLocation) return;
 		if (!piece) return;
 
-		if (startLocation[0] === Number(file) && startLocation[1] === Number(rank)) return;
+		if (
+			startLocation[0] === Number(file) &&
+			startLocation[1] === Number(rank)
+		)
+			return;
 
 		const isLocallyLegal = locallyComputedLegalMoves.some(
 			(legalMove) =>
@@ -170,17 +171,25 @@ function VariantPlayPage() {
 
 			let batchGeneratedLegalMoves = null;
 			if (legalMoveCache.length === 0) {
-				const { legalMoves } = await batchGenerateLegalMoves(activeGameId);
+				const { legalMoves } =
+					await batchGenerateLegalMoves(activeGameId);
 				if (!legalMoves) return;
 
 				updateLegalMoveCache(legalMoves);
 				batchGeneratedLegalMoves = legalMoves;
 			}
 
-			const legalMovesUsed = legalMoveCache.length > 0 ? legalMoveCache : batchGeneratedLegalMoves;
+			const legalMovesUsed =
+				legalMoveCache.length > 0
+					? legalMoveCache
+					: batchGeneratedLegalMoves;
 			if (!legalMovesUsed) return;
-			
-			const legalMovesForCurrentPiece = legalMovesUsed.find(([position]) => position[0] === file && position[1] === rank)?.[1] ?? [];
+
+			const legalMovesForCurrentPiece =
+				legalMovesUsed.find(
+					([position]) =>
+						position[0] === file && position[1] === rank,
+				)?.[1] ?? [];
 
 			updateLegalMoves(legalMovesForCurrentPiece);
 		},

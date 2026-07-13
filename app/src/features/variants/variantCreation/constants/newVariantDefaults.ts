@@ -4,9 +4,9 @@ import { defaultSetupRules } from "@/features/variants/variantCreation/constants
 import { defaultMovementRules } from "@/features/variants/variantCreation/constants/defaultMovementRules";
 
 const defaultVariantRules: VariantRules = {
-	setupRules: defaultSetupRules,
-	pieceRuleset: defaultPieceRuleset,
-	movementRules: defaultMovementRules
+	setup: defaultSetupRules,
+	pieces: defaultPieceRuleset,
+	moves: defaultMovementRules,
 };
 
 export { defaultVariantRules };

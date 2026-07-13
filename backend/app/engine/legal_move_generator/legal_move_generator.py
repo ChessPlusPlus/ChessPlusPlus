@@ -33,6 +33,9 @@ class Game:
         if self.debug_mode:
             print(statement, end=end)
 
+    def get_board_size(self):
+        return (self._rules["setup"]["board_x_size"], self._rules["setup"]["board_y_size"])
+    
     def get_game_state_raw(self, include_size: bool = False):
         if include_size:
             return (self._rules["setup"]["board_x_size"], self._rules["setup"]["board_y_size"]), self._game_state
@@ -240,8 +243,8 @@ class Game:
             return legal_moves
 
     def get_legal_moves(self, piece_position: tuple):
-
         legal_moves = {}
+        print(self._game_state, piece_position)
 
         if not piece_position in self._game_state:
             raise NoPieceFoundError

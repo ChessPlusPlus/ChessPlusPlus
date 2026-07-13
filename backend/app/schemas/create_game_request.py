@@ -5,7 +5,9 @@ class CreateGameRequest(BaseSchema):
 	setup_rules: SetupRules
 	piece_ruleset: dict
 	movement_rules: dict
+	serialise: bool
 
 class CreateGameResponse(BaseSchema):
 	game_id: str
 	game_state: list[tuple[tuple[int, int], str]]
+	board_size: tuple[int, int]
