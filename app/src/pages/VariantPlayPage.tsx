@@ -4,7 +4,10 @@ import { Button } from "@/components/ui/button";
 import useVariantsStore from "@/features/variants/common/stores/variantsStore";
 import type { GameState2DArray } from "@/features/variants/common/types/setupRules";
 import PlayChessboard from "@/features/variants/variantPlay/components/PlayChessboard/PlayChessboard";
-import { createGame } from "@/features/variants/variantPlay/services/game";
+import {
+	createGame,
+	createGameRaw,
+} from "@/features/variants/variantPlay/services/game";
 import {
 	batchGenerateLegalMoves,
 	processMove,
@@ -14,6 +17,7 @@ import { DragDropProvider } from "@dnd-kit/react";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import useDevModeStore from "@/shared/stores/devMode";
 
 type OnDragEnd = React.ComponentProps<typeof DragDropProvider>["onDragEnd"];
 type OnDragStart = React.ComponentProps<typeof DragDropProvider>["onDragStart"];
@@ -38,6 +42,7 @@ function VariantPlayPage() {
 	} = useGameplayStore();
 	const { variants, hasHydrated: hasVariantsHydrated } = useVariantsStore();
 	const { variantId } = useParams();
+	const { devModeEnabled } = useDevModeStore();
 
 	useEffect(() => {
 		if (!hasVariantsHydrated) return;
@@ -53,11 +58,9 @@ function VariantPlayPage() {
 		console.log(setupRules, pieceRuleset, movementRules);
 
 		async function handleCreateGame() {
-			const { gameId, gameState, boardSize } = await createGame(
-				setupRules,
-				pieceRuleset,
-				movementRules,
-			);
+			const { gameId, gameState, boardSize } = devModeEnabled
+				? await createGameRaw(selectedVariant.variantRules)
+				: await createGame(setupRules, pieceRuleset, movementRules);
 
 			if (!gameId) return;
 			if (!gameState) return;
