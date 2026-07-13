@@ -2,7 +2,9 @@ from app.schemas.base_schema import BaseSchema
 from app.schemas.legal_move_generator_request import SetupRules
 
 class CreateGameRequest(BaseSchema):
-	json: dict
+	setup_rules: SetupRules
+	piece_ruleset: dict
+	movement_rules: dict
 	serialise: bool
 
 class CreateGameResponse(BaseSchema):
