@@ -5,7 +5,7 @@ import time
 
 from fastapi import APIRouter
 
-from app.schemas.create_game_request import CreateGameRequest, CreateGameResponse
+from app.schemas.create_game_request import CreateGameRequest, CreateGameRequestRaw, CreateGameResponse
 from app.schemas.game_legal_move_generation_request import GameLegalMoveGenerationRequest, GameLegalMoveGenerationResponse
 from app.schemas.game_make_move_request import GameMakeMoveRequest, GameMakeMoveResponse
 from app.schemas.batch_generate_legal_moves import BatchGenerateLegalMovesRequest, BatchGenerateLegalMovesResponse
@@ -17,6 +17,19 @@ from app.core.game_store import get_game_instance, update_game_instance, create_
 
 router = APIRouter()
 
+@router.post("/create-game-raw", response_model=CreateGameResponse)
+async def create_game_raw(request: CreateGameRequestRaw):
+	game_id = str(uuid.uuid4())
+
+	game_instance = Game(request.json)
+	await create_game_in_store(game_id, game_instance)
+
+	return CreateGameResponse(
+		game_id=game_id,
+		game_state=dict.items(game_instance.get_game_state()),
+		board_size=game_instance.get_board_size()
+	)
+
 @router.post("/create-game", response_model=CreateGameResponse)
 async def create_game(request: CreateGameRequest):
 	game_id = str(uuid.uuid4())
@@ -25,7 +38,7 @@ async def create_game(request: CreateGameRequest):
 		"piece_ownership": request.setup_rules.piece_ownership,
 		"board_x_size": request.setup_rules.board_x_size,
 		"board_y_size": request.setup_rules.board_y_size,
-		"starting_position": serialise_starting_position(request.setup_rules.starting_position) if request.serialise else request.setup_rules.starting_position,
+		"starting_position": serialise_starting_position(request.setup_rules.starting_position),
 	}
 
 	piece_ruleset = convert_camel_to_snake(request.piece_ruleset, [0])

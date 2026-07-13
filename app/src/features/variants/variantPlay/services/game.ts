@@ -13,6 +13,31 @@ type CreateGameResponse = {
 	boardSize: [number, number] | null;
 };
 
+async function createGameRaw(
+	json: Record<string, unknown>,
+): Promise<CreateGameResponse> {
+	try {
+		const response = await api.post("game/create-game-raw", {
+			json,
+		});
+		return {
+			gameId: response.data.gameId,
+			gameState: response.data.gameState,
+			boardSize: response.data.boardSize,
+		};
+	} catch (error) {
+		if (error instanceof AxiosError) {
+			console.error(error.response?.data);
+		}
+
+		return {
+			gameId: null,
+			gameState: null,
+			boardSize: null,
+		};
+	}
+}
+
 async function createGame(
 	setupRules: SetupRules,
 	pieceRuleset: PieceRuleset,
@@ -25,7 +50,6 @@ async function createGame(
 			setupRules,
 			pieceRuleset,
 			movementRules,
-			serialise: import.meta.env.VITE_IS_BETA != "true",
 		});
 
 		console.log(response.data);
@@ -48,4 +72,4 @@ async function createGame(
 	}
 }
 
-export { createGame };
+export { createGame, createGameRaw };

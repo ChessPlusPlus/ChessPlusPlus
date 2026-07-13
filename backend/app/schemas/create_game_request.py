@@ -5,7 +5,9 @@ class CreateGameRequest(BaseSchema):
 	setup_rules: SetupRules
 	piece_ruleset: dict
 	movement_rules: dict
-	serialise: bool
+
+class CreateGameRequestRaw(BaseSchema):
+	json: dict
 
 class CreateGameResponse(BaseSchema):
 	game_id: str
