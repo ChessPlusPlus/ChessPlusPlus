@@ -4,7 +4,7 @@ class SetupRules(BaseSchema):
     piece_ownership: dict[str, list[str]]
     board_x_size: int
     board_y_size: int
-    starting_position: list[tuple[tuple[int, int], str]] | list[dict]
+    starting_position: list[tuple[tuple[int, int], str]]
 
 class GenerateLegalMovesRequest(BaseSchema):
     piece_name: str
