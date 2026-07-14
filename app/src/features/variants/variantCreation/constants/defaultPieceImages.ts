@@ -12,11 +12,11 @@ import whiteKnightSvg from "@/features/variants/common/assets/wN.svg?raw";
 import blackKnightSvg from "@/features/variants/common/assets/bN.svg?raw";
 import whiteKingSvg from "@/features/variants/common/assets/wK.svg?raw";
 import blackKingSvg from "@/features/variants/common/assets/bK.svg?raw";
-import placeholderImageSvg from "@/features/variants/common/assets/placeholder.svg?raw";
+import placeholderImageJpeg from "@/features/variants/common/assets/placeholder.jpeg";
 import movementPreviewSvg from "@/features/variants/common/assets/movementPreview.svg?raw";
 
 async function getPlaceholderImageBlob() {
-	const response = await fetch(placeholderImageSvg);
+	const response = await fetch(placeholderImageJpeg);
 	return await response.blob();
 }
 
