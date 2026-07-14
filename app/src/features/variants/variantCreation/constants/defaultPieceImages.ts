@@ -12,8 +12,13 @@ import whiteKnightSvg from "@/features/variants/common/assets/wN.svg?raw";
 import blackKnightSvg from "@/features/variants/common/assets/bN.svg?raw";
 import whiteKingSvg from "@/features/variants/common/assets/wK.svg?raw";
 import blackKingSvg from "@/features/variants/common/assets/bK.svg?raw";
-import placeholderImageSvg from "@/features/variants/common/assets/placeholder.svg?raw";
+import placeholderImageJpeg from "@/features/variants/common/assets/placeholder.jpeg";
 import movementPreviewSvg from "@/features/variants/common/assets/movementPreview.svg?raw";
+
+async function getPlaceholderImageBlob() {
+	const response = await fetch(placeholderImageJpeg);
+	return await response.blob();
+}
 
 const defaultPieceImages: Record<string, PieceImage> = {
 	white_pawn: {
@@ -53,7 +58,7 @@ const defaultPieceImages: Record<string, PieceImage> = {
 		image: new Blob([blackKingSvg], { type: "image/svg+xml" }),
 	},
 	placeholder: {
-		image: new Blob([placeholderImageSvg], { type: "image/svg+xml" }),
+		image: await getPlaceholderImageBlob(),
 	},
 	movement_preview: {
 		image: new Blob([movementPreviewSvg], { type: "image/svg+xml" }),
