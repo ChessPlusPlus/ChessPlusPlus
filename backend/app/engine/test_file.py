@@ -2,15 +2,19 @@ import json
 from json import JSONDecodeError
 from pathlib import Path
 
+from pydantic import ValidationError
+
 import app.engine.json_validator.json_validator as json_validator
 import app.engine.legal_move_generator.legal_move_generator as lmg
 import app.engine.json_normaliser.json_normaliser as jn
-import app.engine.legal_move_generator.instanceless_legal_move_generator as ilmg
 import app.engine.json_validator.condition_cyclicity_detector as ccd
+import app.engine.json_pydantic_model.json_model as jm
 
 BASE_DIR = Path(__file__).parent.resolve()
 TEST_NORMALISED_JSON_PATH = BASE_DIR / "test_normalised_json.json"
 TEST_SIMPLE_JSON_PATH = BASE_DIR / "test_simple_json.json"
+
+test_json = str(json.load(open(TEST_NORMALISED_JSON_PATH)))
 
 def test_validate_json():
     try:
@@ -109,21 +113,12 @@ def debug_movement():
     legal_moves = game.get_legal_moves((0, 1))
     print(legal_moves)
 
-def test_ilmg():
-    g = ilmg.InstancelessLegalMoveGenerator
-    rules = json.load(open(TEST_NORMALISED_JSON_PATH))
-    game = ilmg.GameContext(rules, g.get_start_game_state(rules))
+def test_json_pydantic_model():
 
-    print(g.get_simple_game_state(game.get_json_game_state()))
+    model = None
+    try:
+        model = jm.VariantRules.model_validate_json(test_json)
+    except ValidationError as e:
+        print(e.errors())
 
-    game.update_json_game_state(g.make_move(game.get_json_game_state(), (0, 0), (1, 0)))
-    print(game.get_json_game_state())
-
-    game.update_json_game_state(g.make_move(game.get_json_game_state(), (1, 0), (0, 0)))
-    print(game.get_json_game_state())
-
-def test_ccd():
-    conditions = json.load(open(TEST_NORMALISED_JSON_PATH))["conditions"]
-    return ccd.check_for_cyclicity_in_conditions(conditions)
-
-print(test_validate_json())
+test_json_pydantic_model()
