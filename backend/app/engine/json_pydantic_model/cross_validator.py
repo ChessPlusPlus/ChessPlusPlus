@@ -1,4 +1,6 @@
 from .common import *
+if TYPE_CHECKING:
+    from .json_model import VariantRules
 
 class Helpers:
 
@@ -13,18 +15,20 @@ class Helpers:
             raise ValueError
 
     @staticmethod
-    def check_piece_exists(piece_name, variant_rules):
+    def check_piece_exists(piece_name, variant_rules: VariantRules):
         if piece_name not in variant_rules.pieces:
             raise ValueError
 
 class Components:
 
     @staticmethod
-    def piece_ownership_check(variant_rules):
-        pass
+    def piece_ownership_check(variant_rules: VariantRules):
+        for pieces in variant_rules.setup.piece_ownership.values():
+            for piece_name in pieces:
+                Helpers.check_piece_exists(piece_name, variant_rules)
 
     @staticmethod
-    def start_piece_check(variant_rules):
+    def start_piece_check(variant_rules: VariantRules):
         board_x_size = variant_rules.setup.board_x_size
         board_y_size = variant_rules.setup.board_y_size
         for piece_starting in variant_rules.setup.starting_position:
@@ -35,6 +39,7 @@ class Components:
 class CrossValidator:
     
     @staticmethod
-    def validate(variant_rules):
+    def validate(variant_rules: VariantRules):
+        Components.piece_ownership_check(variant_rules)
         Components.start_piece_check(variant_rules)
 

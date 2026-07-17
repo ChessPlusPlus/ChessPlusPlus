@@ -1,4 +1,4 @@
 from ..common import *
 
-class Move(BaseModel):
+class Move(StrictBaseModel):
     pass

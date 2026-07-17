@@ -1,5 +1,7 @@
 from ..common import *
 
-class Condition(BaseModel):
+class Condition(StrictBaseModel):
     type: str
     invert: bool
+
+

@@ -1,4 +1,4 @@
 from ..common import *
 
-class Piece(BaseModel):
+class Piece(StrictBaseModel):
     pass

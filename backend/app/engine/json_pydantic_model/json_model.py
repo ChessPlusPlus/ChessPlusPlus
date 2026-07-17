@@ -1,5 +1,3 @@
-from pydantic import model_validator
-
 from .common import *
 
 from .json_model_subclasses.setup import Setup
@@ -9,7 +7,7 @@ from .json_model_subclasses.piece import Piece
 
 from .cross_validator import CrossValidator
 
-class VariantRules(BaseModel):
+class VariantRules(StrictBaseModel):
     setup: Setup
     conditions: dict[str, Condition]
     moves: dict[str, Move]

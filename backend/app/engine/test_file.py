@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).parent.resolve()
 TEST_NORMALISED_JSON_PATH = BASE_DIR / "test_normalised_json.json"
 TEST_SIMPLE_JSON_PATH = BASE_DIR / "test_simple_json.json"
 
-test_json = str(json.load(open(TEST_NORMALISED_JSON_PATH)))
+test_json = open(TEST_NORMALISED_JSON_PATH).read()
 
 def test_validate_json():
     try:
@@ -120,5 +120,7 @@ def test_json_pydantic_model():
         model = jm.VariantRules.model_validate_json(test_json)
     except ValidationError as e:
         print(e.errors())
+
+    print(model)
 
 test_json_pydantic_model()
