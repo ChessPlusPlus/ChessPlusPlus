@@ -54,3 +54,12 @@ class TokenBucket:
             return self.refilled_at + self.refill_interval - time.time()
 
         return None
+
+    def to_dict(self):
+        return {
+            "max_tokens": self.max_tokens,
+            "refill_rate": self.refill_rate,
+            "refill_interval": self.refill_interval,
+            "tokens": self.tokens,
+            "refilled_at": self.refilled_at
+        }
