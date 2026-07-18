@@ -29,7 +29,7 @@ class JSONValidationRequest(BaseSchema):
 class JSONValidationResponse(BaseSchema):
     validation_status: tuple[bool, str]
 
-@app.post("/test")
+@app.api_route("/test", methods=["GET", "POST"], status_code=200)
 async def test_route():
     return {"message": "Hello, World!"}
 
