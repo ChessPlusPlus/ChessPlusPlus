@@ -17,49 +17,26 @@ if raw_bucket_state then
 end
 
 local elapsed_time = current_time - last_refill_time
-
 if elapsed_time >= refill_interval then
     local num_refills = math.floor(tonumber(elapsed_time / refill_interval))
 
     token_count = math.min(bucket_size, token_count + num_refills * refill_rate)
     current_time = last_refill_time + num_refills * refill_interval
-
-    redis.call("SET", bucket_key, cjson.encode({
-        tokens = token_count,
-        bucket_size = bucket_size,
-        refill_rate = refill_rate,
-        refill_interval = refill_interval,
-        last_refill_time = current_time,
-    }))
 end
 
+local is_allowed = false
 if token_count >= token_cost then
-    local remaining_tokens = token_count - token_cost
-
-    redis.call("SET", bucket_key, cjson.encode({
-        tokens = remaining_tokens,
-        bucket_size = bucket_size,
-        refill_rate = refill_rate,
-        refill_interval = refill_interval,
-        last_refill_time = current_time,
-    }))
-
-    return {
-        true,
-        bucket_size,
-        remaining_tokens,
-        current_time + refill_interval,
-    }
-else
-    return {
-        false,
-        bucket_size,
-        token_count,
-        current_time + refill_interval
-    }
+    is_allowed = true
+    token_count = token_count - token_cost
 end
 
-
+redis.call("SET", bucket_key, cjson.encode({
+    tokens = remaining_tokens,
+    bucket_size = bucket_size,
+    refill_rate = refill_rate,
+    refill_interval = refill_interval,
+    last_refill_time = current_time,
+}))
 
 
 
