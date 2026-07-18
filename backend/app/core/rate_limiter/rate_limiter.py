@@ -10,6 +10,6 @@ script_content = script_path.read_text()
 run_consume_token_script = redis_client.register_script(script_content)
 
 async def consume_token(ip_address: str, bucket_size: int = BUCKET_SIZE, refill_rate: int = REFILL_RATE, refill_interval: int = REFILL_INTERVAL, token_cost: int = 1):
-    result = await run_consume_token_script(keys=[ip_address], args=[bucket_size, refill_rate, refill_interval, token_cost])
+    result = await run_consume_token_script(keys=[f"token_bucket:{ip_address}"], args=[bucket_size, refill_rate, refill_interval, token_cost])
 
     return bool(result)
