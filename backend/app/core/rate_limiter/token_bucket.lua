@@ -24,7 +24,7 @@ local last_refill_time = current_bucket_state["last_refill_time"]
 local elapsed_time = current_time - last_refill_time
 
 if elapsed_time >= refill_interval then
-    local num_refills = tonumber(elapsed_time // refill_interval)
+    local num_refills = math.floor(tonumber(elapsed_time / refill_interval))
 
     token_count = math.min(bucket_size, token_count + num_refills * refill_rate)
     current_time = last_refill_time + num_refills * refill_interval
