@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from app.middleware.rate_limiter import rate_limit_middleware
 from app.schemas.base_schema import BaseSchema
 from app.engine.json_validator.json_validator import validate_json
 
@@ -11,6 +12,9 @@ from app.api.routers import json
 app = FastAPI()
 
 origins = ["http://localhost:5173", "https://chessplusplus.vercel.app", "https://chessplusplus-beta.vercel.app"]
+
+app.middleware("http")(rate_limit_middleware)
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -29,7 +33,7 @@ class JSONValidationRequest(BaseSchema):
 class JSONValidationResponse(BaseSchema):
     validation_status: tuple[bool, str]
 
-@app.post("/test")
+@app.api_route("/test", methods=["GET", "POST"], status_code=200)
 async def test_route():
     return {"message": "Hello, World!"}
 
