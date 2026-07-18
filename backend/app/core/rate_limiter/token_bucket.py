@@ -31,7 +31,7 @@ class TokenBucket:
         self.tokens = min(self.max_tokens, self.tokens + num_refills * self.refill_rate)
         self.refilled_at += num_refills * self.refill_interval
 
-    def is_request_allowed(self):
+    def process_request(self):
         with self.lock:
             self._refill()
             if self.tokens > 0:
