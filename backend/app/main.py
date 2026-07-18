@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from app.middleware.rate_limiter import rate_limit_middleware
 from app.schemas.base_schema import BaseSchema
 from app.engine.json_validator.json_validator import validate_json
 
@@ -13,6 +14,7 @@ app = FastAPI()
 origins = ["http://localhost:5173", "https://chessplusplus.vercel.app", "https://chessplusplus-beta.vercel.app"]
 app.add_middleware(
     CORSMiddleware,
+    rate_limit_middleware,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
