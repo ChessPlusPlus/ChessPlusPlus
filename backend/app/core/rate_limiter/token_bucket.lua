@@ -49,9 +49,19 @@ if token_count >= token_cost then
         last_refill_time = current_time,
     }))
 
-    return true
+    return {
+        true,
+        bucket_size,
+        remaining_tokens,
+        current_time + refill_interval,
+    }
 else
-    return false
+    return {
+        false,
+        bucket_size,
+        token_count,
+        current_time + refill_interval
+    }
 end
 
 
