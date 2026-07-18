@@ -30,13 +30,15 @@ if token_count >= token_cost then
     token_count = token_count - token_cost
 end
 
+local ttl = math.ceil((bucket_size / refill_rate)) * refill_rate
+
 redis.call("SET", bucket_key, cjson.encode({
     tokens = remaining_tokens,
     bucket_size = bucket_size,
     refill_rate = refill_rate,
     refill_interval = refill_interval,
     last_refill_time = current_time,
-}))
+}), "EX", ttl)
 
 
 
