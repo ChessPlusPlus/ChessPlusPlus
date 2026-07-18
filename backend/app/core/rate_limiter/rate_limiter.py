@@ -21,9 +21,9 @@ async def consume_token(ip_address: str, bucket_size: int = BUCKET_SIZE, refill_
     reset_time = result[3]
 
     return {
-        "success": result[0],
-        "bucket_size": result[1],
-        "remaining_tokens": result[2],
-        "retry_after": max(1, reset_time - current_time),
-        "reset_time": reset_time
+        "success": bool(result[0]),
+        "bucket_size": int(result[1]),
+        "remaining_tokens": int(result[2]),
+        "retry_after": int(max(1, reset_time - current_time)),
+        "reset_time": int(reset_time),
     }
