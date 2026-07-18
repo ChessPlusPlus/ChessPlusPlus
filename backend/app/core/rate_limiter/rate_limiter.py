@@ -5,7 +5,7 @@ BUCKET_SIZE = 20
 REFILL_AMOUNT = 4
 REFILL_INTERVAL = 1
 
-script_path = Path(__file__).with_name("rate_limiter.lua")
+script_path = Path(__file__).with_name("token_bucket.lua")
 script_content = script_path.read_text()
 
 run_consume_token_script = redis_client.register_script(script_content)
