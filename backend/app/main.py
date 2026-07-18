@@ -12,9 +12,11 @@ from app.api.routers import json
 app = FastAPI()
 
 origins = ["http://localhost:5173", "https://chessplusplus.vercel.app", "https://chessplusplus-beta.vercel.app"]
+
+app.middleware("http")(rate_limit_middleware)
+
 app.add_middleware(
     CORSMiddleware,
-    rate_limit_middleware,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
