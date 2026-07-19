@@ -129,7 +129,11 @@ class Game:
                         value = piece_object.data["piece_move_count"]
 
                 value += condition_definition["offset"]
-                if condition_definition["min"] <= value <= condition_definition["max"]:
+
+                min_value = float("inf") if condition_definition["min"] == "inf" else condition_definition["min"]
+                max_value = float("inf") if condition_definition["max"] == "inf" else condition_definition["max"]
+
+                if min_value <= value <= max_value:
                     output = True
                 else:
                     output = False
