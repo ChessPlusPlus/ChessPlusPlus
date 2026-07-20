@@ -6,9 +6,21 @@ class BaseCondition(StrictBaseModel):
 class ParameterCondition(BaseCondition):
     condition: str
 
-class Parametered(BaseCondition):
-    type: Literal["all_of", "any_of"]
+    def cross_validate(self, variant_rules: VariantRules):
+        check_piece_exists(self.condition, variant_rules)
+
+class Logical(BaseCondition):
     conditions: list[ParameterCondition] = Field(min_length=1)
+
+    def cross_validate(self, variant_rules: VariantRules):
+        for parameter_condition in self.conditions:
+            parameter_condition.cross_validate(variant_rules)
+
+class AllOf(Logical):
+    type: Literal["all_of"]
+
+class AnyOf(Logical):
+    type: Literal["any_of"]
 
 class SquareOccupied(BaseCondition):
     type: Literal["square_occupied"]
@@ -17,7 +29,7 @@ class SquareOccupied(BaseCondition):
 
 class Range(BaseCondition):
     type: Literal["range"]
-    value_source: str
+    value_source: Literal["piece_x", "piece_y", "piece_move_count"]
     offset: int
     min: int | Literal["inf"]
     max: int | Literal["inf"]
@@ -27,7 +39,7 @@ class Range(BaseCondition):
         min_value = float("inf") if self.min == "inf" else self.min
         max_value = float("inf") if self.max == "inf" else self.max
         if max_value < min_value:
-            raise ValueError
+            raise ValueError(f"max ({max_value}) cannot be smaller than min ({min_value})")
         return self
 
-Condition = Annotated[Parametered | SquareOccupied | Range, Field(discriminator="type")]
+Condition = Annotated[AllOf | AnyOf | SquareOccupied | Range, Field(discriminator="type")]
