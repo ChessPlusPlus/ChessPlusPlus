@@ -13,8 +13,13 @@ class Logical(BaseCondition):
     conditions: list[ParameterCondition] = Field(min_length=1)
 
     def cross_validate(self, variant_rules: VariantRules):
+        used_parameter_conditions = set()
         for parameter_condition in self.conditions:
             parameter_condition.cross_validate(variant_rules)
+            if parameter_condition not in used_parameter_conditions:
+                used_parameter_conditions.add(parameter_condition.condition)
+            else:
+                raise ValueError(f"Duplicate condition {parameter_condition.condition} in logical condition")
 
 class AllOf(Logical):
     type: Literal["all_of"]
@@ -35,7 +40,7 @@ class Range(BaseCondition):
     max: int | Literal["inf"]
 
     @model_validator(mode="after")
-    def validate(self):
+    def validate_min_max(self):
         min_value = float("inf") if self.min == "inf" else self.min
         max_value = float("inf") if self.max == "inf" else self.max
         if max_value < min_value:
