@@ -33,7 +33,7 @@ end
 local ttl = math.ceil((bucket_size / refill_rate)) * refill_rate
 
 redis.call("SET", bucket_key, cjson.encode({
-    tokens = remaining_tokens,
+    tokens = token_count,
     bucket_size = bucket_size,
     refill_rate = refill_rate,
     refill_interval = refill_interval,
