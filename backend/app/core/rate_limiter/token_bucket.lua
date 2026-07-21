@@ -41,5 +41,12 @@ redis.call("SET", bucket_key, cjson.encode({
 }), "EX", ttl)
 
 
+return {
+    is_allowed,
+    bucket_size,
+    token_count,
+    current_time + refill_interval
+}
+
 
 
