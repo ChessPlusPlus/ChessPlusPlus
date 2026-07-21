@@ -1,8 +1,6 @@
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import useVariantDraftStore from "@/features/variants/variantEditor/common/stores/variantDraft";
-import {
-	generateNumberSequence,
-} from "@/features/variants/variantEditor/common/utils/boardGeneration";
+import { generateNumberSequence } from "@/features/variants/variantEditor/common/utils/boardGeneration";
 import type { GameStateMap } from "@/features/variants/common/types/setupRules";
 
 type ChessboardGridProps = {
@@ -20,11 +18,8 @@ function ChessboardGrid({ boardState, legalMoves }: ChessboardGridProps) {
 	if (!images) return null;
 	if (!currentVariantId) return null;
 
-	const boardXSize = setupRulesDraft.boardXSize;
-	const boardYSize = setupRulesDraft.boardYSize;
-
-	const ranks = generateNumberSequence(boardYSize).reverse();
-	const files = generateNumberSequence(boardXSize);
+	const ranks = generateNumberSequence(8).reverse();
+	const files = generateNumberSequence(8);
 
 	const legalMoveEntries = Object.entries(legalMoves);
 
