@@ -24,11 +24,8 @@ function ChessboardGrid({
 	if (!images) return null;
 	if (!currentVariantId) return null;
 
-	const boardXSize = setupRulesDraft.boardXSize;
-	const boardYSize = setupRulesDraft.boardYSize;
-
-	const ranks = generateNumberSequence(boardYSize).reverse();
-	const files = generateNumberSequence(boardXSize);
+	const ranks = generateNumberSequence(8).reverse();
+	const files = generateNumberSequence(8);
 
 	function renderPieceImage(imageId: string, pieceName: string) {
 		if (!currentVariantId) return null;
