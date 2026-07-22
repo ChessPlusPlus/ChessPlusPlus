@@ -184,13 +184,6 @@
 		]
 	},
     "conditions": {
-		"test": {
-			"type": "all_of",
-			"conditions": [
-				{"condition": "test", "invert": false}
-			],
-			"invert": false
-		},
 		"has_not_moved": {
 			"type": "range",
 			"value_source": "piece_move_count",

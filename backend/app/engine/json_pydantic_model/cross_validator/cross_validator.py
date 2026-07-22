@@ -1,5 +1,5 @@
 from ..common import *
-from condition_cyclicity_detector import check_for_cyclicity_in_conditions
+from .condition_cyclicity_detector import check_for_cyclicity_in_conditions
 if TYPE_CHECKING:
     from ..json_model import VariantRules
 

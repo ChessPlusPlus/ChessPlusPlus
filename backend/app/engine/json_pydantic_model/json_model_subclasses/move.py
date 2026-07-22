@@ -1,9 +1,11 @@
+from pydantic.v1 import PositiveInt
+
 from ..common import *
 
 class MoveDefinition(StrictBaseModel):
     move_x: int
     move_y: int
-    range: int = Field(..., ge=1)
+    range: Literal["inf"] | Annotated[int, Field(..., ge=0)]
     move_stop_conditions: list[str]
 
     @model_validator(mode="after")
