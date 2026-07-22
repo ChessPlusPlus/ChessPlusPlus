@@ -18,3 +18,7 @@ def check_piece_exists(piece_name, variant_rules: VariantRules):
 def check_condition_exits(condition_name, variant_rules: VariantRules):
     if condition_name not in variant_rules.conditions:
         raise ValueError(f"\"{condition_name}\" condition does not exist")
+
+def check_move_exists(move_name, variant_rules: VariantRules):
+    if move_name not in variant_rules.moves:
+        raise ValueError(f"\"{move_name}\" move does not exist")
