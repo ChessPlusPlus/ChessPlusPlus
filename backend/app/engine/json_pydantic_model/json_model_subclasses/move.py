@@ -1,5 +1,3 @@
-from pydantic.v1 import PositiveInt
-
 from ..common import *
 
 class MoveDefinition(StrictBaseModel):
