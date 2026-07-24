@@ -111,6 +111,7 @@ def debug_movement():
 
 def test_json_pydantic_model():
 
-    print(jm.get_json_pydantic_model(test_json))
+    model = jm.get_json_pydantic_model(test_json)
+    print(jm.validate_json_pydantic_model(model))
 
 test_json_pydantic_model()

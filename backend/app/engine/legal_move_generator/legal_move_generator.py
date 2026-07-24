@@ -2,7 +2,7 @@ import copy
 from app.engine.legal_move_generator.custom_errors import *
 from app.engine.legal_move_generator.piece_class import Piece
 
-from app.engine.json_validator.json_validator import validate_json
+from app.engine.json_pydantic_model.json_model import
 
 class Game:
 

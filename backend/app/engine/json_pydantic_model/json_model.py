@@ -26,3 +26,11 @@ def get_json_pydantic_model(raw_json_str: str) -> VariantRules | list[dict]: # e
     except ValidationError as e:
         return e.errors()
     return model
+
+def validate_json_pydantic_model(model: VariantRules) -> tuple[bool, None | list[dict]]:
+    try:
+        VariantRules.model_validate(model)
+    except ValidationError as e:
+        return e.errors()
+
+    return True, None
