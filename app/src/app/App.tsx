@@ -18,14 +18,17 @@ import AnalyticsDisclaimerDialog from "@/shared/components/AnalyticsDisclaimerDi
 import posthog from "posthog-js";
 import usePieceImagesStore from "@/features/variants/common/stores/pieceImages";
 import { defaultPieceImages } from "@/features/variants/variantCreation/constants/defaultPieceImages";
+import { ConvexProvider, ConvexReactClient } from "convex/react";
 
 const queryClient = new QueryClient();
+const convex = new ConvexReactClient(import.meta.env.VITE_CONVEX_URL);
 
 function App() {
 	const { analyticsEnabled } = useAnalyticsPreferencesStore();
-	const { openAnalyticsDisclaimerDialog } = useAnalyticsDisclaimerDialogStore();
+	const { openAnalyticsDisclaimerDialog } =
+		useAnalyticsDisclaimerDialogStore();
 	const { images, updateImages } = usePieceImagesStore();
-	
+
 	useEffect(() => {
 		if (analyticsEnabled === null) {
 			openAnalyticsDisclaimerDialog();
@@ -48,8 +51,8 @@ function App() {
 				widget: true,
 				theme: "auto",
 				trigger: "custom",
-				position: "left"
-			})
+				position: "left",
+			});
 		}
 	}, []);
 
@@ -65,32 +68,40 @@ function App() {
 			});
 		}
 	}, [images, updateImages]);
-	
+
 	return (
-		<PostHogProvider>
-			<QueryClientProvider client={queryClient}>
-				<TooltipProvider>
-					<BrowserRouter>
-						<PostHogPageviewTracker />
-						<Routes>
-							<Route path="/" element={<HomePage />} />
-							<Route
-								path="/variants/:variantId"
-								element={<VariantEditorPage />}
-							/>
-							<Route path="/variants/:variantId/setup" element={<BoardSetupPage />} />
-							<Route path="/variants/:variantId/play" element={<VariantPlayPage />} />
-							<Route path="/test" element={<TestPage />} />
-							<Route
-								path="/json-validator-test"
-								element={<JSONValidatorTestPage />}
-							/>
-						</Routes>
-						<AnalyticsDisclaimerDialog />
-					</BrowserRouter>
-				</TooltipProvider>
-			</QueryClientProvider>
-		</PostHogProvider>
+		<ConvexProvider client={convex}>
+			<PostHogProvider>
+				<QueryClientProvider client={queryClient}>
+					<TooltipProvider>
+						<BrowserRouter>
+							<PostHogPageviewTracker />
+							<Routes>
+								<Route path="/" element={<HomePage />} />
+								<Route
+									path="/variants/:variantId"
+									element={<VariantEditorPage />}
+								/>
+								<Route
+									path="/variants/:variantId/setup"
+									element={<BoardSetupPage />}
+								/>
+								<Route
+									path="/variants/:variantId/play"
+									element={<VariantPlayPage />}
+								/>
+								<Route path="/test" element={<TestPage />} />
+								<Route
+									path="/json-validator-test"
+									element={<JSONValidatorTestPage />}
+								/>
+							</Routes>
+							<AnalyticsDisclaimerDialog />
+						</BrowserRouter>
+					</TooltipProvider>
+				</QueryClientProvider>
+			</PostHogProvider>
+		</ConvexProvider>
 	);
 }
 
