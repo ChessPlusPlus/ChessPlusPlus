@@ -1,3 +1,5 @@
+from pydantic import ValidationError
+
 from .common import *
 
 from .json_model_subclasses.setup import Setup
@@ -17,3 +19,10 @@ class VariantRules(StrictBaseModel):
     def model_cross_validate(self):
         cross_validate(self)
         return self
+
+def get_json_pydantic_model(raw_json_str: str) -> VariantRules | list[dict]: # either returns the variant rules or all the errors found
+    try:
+        model = VariantRules.model_validate_json(raw_json_str)
+    except ValidationError as e:
+        return e.errors()
+    return model

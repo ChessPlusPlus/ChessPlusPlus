@@ -4,10 +4,6 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-import app.engine.json_validator.json_validator as json_validator
-import app.engine.legal_move_generator.legal_move_generator as lmg
-import app.engine.json_normaliser.json_normaliser as jn
-import app.engine.json_validator.condition_cyclicity_detector as ccd
 import app.engine.json_pydantic_model.json_model as jm
 
 BASE_DIR = Path(__file__).parent.resolve()
@@ -115,12 +111,6 @@ def debug_movement():
 
 def test_json_pydantic_model():
 
-    model = None
-    try:
-        model = jm.VariantRules.model_validate_json(test_json)
-    except ValidationError as e:
-        print(e.errors())
-
-    print(model)
+    print(jm.get_json_pydantic_model(test_json))
 
 test_json_pydantic_model()

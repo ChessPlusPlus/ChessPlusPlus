@@ -19,7 +19,7 @@ class Logical(BaseCondition):
             if parameter_condition not in used_parameter_conditions:
                 used_parameter_conditions.add(parameter_condition.condition)
             else:
-                raise ValueError(f"Duplicate condition {parameter_condition.condition} in logical condition")
+                raise ValueError(f"Duplicate condition \"{parameter_condition.condition}\" in logical condition")
 
 class AllOf(Logical):
     type: Literal["all_of"]
