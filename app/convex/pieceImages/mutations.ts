@@ -24,6 +24,17 @@ const uploadNewImage = mutation({
 		if (!metadata) return { imageId: null };
 
 		const imageHash = metadata.sha256;
+		const existingImage = await ctx.db
+			.query("pieceImages")
+			.withIndex("by_image_hash", (q) => q.eq("imageHash", imageHash))
+			.unique();
+
+		if (existingImage) {
+			return {
+				imageId: existingImage._id,
+			};
+		}
+
 		const uploadedImageId = await ctx.db.insert("pieceImages", {
 			storageId,
 			imageHash,
