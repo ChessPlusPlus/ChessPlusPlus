@@ -8,13 +8,19 @@
  * @module
  */
 
+import type * as pieceImages_mutations from "../pieceImages/mutations.js";
+import type * as pieceImages_queries from "../pieceImages/queries.js";
+
 import type {
   ApiFromModules,
   FilterApi,
   FunctionReference,
 } from "convex/server";
 
-declare const fullApi: ApiFromModules<{}>;
+declare const fullApi: ApiFromModules<{
+  "pieceImages/mutations": typeof pieceImages_mutations;
+  "pieceImages/queries": typeof pieceImages_queries;
+}>;
 
 /**
  * A utility for referencing Convex functions in your app's public API.
