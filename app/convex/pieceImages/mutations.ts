@@ -58,7 +58,7 @@ const updateImage = mutation({
 	handler: async (ctx, args) => {
 		const { newStorageId } = args;
 
-		const metadata = await ctx.db.system.get("_storage");
+		const metadata = await ctx.db.system.get("_storage", newStorageId);
 		if (!metadata) return { imageId: null };
 
 		const imageHash = metadata.sha256;
