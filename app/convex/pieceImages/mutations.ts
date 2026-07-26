@@ -52,7 +52,7 @@ const updateImage = mutation({
 	},
 
 	returns: {
-		imageId: v.union(v.string(), v.null()),
+		imageId: v.union(v.id("pieceImages"), v.null()),
 	},
 
 	handler: async (ctx, args) => {
