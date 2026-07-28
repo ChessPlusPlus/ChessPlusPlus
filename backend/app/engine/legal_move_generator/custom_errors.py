@@ -5,5 +5,7 @@ class StationaryMoveError(Exception):
     pass
 class NoPieceFoundError(Exception):
     pass
+class NotVariantRulesInstanceError(Exception):
+    pass
 class InvalidJSONRulesError(Exception):
     pass

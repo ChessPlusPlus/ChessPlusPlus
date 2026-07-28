@@ -2,8 +2,7 @@ import json
 from json import JSONDecodeError
 from pathlib import Path
 
-from pydantic import ValidationError
-
+import legal_move_generator.legal_move_generator as lmg
 import app.engine.json_pydantic_model.json_model as jm
 
 BASE_DIR = Path(__file__).parent.resolve()
@@ -78,20 +77,14 @@ def display_game_state(board_size: tuple, game_state: dict, show_coords: bool = 
     print("----+" * board_size[0])
 
 def test_get_legal_moves():
-    SHOW_COORDS = True
+    model = jm.get_json_pydantic_model(test_json)
 
-    tvj_output = test_validate_json()
-    print("JSON Validation:")
-    print(f"\tOutput: {tvj_output[0]}")
-    print(f"\tMessage: {tvj_output[1]}")
+    game = lmg.Game(model)
+    game.overwrite_game_state({(4, 3): "white_bishop"})
 
-    if tvj_output[0]:
-        game = lmg.Game(json.load(open(TEST_NORMALISED_JSON_PATH)))
-        game.overwrite_game_state({(4, 3): "white_bishop"})
+    legal_moves = game.get_legal_moves((4, 3))
 
-        legal_moves = game.get_legal_moves((4, 3))
-
-        return legal_moves
+    return legal_moves
 
 def test_normalise_json():
     test_data = json.load(open(TEST_SIMPLE_JSON_PATH))
@@ -114,4 +107,4 @@ def test_json_pydantic_model():
     model = jm.get_json_pydantic_model(test_json)
     print(jm.validate_json_pydantic_model(model))
 
-test_json_pydantic_model()
+test_get_legal_moves()

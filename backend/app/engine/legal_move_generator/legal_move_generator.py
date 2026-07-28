@@ -2,7 +2,7 @@ import copy
 from app.engine.legal_move_generator.custom_errors import *
 from app.engine.legal_move_generator.piece_class import Piece
 
-from app.engine.json_pydantic_model.json_model import
+import app.engine.json_pydantic_model.json_model as pjm
 
 class Game:
 
@@ -10,20 +10,23 @@ class Game:
         "piece_move_count": 0
     }
 
-    def __init__(self, rules: dict):
+    def __init__(self, variant_rules: pjm.VariantRules):
 
-        validated, validate_message = validate_json(rules)
+        if not isinstance(variant_rules, pjm.VariantRules):
+            raise NotVariantRulesInstanceError("variant_rules input must be an instance of VariantRules")
+
+        validated, validate_message = pjm.validate_json_pydantic_model(variant_rules)
         if not validated:
             raise InvalidJSONRulesError(validate_message)
 
         self.debug_mode = False
 
-        self._rules = rules
+        self._variant_rules = variant_rules
         self._game_state = {}
         self._id_counter = 0
 
-        for starting_piece in rules["setup"]["starting_position"]:
-            self._game_state[(starting_piece["x_pos"], starting_piece["y_pos"])] = Piece((starting_piece["x_pos"], starting_piece["y_pos"]), self._id_counter, starting_piece["piece_name"], copy.deepcopy(Game.piece_default_start_data))
+        for starting_piece in self._variant_rules.setup.starting_position:
+            self._game_state[(starting_piece.x_pos, starting_piece.y_pos)] = Piece((starting_piece.x_pos, starting_piece.y_pos ), self._id_counter, starting_piece.piece_name, copy.deepcopy(Game.piece_default_start_data))
             self._id_counter += 1
 
     def set_debug_mode(self, debug_mode: bool):
@@ -34,11 +37,11 @@ class Game:
             print(statement, end=end)
 
     def get_board_size(self):
-        return (self._rules["setup"]["board_x_size"], self._rules["setup"]["board_y_size"])
+        return self._variant_rules.setup.board_x_size, self._variant_rules.setup.board_y_size
     
     def get_game_state_raw(self, include_size: bool = False):
         if include_size:
-            return (self._rules["setup"]["board_x_size"], self._rules["setup"]["board_y_size"]), self._game_state
+            return (self._variant_rules.setup.board_x_size, self._variant_rules.setup.board_y_size), self._game_state
         return self._game_state
 
     def get_game_state(self):
@@ -73,18 +76,18 @@ class Game:
         self._game_state.pop(piece_start_position)
 
     def _check_condition(self, condition_name: str, piece_object: Piece):
-        condition_definition = self._rules["conditions"][condition_name]
-        condition_type = condition_definition["type"]
+        condition_definition = self._variant_rules.conditions[condition_name]
+        condition_type = condition_definition.type
 
         output = None
         match condition_type:
 
             case "all_of":
-                parameter_conditions = condition_definition["conditions"]
+                parameter_conditions = condition_definition.conditions
                 for parameter_condition in parameter_conditions:
-                    para_condition_name = parameter_condition["condition"]
+                    para_condition_name = parameter_condition.condition
                     para_output = self._check_condition(para_condition_name, piece_object)
-                    if parameter_condition["invert"] == True:
+                    if parameter_condition.invert == True:
                         para_output = not para_output
                     if para_output == False:
                         break
@@ -94,11 +97,11 @@ class Game:
                     output = False
 
             case "any_of":
-                parameter_conditions = condition_definition["conditions"]
+                parameter_conditions = condition_definition.conditions
                 for parameter_condition in parameter_conditions:
-                    para_condition_name = parameter_condition["condition"]
+                    para_condition_name = condition_definition.conditions
                     para_output = self._check_condition(para_condition_name, piece_object)
-                    if parameter_condition["invert"] == True:
+                    if parameter_condition.invert == True:
                         para_output = not para_output
                     if para_output == True:
                         break
@@ -109,8 +112,8 @@ class Game:
 
             case "square_occupied":
                 check_position = list(piece_object.position)
-                check_position[0] += condition_definition["offset_x"]
-                check_position[1] += condition_definition["offset_y"]
+                check_position[0] += condition_definition.offset_x
+                check_position[1] += condition_definition.offset_y
                 check_position = tuple(check_position)
                 if check_position in self._game_state:
                     output = True
@@ -119,7 +122,7 @@ class Game:
 
             case "range":
                 value = None
-                value_source = condition_definition["value_source"]
+                value_source = condition_definition.value_source
                 match value_source:
                     case "piece_x":
                         value = piece_object.position[0]
@@ -128,24 +131,24 @@ class Game:
                     case "piece_move_count":
                         value = piece_object.data["piece_move_count"]
 
-                value += condition_definition["offset"]
+                value += condition_definition.offset
 
-                min_value = float("inf") if condition_definition["min"] == "inf" else condition_definition["min"]
-                max_value = float("inf") if condition_definition["max"] == "inf" else condition_definition["max"]
+                min_value = float("inf") if condition_definition.min == "inf" else condition_definition.min
+                max_value = float("inf") if condition_definition.max == "inf" else condition_definition.max
 
                 if min_value <= value <= max_value:
                     output = True
                 else:
                     output = False
 
-        invert = condition_definition["invert"]
+        invert = condition_definition.invert
         if invert:
             output = not output
         return output
 
     def _position_within_board(self, position: tuple):
-        board_x_size = self._rules["setup"]["board_x_size"]
-        board_y_size = self._rules["setup"]["board_y_size"]
+        board_x_size = self._variant_rules.setup.board_x_size
+        board_y_size = self._variant_rules.setup.board_y_size
 
         if 0 <= position[0] < board_x_size and 0 <= position[1] < board_y_size:
             return True
@@ -164,9 +167,9 @@ class Game:
 
         terminate = False
 
-        move_definition = self._rules["moves"][move_name]
+        move_definition = self._variant_rules.moves[move_name]
 
-        start_conditions = move_definition["start_conditions"]
+        start_conditions = move_definition.start_conditions
 
         if start_conditions != []:
             pass_conditions = True
@@ -182,12 +185,12 @@ class Game:
                 else:
                     return []
 
-        move_x = move_definition["move_definition"]["move_x"]
-        move_y = move_definition["move_definition"]["move_y"]
-        move_range = move_definition["move_definition"]["range"]
+        move_x = move_definition.move_definition.move_x
+        move_y = move_definition.move_definition.move_x
+        move_range = move_definition.move_definition.range
 
-        move_stop_conditions = move_definition["move_definition"]["move_stop_conditions"]
-        end_conditions = move_definition["end_conditions"]
+        move_stop_conditions = move_definition.move_definition.move_stop_conditions
+        end_conditions = move_definition.end_conditions
 
         legal_moves = []
 
@@ -256,24 +259,24 @@ class Game:
         piece_object = copy.deepcopy(self._game_state[piece_position])
 
         piece_name = self._game_state[piece_position].piece_name
-        piece_move_names = self._rules["pieces"][piece_name]["moveset"]
+        piece_move_names = self._variant_rules.pieces[piece_name].moveset
         for move_group in piece_move_names:
-            if isinstance(move_group, dict):
-                legal_move_group = self._loop_move(piece_object, move_group["move_name"])
-                legal_moves[move_group["move_name"]] = legal_move_group
+            if isinstance(move_group, pjm.Move):
+                legal_move_group = self._loop_move(piece_object, move_group.move_name)
+                legal_moves[move_group.move_name] = legal_move_group
 
             elif isinstance(move_group, list):
                 each_piece_object = copy.deepcopy(piece_object)
                 for each_move in move_group:
-                    each_legal_moves_both = self._loop_move(each_piece_object, each_move["move_name"], True)
+                    each_legal_moves_both = self._loop_move(each_piece_object, each_move.move_name, True)
                     each_legal_moves = each_legal_moves_both[0]
 
-                    if each_move["valid_move"]:
-                        legal_moves[each_move["move_name"]] = each_legal_moves
+                    if each_move.valid_move:
+                        legal_moves[each_move.move_name] = each_legal_moves
                     if not each_legal_moves == []:
                         each_piece_object.position = each_legal_moves[-1]
 
-                    if each_legal_moves_both[1] and each_move["terminate_on_stop"]:
+                    if each_legal_moves_both[1] and each_move.terminate_on_stop:
                         break
 
         return legal_moves
