@@ -1,4 +1,8 @@
+from __future__ import annotations
 from ..common import *
+
+if TYPE_CHECKING:
+    from ..json_model import VariantRules
 
 PARAMETERED_CONDITION_TYPES = {
     "all_of",

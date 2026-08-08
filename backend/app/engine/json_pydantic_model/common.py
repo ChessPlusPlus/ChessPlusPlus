@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 from pydantic import BaseModel, ConfigDict, model_validator, Field
 from typing import TYPE_CHECKING, Literal, Annotated
 from .cross_validator.helpers import *

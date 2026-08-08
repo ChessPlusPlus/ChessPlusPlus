@@ -1,3 +1,4 @@
+from __future__ import annotations
 from ..common import *
 from .condition_cyclicity_detector import check_for_cyclicity_in_conditions
 if TYPE_CHECKING:

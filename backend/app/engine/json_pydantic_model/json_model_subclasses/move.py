@@ -1,4 +1,8 @@
+from __future__ import annotations
 from ..common import *
+
+if TYPE_CHECKING:
+    from ..json_model import VariantRules
 
 class MoveDefinition(StrictBaseModel):
     move_x: int

@@ -1,5 +1,8 @@
+from __future__ import annotations
 from ..common import *
 
+if TYPE_CHECKING:
+    from ..json_model import VariantRules
 
 class StartingPiece(StrictBaseModel):
     piece_name: str
