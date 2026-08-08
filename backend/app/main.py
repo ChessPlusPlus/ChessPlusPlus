@@ -21,7 +21,7 @@ app.add_middleware(
 
 app.include_router(move_rules.router, prefix="/move-rules")
 app.include_router(game.router, prefix="/game")
-app.include_router(json.router, prefix="/json")
+# app.include_router(json.router, prefix="/json")
 
 class JSONValidationRequest(BaseSchema):
     json_to_validate: dict
