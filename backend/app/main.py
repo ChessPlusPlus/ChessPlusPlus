@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from app.schemas.base_schema import BaseSchema
-from app.engine.json_validator.json_validator import validate_json
+from app.engine.json_pydantic_model.json_model import validate_json_pydantic_model, get_json_pydantic_model
 
 from app.api.routers import move_rules
 from app.api.routers import game
@@ -35,6 +35,8 @@ async def test_route():
 
 @app.post("/json-validator-test", response_model=JSONValidationResponse)
 async def json_validator_test(validation_request: JSONValidationRequest):
-    validation_status = validate_json(validation_request.json_to_validate)
+    validation_status = validate_json_pydantic_model(
+        get_json_pydantic_model(validation_request.json_to_validate)
+    )
 
     return {"validation_status": validation_status}
